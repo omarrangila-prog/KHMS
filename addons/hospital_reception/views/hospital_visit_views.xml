@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Reception-specific additions to hospital_base's visit form: a
+         "Cancel (with reason)" button that opens the mandatory-reason
+         wizard instead of calling action_cancel() directly, and a print
+         action for the queue ticket. -->
+    <record id="hospital_visit_view_form_inherit_reception" model="ir.ui.view">
+        <field name="name">hospital.visit.view.form.inherit.reception</field>
+        <field name="model">hospital.visit</field>
+        <field name="inherit_id" ref="hospital_base.hospital_visit_view_form"/>
+        <field name="arch" type="xml">
+            <button name="action_cancel" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </button>
+            <button name="action_cancel" position="after">
+                <button name="%(hospital_reception.hospital_visit_cancel_wizard_action)d"
+                        type="action" string="Cancel"
+                        invisible="state in ('cancelled', 'void', 'done')"/>
+                <button name="%(hospital_reception.hospital_queue_ticket_report)d"
+                        type="action" string="Print Queue Ticket"
+                        invisible="state in ('cancelled', 'void')"/>
+            </button>
+            <field name="priority" position="after">
+                <field name="queue_position" readonly="1" invisible="queue_position == 0"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Queue kanban: hospital_base's existing visit kanban already
+         groups by state; reception's Queue menu reuses the same view but
+         opens it grouped by doctor and scoped to the active pre-billing
+         states (Phase 8 §1 "Live Queue (kanban by doctor)"). -->
+    <record id="hospital_visit_action_queue" model="ir.actions.act_window">
+        <field name="name">Queue</field>
+        <field name="res_model">hospital.visit</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="hospital_base.hospital_visit_view_search"/>
+        <field name="domain">[('state', 'in', ['waiting_nurse', 'waiting_doctor', 'in_progress_multi'])]</field>
+        <field name="context">{'search_default_groupby_doctor': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Queue is clear -- no patients waiting
+            </p>
+        </field>
+    </record>
+
+</odoo>

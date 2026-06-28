@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- 15 demo appointments (Phase 6 §2), spread across today and the
+         next few days, referencing hospital_base's actual demo patient/
+         doctor xml ids. Most are left in draft/confirmed so they show up
+         on the Reception Dashboard's "Today's Appointments" list and
+         exercise the check-in/no-show/cancel actions in demo mode. -->
+
+    <record id="demo_appointment_01" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_11"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="department_id" ref="hospital_base.demo_department_general_medicine"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() + relativedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">confirmed</field>
+    </record>
+
+    <record id="demo_appointment_02" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_12"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="department_id" ref="hospital_base.demo_department_cardiology"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() + relativedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">confirmed</field>
+    </record>
+
+    <record id="demo_appointment_03" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_13"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="department_id" ref="hospital_base.demo_department_orthopedics"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() + relativedelta(hours=3)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">draft</field>
+    </record>
+
+    <record id="demo_appointment_04" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_14"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_4"/>
+        <field name="department_id" ref="hospital_base.demo_department_pediatrics"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() + relativedelta(hours=4)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">draft</field>
+    </record>
+
+    <record id="demo_appointment_05" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_15"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_5"/>
+        <field name="department_id" ref="hospital_base.demo_department_emergency"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() + relativedelta(hours=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">confirmed</field>
+    </record>
+
+    <record id="demo_appointment_06" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_16"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="department_id" ref="hospital_base.demo_department_general_medicine"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() - relativedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">no_show</field>
+    </record>
+
+    <record id="demo_appointment_07" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_17"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="department_id" ref="hospital_base.demo_department_cardiology"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() - relativedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">cancelled</field>
+        <field name="notes">Patient called to reschedule.</field>
+    </record>
+
+    <record id="demo_appointment_08" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_18"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="department_id" ref="hospital_base.demo_department_orthopedics"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() + relativedelta(days=1, hours=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">draft</field>
+    </record>
+
+    <record id="demo_appointment_09" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_19"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_4"/>
+        <field name="department_id" ref="hospital_base.demo_department_pediatrics"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() + relativedelta(days=1, hours=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">draft</field>
+    </record>
+
+    <record id="demo_appointment_10" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_20"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_5"/>
+        <field name="department_id" ref="hospital_base.demo_department_emergency"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() + relativedelta(days=1, hours=3)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">confirmed</field>
+    </record>
+
+    <record id="demo_appointment_11" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_01"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="department_id" ref="hospital_base.demo_department_general_medicine"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() + relativedelta(days=2, hours=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">draft</field>
+    </record>
+
+    <record id="demo_appointment_12" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_02"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="department_id" ref="hospital_base.demo_department_cardiology"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() + relativedelta(days=2, hours=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">draft</field>
+    </record>
+
+    <record id="demo_appointment_13" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_03"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="department_id" ref="hospital_base.demo_department_orthopedics"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() + relativedelta(days=3, hours=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">confirmed</field>
+    </record>
+
+    <record id="demo_appointment_14" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_04"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_4"/>
+        <field name="department_id" ref="hospital_base.demo_department_pediatrics"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() + relativedelta(days=3, hours=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">draft</field>
+    </record>
+
+    <record id="demo_appointment_15" model="hospital.appointment">
+        <field name="patient_id" ref="hospital_base.demo_patient_05"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_5"/>
+        <field name="department_id" ref="hospital_base.demo_department_emergency"/>
+        <field name="scheduled_datetime" eval="(DateTime.datetime.now() - relativedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        <field name="state">checked_in</field>
+        <field name="visit_id" ref="demo_visit_05"/>
+    </record>
+
+</odoo>

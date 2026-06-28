@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="hospital_queue_ticket_template">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="o">
+                <div class="o_hospital_queue_ticket page">
+                    <div style="text-align: center; border: 1px dashed #2c3e50; padding: 10px;">
+                        <h3 style="margin: 0;">Queue Ticket</h3>
+                        <h1 style="margin: 6px 0; font-size: 32px;">
+                            <span t-esc="o.visit_code"/>
+                        </h1>
+                        <div>
+                            <strong>Patient: </strong>
+                            <span t-esc="o.patient_id.name"/>
+                        </div>
+                        <div t-if="o.doctor_id">
+                            <strong>Doctor: </strong>
+                            <span t-esc="o.doctor_id.name"/>
+                        </div>
+                        <div t-if="o.department_id">
+                            <strong>Department: </strong>
+                            <span t-esc="o.department_id.name"/>
+                        </div>
+                        <div>
+                            <strong>Priority: </strong>
+                            <span t-esc="dict(o._fields['priority'].selection).get(o.priority)"/>
+                        </div>
+                        <div t-if="o.queue_position">
+                            <strong>Queue Position: </strong>
+                            <span t-esc="o.queue_position"/>
+                        </div>
+                        <div>
+                            <strong>Checked In: </strong>
+                            <span t-esc="o.checkin_datetime"/>
+                        </div>
+                        <p style="margin-top: 10px; font-size: 11px;">
+                            Please wait to be called. Keep this ticket with you.
+                        </p>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

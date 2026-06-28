@@ -1,0 +1,151 @@
+// Reception Dashboard styling. Reuses the shared design tokens defined
+// once in hospital_base/static/src/scss/_variables.scss (Phase 7 §2,
+// Phase 11 §5) -- never redefine the palette here.
+@import "/hospital_base/static/src/scss/_variables";
+
+.o_hospital_reception_dashboard {
+    padding: $o-hospital-spacing-lg;
+
+    .o_hospital_dashboard_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: $o-hospital-spacing-md;
+
+        h2 {
+            color: $o-hospital-secondary;
+            margin: 0;
+        }
+
+        .o_hospital_dashboard_actions {
+            display: flex;
+            gap: $o-hospital-spacing-sm;
+        }
+    }
+
+    .o_hospital_kpi_strip {
+        display: flex;
+        gap: $o-hospital-spacing-md;
+        margin-bottom: $o-hospital-spacing-lg;
+
+        .o_hospital_kpi_card {
+            flex: 1;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-left: 4px solid $o-hospital-primary;
+            border-radius: 4px;
+            padding: $o-hospital-spacing-md;
+            display: flex;
+            flex-direction: column;
+            min-height: 64px;
+
+            .o_hospital_kpi_value {
+                font-size: 28px;
+                font-weight: 600;
+                color: $o-hospital-secondary;
+            }
+
+            .o_hospital_kpi_label {
+                font-size: 13px;
+                color: #6c757d;
+                text-transform: uppercase;
+            }
+        }
+    }
+
+    .o_hospital_dashboard_columns {
+        display: flex;
+        gap: $o-hospital-spacing-lg;
+        align-items: flex-start;
+
+        .o_hospital_queue_column,
+        .o_hospital_appointments_column {
+            flex: 1;
+            min-width: 0;
+        }
+    }
+
+    .o_hospital_queue_kanban {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $o-hospital-spacing-sm;
+    }
+
+    .o_hospital_queue_doctor_card {
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: $o-hospital-spacing-sm;
+        min-width: 200px;
+        flex: 1 1 200px;
+
+        .o_hospital_queue_doctor_header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: $o-hospital-spacing-xs;
+            padding-bottom: $o-hospital-spacing-xs;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .o_hospital_queue_visit_row {
+            display: flex;
+            gap: $o-hospital-spacing-xs;
+            align-items: center;
+            padding: $o-hospital-spacing-xs 0;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #f8f9fa;
+            }
+
+            .o_hospital_queue_visit_code {
+                font-weight: 600;
+                color: $o-hospital-primary;
+            }
+        }
+    }
+
+    .o_hospital_appointments_list {
+        width: 100%;
+
+        td {
+            padding: $o-hospital-spacing-xs $o-hospital-spacing-sm;
+            border-bottom: 1px solid #f0f0f0;
+        }
+    }
+
+    .o_hospital_queue_empty,
+    .o_hospital_appointments_empty {
+        color: #6c757d;
+        padding: $o-hospital-spacing-md;
+        text-align: center;
+        font-style: italic;
+    }
+
+    .o_hospital_skeleton {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: o-hospital-skeleton-loading 1.5s infinite;
+        border-radius: 4px;
+        min-height: 64px;
+    }
+
+    .o_hospital_kpi_card.o_hospital_skeleton {
+        flex: 1;
+    }
+
+    .o_hospital_queue_doctor_card.o_hospital_skeleton {
+        min-width: 200px;
+        min-height: 100px;
+    }
+
+    .o_hospital_appointments_skeleton {
+        min-height: 120px;
+    }
+}
+
+@keyframes o-hospital-skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}

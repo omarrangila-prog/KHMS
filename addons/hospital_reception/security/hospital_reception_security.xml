@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record id="group_hospital_reception" model="res.groups">
+        <field name="name">Hospital Reception</field>
+        <field name="category_id" ref="hospital_base.module_hospital_category"/>
+        <field name="implied_ids" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+        <field name="comment">Front-desk staff: register patients, book/check-in appointments, manage the reception queue.</field>
+    </record>
+
+    <!-- Multi-company record rules, consistent with the hospital_base
+         ['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]
+         pattern (Phase 9 §3). -->
+    <record id="hospital_appointment_company_rule" model="ir.rule">
+        <field name="name">Hospital Appointment: multi-company isolation</field>
+        <field name="model_id" ref="model_hospital_appointment"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+</odoo>

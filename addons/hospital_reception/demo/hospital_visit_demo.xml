@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- 10 demo visits parked in waiting_nurse (Phase 6 §2 demo data
+         spec), referencing hospital_base's actual demo patient/doctor/
+         department xml ids. action_confirm() (hospital_base) moves a
+         freshly-created draft visit straight to waiting_nurse. -->
+
+    <record id="demo_visit_01" model="hospital.visit">
+        <field name="patient_id" ref="hospital_base.demo_patient_01"/>
+        <field name="visit_type">opd</field>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="department_id" ref="hospital_base.demo_department_general_medicine"/>
+        <field name="priority">normal</field>
+    </record>
+
+    <record id="demo_visit_02" model="hospital.visit">
+        <field name="patient_id" ref="hospital_base.demo_patient_02"/>
+        <field name="visit_type">opd</field>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="department_id" ref="hospital_base.demo_department_cardiology"/>
+        <field name="priority">urgent</field>
+    </record>
+
+    <record id="demo_visit_03" model="hospital.visit">
+        <field name="patient_id" ref="hospital_base.demo_patient_03"/>
+        <field name="visit_type">opd</field>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="department_id" ref="hospital_base.demo_department_orthopedics"/>
+        <field name="priority">normal</field>
+    </record>
+
+    <record id="demo_visit_04" model="hospital.visit">
+        <field name="patient_id" ref="hospital_base.demo_patient_04"/>
+        <field name="visit_type">opd</field>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_4"/>
+        <field name="department_id" ref="hospital_base.demo_department_pediatrics"/>
+        <field name="priority">normal</field>
+    </record>
+
+    <record id="demo_visit_05" model="hospital.visit">
+        <field name="patient_id" ref="hospital_base.demo_patient_05"/>
+        <field name="visit_type">opd</field>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_5"/>
+        <field name="department_id" ref="hospital_base.demo_department_emergency"/>
+        <field name="priority">emergency</field>
+    </record>
+
+    <record id="demo_visit_06" model="hospital.visit">
+        <field name="patient_id" ref="hospital_base.demo_patient_06"/>
+        <field name="visit_type">opd</field>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="department_id" ref="hospital_base.demo_department_general_medicine"/>
+        <field name="priority">normal</field>
+    </record>
+
+    <record id="demo_visit_07" model="hospital.visit">
+        <field name="patient_id" ref="hospital_base.demo_patient_07"/>
+        <field name="visit_type">opd</field>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="department_id" ref="hospital_base.demo_department_cardiology"/>
+        <field name="priority">normal</field>
+    </record>
+
+    <record id="demo_visit_08" model="hospital.visit">
+        <field name="patient_id" ref="hospital_base.demo_patient_08"/>
+        <field name="visit_type">opd</field>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="department_id" ref="hospital_base.demo_department_orthopedics"/>
+        <field name="priority">urgent</field>
+    </record>
+
+    <record id="demo_visit_09" model="hospital.visit">
+        <field name="patient_id" ref="hospital_base.demo_patient_09"/>
+        <field name="visit_type">opd</field>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_4"/>
+        <field name="department_id" ref="hospital_base.demo_department_pediatrics"/>
+        <field name="priority">normal</field>
+    </record>
+
+    <record id="demo_visit_10" model="hospital.visit">
+        <field name="patient_id" ref="hospital_base.demo_patient_10"/>
+        <field name="visit_type">opd</field>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_5"/>
+        <field name="department_id" ref="hospital_base.demo_department_emergency"/>
+        <field name="priority">normal</field>
+    </record>
+
+    <function model="hospital.visit" name="action_confirm">
+        <value model="hospital.visit" eval="[
+            ref('demo_visit_01'), ref('demo_visit_02'), ref('demo_visit_03'),
+            ref('demo_visit_04'), ref('demo_visit_05'), ref('demo_visit_06'),
+            ref('demo_visit_07'), ref('demo_visit_08'), ref('demo_visit_09'),
+            ref('demo_visit_10'),
+        ]"/>
+    </function>
+
+</odoo>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="hospital_reception_menu_root"
+              name="Reception"
+              parent="hospital_base.hospital_menu_root"
+              groups="group_hospital_reception,hospital_base.group_hospital_admin"
+              sequence="6"/>
+
+    <menuitem id="hospital_reception_menu_dashboard"
+              name="Dashboard"
+              parent="hospital_reception_menu_root"
+              action="hospital_reception_dashboard_action"
+              sequence="10"/>
+
+    <menuitem id="hospital_reception_menu_patients"
+              name="Patients"
+              parent="hospital_reception_menu_root"
+              action="hospital_base.hospital_patient_action"
+              sequence="20"/>
+
+    <menuitem id="hospital_reception_menu_appointments"
+              name="Appointments"
+              parent="hospital_reception_menu_root"
+              action="hospital_appointment_action"
+              sequence="30"/>
+
+    <menuitem id="hospital_reception_menu_queue"
+              name="Queue"
+              parent="hospital_reception_menu_root"
+              action="hospital_visit_action_queue"
+              sequence="40"/>
+
+</odoo>

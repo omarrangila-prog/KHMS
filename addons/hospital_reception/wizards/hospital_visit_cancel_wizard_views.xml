@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_visit_cancel_wizard_view_form" model="ir.ui.view">
+        <field name="name">hospital.visit.cancel.wizard.view.form</field>
+        <field name="model">hospital.visit.cancel.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cancel Visit">
+                <group>
+                    <field name="visit_id" readonly="1"/>
+                    <field name="reason" placeholder="Why is this visit being cancelled?"/>
+                </group>
+                <footer>
+                    <button name="action_confirm_cancel" type="object" string="Confirm Cancellation" class="btn-danger"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="hospital_visit_cancel_wizard_action" model="ir.actions.act_window">
+        <field name="name">Cancel Visit</field>
+        <field name="res_model">hospital.visit.cancel.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="hospital_base.model_hospital_visit"/>
+        <field name="binding_view_types">form</field>
+    </record>
+
+</odoo>
