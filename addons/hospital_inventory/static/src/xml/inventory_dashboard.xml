@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="hospital_inventory.InventoryDashboard">
+        <div class="o_hospital_inventory_dashboard">
+            <div class="o_hospital_dashboard_header">
+                <h2>Inventory Dashboard</h2>
+            </div>
+
+            <div class="o_hospital_dashboard_error alert alert-danger" t-if="state.error" role="alert">
+                Couldn't load the dashboard.
+                <button class="btn btn-link" t-on-click="onRetry">Retry</button>
+            </div>
+
+            <div class="o_hospital_inventory_kpi_row" t-if="!state.loading">
+                <div class="o_hospital_inventory_kpi_card o_hospital_kpi_warning" t-on-click="openLowStockAlerts">
+                    <div class="o_hospital_kpi_value" t-esc="state.lowStockCount"/>
+                    <div class="o_hospital_kpi_label">Low Stock</div>
+                </div>
+                <div class="o_hospital_inventory_kpi_card o_hospital_kpi_danger" t-on-click="openExpiryAlerts">
+                    <div class="o_hospital_kpi_value" t-esc="state.expiringSoonCount"/>
+                    <div class="o_hospital_kpi_label">Expiring Soon / Expired</div>
+                </div>
+                <div class="o_hospital_inventory_kpi_actions">
+                    <button class="btn btn-secondary" t-on-click="openAdjustStock">Adjust Stock</button>
+                </div>
+            </div>
+
+            <div class="o_hospital_inventory_kpi_row o_hospital_skeleton" t-if="state.loading"/>
+
+            <t t-elif="!state.loading and state.rows.length === 0">
+                <div class="o_hospital_inventory_empty">
+                    All stock levels healthy.
+                </div>
+            </t>
+
+            <table class="table table-sm table-striped o_hospital_inventory_table" t-if="!state.loading and state.rows.length">
+                <thead>
+                    <tr>
+                        <th>Medicine</th>
+                        <th>On Hand</th>
+                        <th>Reorder Threshold</th>
+                        <th>Status</th>
+                        <th>Nearest Expiry</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="state.rows" t-as="row" t-key="row.id">
+                        <td>
+                            <a href="#" t-on-click.prevent="() => this.openMedicine(row.product_id[0])"
+                               t-esc="row.product_id[1]"/>
+                        </td>
+                        <td t-esc="row.qty_available"/>
+                        <td t-esc="row.reorder_threshold"/>
+                        <td>
+                            <span class="badge text-bg-danger" t-if="row.is_low_stock">Low Stock</span>
+                            <span class="badge text-bg-danger" t-if="row.is_expired">Expired</span>
+                            <span class="badge text-bg-warning" t-if="row.is_expiring_soon and !row.is_expired">Expiring Soon</span>
+                            <span class="badge text-bg-success" t-if="!row.is_low_stock and !row.is_expiring_soon and !row.is_expired">OK</span>
+                        </td>
+                        <td t-esc="row.nearest_expiry_date || '-'"/>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </t>
+
+</templates>

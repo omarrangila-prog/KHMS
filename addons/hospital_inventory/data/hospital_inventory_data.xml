@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Hospital Medicines product category (Phase 6 §6 "medicine product
+         category"). Created as a top-level category, like Odoo's own
+         "Goods"/"Services"/"Expenses" categories (product/data/
+         product_data.xml) — Odoo 19's product module does not ship a
+         single catch-all "All" root category to nest under. Medicines
+         are not required to use this category, but demo data and the
+         Medicines catalog action default to it so a fresh install has a
+         sensible place for new medicines to land. -->
+    <record id="product_category_hospital_medicines" model="product.category">
+        <field name="name">Hospital Medicines</field>
+    </record>
+
+    <!-- Pharmacy warehouse (Phase 6 §6 "Pharmacy warehouse + locations").
+         Creating a stock.warehouse automatically creates its own view/
+         input/output/stock locations — no need to hand-build those. -->
+    <record id="stock_warehouse_pharmacy" model="stock.warehouse">
+        <field name="name">Pharmacy</field>
+        <field name="code">PHM</field>
+    </record>
+
+    <!-- A named sub-location under the Pharmacy warehouse's own internal
+         stock location, so dispensing/receiving can target a specific
+         "Pharmacy Store" shelf location distinct from the warehouse's
+         generic top-level internal location. lot_stock_id/company_id are
+         regular Many2one fields on stock.warehouse, not separate
+         records, so they cannot be addressed with a plain ref="module.
+         xmlid" — ref only resolves a flat xml-id to its own record id.
+         The eval="obj()..." idiom (also used by Odoo core's own
+         stock/data/stock_demo.xml) reads the field off the already-
+         created warehouse record at data-load time instead. -->
+    <record id="stock_location_pharmacy_store" model="stock.location">
+        <field name="name">Pharmacy Store</field>
+        <field name="location_id" eval="obj().env.ref('hospital_inventory.stock_warehouse_pharmacy').lot_stock_id.id"/>
+        <field name="usage">internal</field>
+        <field name="company_id" eval="obj().env.ref('hospital_inventory.stock_warehouse_pharmacy').company_id.id"/>
+    </record>
+
+</odoo>

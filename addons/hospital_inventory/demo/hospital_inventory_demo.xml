@@ -1,0 +1,1379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- 50 demo medicines (Phase 6 section 6 'fifty demo medicines with
+         varied stock/expiry'). Created directly as product.product
+         records, matching Odoo's own product_demo.xml convention for
+         simple, single-variant products. Stock is seeded via
+         stock.quant's inventory_quantity field, Odoo's own demo-data
+         convention (see stock/data/stock_demo.xml): writing
+         inventory_quantity auto-applies the on-hand quantity, so no
+         separate stock.picking/inventory-adjustment wizard flow is
+         needed for demo purposes. Every 5th medicine is deliberately
+         left under its reorder threshold (low stock) and every 7th has
+         zero stock, so the Inventory Dashboard demo has a non-trivial
+         low-stock list out of the box. Expiry dates cycle through three
+         buckets: already expired, expiring within 30 days, and safely
+         far out, via one hospital.medicine.batch (stock.lot) per
+         medicine, so the Expiry Alerts screen also has a realistic
+         mixed demo set. -->
+
+    <record id="demo_medicine_01" model="product.product">
+        <field name="name">Paracetamol 500mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Paracetamol</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">500mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_01" model="stock.lot">
+        <field name="name">BATCH-001</field>
+        <field name="product_id" ref="demo_medicine_01"/>
+        <field name="expiry_date">2026-07-04</field>
+    </record>
+
+    <record id="demo_medicine_quant_01" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_01"/>
+        <field name="lot_id" ref="demo_medicine_lot_01"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">53.0</field>
+    </record>
+
+    <record id="demo_medicine_02" model="product.product">
+        <field name="name">Ibuprofen 400mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Ibuprofen</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">400mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_02" model="stock.lot">
+        <field name="name">BATCH-002</field>
+        <field name="product_id" ref="demo_medicine_02"/>
+        <field name="expiry_date">2027-01-16</field>
+    </record>
+
+    <record id="demo_medicine_quant_02" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_02"/>
+        <field name="lot_id" ref="demo_medicine_lot_02"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">56.0</field>
+    </record>
+
+    <record id="demo_medicine_03" model="product.product">
+        <field name="name">Amoxicillin 250mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Amoxicillin</field>
+        <field name="dosage_form">capsule</field>
+        <field name="strength">250mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_03" model="stock.lot">
+        <field name="name">BATCH-003</field>
+        <field name="product_id" ref="demo_medicine_03"/>
+        <field name="expiry_date">2026-06-15</field>
+    </record>
+
+    <record id="demo_medicine_quant_03" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_03"/>
+        <field name="lot_id" ref="demo_medicine_lot_03"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">59.0</field>
+    </record>
+
+    <record id="demo_medicine_04" model="product.product">
+        <field name="name">Azithromycin 500mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Azithromycin</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">500mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_04" model="stock.lot">
+        <field name="name">BATCH-004</field>
+        <field name="product_id" ref="demo_medicine_04"/>
+        <field name="expiry_date">2026-07-07</field>
+    </record>
+
+    <record id="demo_medicine_quant_04" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_04"/>
+        <field name="lot_id" ref="demo_medicine_lot_04"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">62.0</field>
+    </record>
+
+    <record id="demo_medicine_05" model="product.product">
+        <field name="name">Cetirizine 10mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Cetirizine</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">10mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">20.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_05" model="stock.lot">
+        <field name="name">BATCH-005</field>
+        <field name="product_id" ref="demo_medicine_05"/>
+        <field name="expiry_date">2027-01-19</field>
+    </record>
+
+    <record id="demo_medicine_quant_05" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_05"/>
+        <field name="lot_id" ref="demo_medicine_lot_05"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">3.0</field>
+    </record>
+
+    <record id="demo_medicine_06" model="product.product">
+        <field name="name">Omeprazole 20mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Omeprazole</field>
+        <field name="dosage_form">capsule</field>
+        <field name="strength">20mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_06" model="stock.lot">
+        <field name="name">BATCH-006</field>
+        <field name="product_id" ref="demo_medicine_06"/>
+        <field name="expiry_date">2026-06-12</field>
+    </record>
+
+    <record id="demo_medicine_quant_06" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_06"/>
+        <field name="lot_id" ref="demo_medicine_lot_06"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">68.0</field>
+    </record>
+
+    <record id="demo_medicine_07" model="product.product">
+        <field name="name">Metformin 500mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Metformin</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">500mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">10.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_07" model="stock.lot">
+        <field name="name">BATCH-007</field>
+        <field name="product_id" ref="demo_medicine_07"/>
+        <field name="expiry_date">2026-07-10</field>
+    </record>
+
+    <record id="demo_medicine_08" model="product.product">
+        <field name="name">Amlodipine 5mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Amlodipine</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">5mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_08" model="stock.lot">
+        <field name="name">BATCH-008</field>
+        <field name="product_id" ref="demo_medicine_08"/>
+        <field name="expiry_date">2027-01-22</field>
+    </record>
+
+    <record id="demo_medicine_quant_08" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_08"/>
+        <field name="lot_id" ref="demo_medicine_lot_08"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">74.0</field>
+    </record>
+
+    <record id="demo_medicine_09" model="product.product">
+        <field name="name">Atorvastatin 10mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Atorvastatin</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">10mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_09" model="stock.lot">
+        <field name="name">BATCH-009</field>
+        <field name="product_id" ref="demo_medicine_09"/>
+        <field name="expiry_date">2026-06-09</field>
+    </record>
+
+    <record id="demo_medicine_quant_09" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_09"/>
+        <field name="lot_id" ref="demo_medicine_lot_09"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">77.0</field>
+    </record>
+
+    <record id="demo_medicine_10" model="product.product">
+        <field name="name">Salbutamol 100mcg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Salbutamol</field>
+        <field name="dosage_form">inhaler</field>
+        <field name="strength">100mcg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">20.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_10" model="stock.lot">
+        <field name="name">BATCH-010</field>
+        <field name="product_id" ref="demo_medicine_10"/>
+        <field name="expiry_date">2026-07-13</field>
+    </record>
+
+    <record id="demo_medicine_quant_10" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_10"/>
+        <field name="lot_id" ref="demo_medicine_lot_10"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">3.0</field>
+    </record>
+
+    <record id="demo_medicine_11" model="product.product">
+        <field name="name">Cough Syrup DX 100ml</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Cough Syrup DX</field>
+        <field name="dosage_form">syrup</field>
+        <field name="strength">100ml</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_11" model="stock.lot">
+        <field name="name">BATCH-011</field>
+        <field name="product_id" ref="demo_medicine_11"/>
+        <field name="expiry_date">2027-01-25</field>
+    </record>
+
+    <record id="demo_medicine_quant_11" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_11"/>
+        <field name="lot_id" ref="demo_medicine_lot_11"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">83.0</field>
+    </record>
+
+    <record id="demo_medicine_12" model="product.product">
+        <field name="name">Paracetamol Syrup 120mg/5ml</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Paracetamol Syrup</field>
+        <field name="dosage_form">syrup</field>
+        <field name="strength">120mg/5ml</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_12" model="stock.lot">
+        <field name="name">BATCH-012</field>
+        <field name="product_id" ref="demo_medicine_12"/>
+        <field name="expiry_date">2026-06-06</field>
+    </record>
+
+    <record id="demo_medicine_quant_12" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_12"/>
+        <field name="lot_id" ref="demo_medicine_lot_12"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">86.0</field>
+    </record>
+
+    <record id="demo_medicine_13" model="product.product">
+        <field name="name">Insulin Glargine 100IU/ml</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Insulin Glargine</field>
+        <field name="dosage_form">injection</field>
+        <field name="strength">100IU/ml</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_13" model="stock.lot">
+        <field name="name">BATCH-013</field>
+        <field name="product_id" ref="demo_medicine_13"/>
+        <field name="expiry_date">2026-07-16</field>
+    </record>
+
+    <record id="demo_medicine_quant_13" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_13"/>
+        <field name="lot_id" ref="demo_medicine_lot_13"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">89.0</field>
+    </record>
+
+    <record id="demo_medicine_14" model="product.product">
+        <field name="name">Diclofenac Gel 1%</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Diclofenac Gel</field>
+        <field name="dosage_form">cream</field>
+        <field name="strength">1%</field>
+        <field name="requires_prescription" eval="False"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">10.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_14" model="stock.lot">
+        <field name="name">BATCH-014</field>
+        <field name="product_id" ref="demo_medicine_14"/>
+        <field name="expiry_date">2027-01-28</field>
+    </record>
+
+    <record id="demo_medicine_15" model="product.product">
+        <field name="name">Ciprofloxacin Eye Drops 0.3%</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Ciprofloxacin Eye Drops</field>
+        <field name="dosage_form">drops</field>
+        <field name="strength">0.3%</field>
+        <field name="requires_prescription" eval="False"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">20.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_15" model="stock.lot">
+        <field name="name">BATCH-015</field>
+        <field name="product_id" ref="demo_medicine_15"/>
+        <field name="expiry_date">2026-06-03</field>
+    </record>
+
+    <record id="demo_medicine_quant_15" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_15"/>
+        <field name="lot_id" ref="demo_medicine_lot_15"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">3.0</field>
+    </record>
+
+    <record id="demo_medicine_16" model="product.product">
+        <field name="name">Loratadine 10mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Loratadine</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">10mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_16" model="stock.lot">
+        <field name="name">BATCH-016</field>
+        <field name="product_id" ref="demo_medicine_16"/>
+        <field name="expiry_date">2026-07-19</field>
+    </record>
+
+    <record id="demo_medicine_quant_16" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_16"/>
+        <field name="lot_id" ref="demo_medicine_lot_16"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">58.0</field>
+    </record>
+
+    <record id="demo_medicine_17" model="product.product">
+        <field name="name">Ranitidine 150mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Ranitidine</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">150mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_17" model="stock.lot">
+        <field name="name">BATCH-017</field>
+        <field name="product_id" ref="demo_medicine_17"/>
+        <field name="expiry_date">2027-01-31</field>
+    </record>
+
+    <record id="demo_medicine_quant_17" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_17"/>
+        <field name="lot_id" ref="demo_medicine_lot_17"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">61.0</field>
+    </record>
+
+    <record id="demo_medicine_18" model="product.product">
+        <field name="name">Ceftriaxone 1g</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Ceftriaxone</field>
+        <field name="dosage_form">injection</field>
+        <field name="strength">1g</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_18" model="stock.lot">
+        <field name="name">BATCH-018</field>
+        <field name="product_id" ref="demo_medicine_18"/>
+        <field name="expiry_date">2026-05-31</field>
+    </record>
+
+    <record id="demo_medicine_quant_18" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_18"/>
+        <field name="lot_id" ref="demo_medicine_lot_18"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">64.0</field>
+    </record>
+
+    <record id="demo_medicine_19" model="product.product">
+        <field name="name">Hydrocortisone Cream 1%</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Hydrocortisone Cream</field>
+        <field name="dosage_form">cream</field>
+        <field name="strength">1%</field>
+        <field name="requires_prescription" eval="False"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_19" model="stock.lot">
+        <field name="name">BATCH-019</field>
+        <field name="product_id" ref="demo_medicine_19"/>
+        <field name="expiry_date">2026-07-22</field>
+    </record>
+
+    <record id="demo_medicine_quant_19" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_19"/>
+        <field name="lot_id" ref="demo_medicine_lot_19"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">67.0</field>
+    </record>
+
+    <record id="demo_medicine_20" model="product.product">
+        <field name="name">Vitamin D3 60000IU</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Vitamin D3</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">60000IU</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">20.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_20" model="stock.lot">
+        <field name="name">BATCH-020</field>
+        <field name="product_id" ref="demo_medicine_20"/>
+        <field name="expiry_date">2027-02-03</field>
+    </record>
+
+    <record id="demo_medicine_quant_20" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_20"/>
+        <field name="lot_id" ref="demo_medicine_lot_20"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">3.0</field>
+    </record>
+
+    <record id="demo_medicine_21" model="product.product">
+        <field name="name">Folic Acid 5mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Folic Acid</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">5mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">10.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_21" model="stock.lot">
+        <field name="name">BATCH-021</field>
+        <field name="product_id" ref="demo_medicine_21"/>
+        <field name="expiry_date">2026-05-28</field>
+    </record>
+
+    <record id="demo_medicine_22" model="product.product">
+        <field name="name">Iron Sucrose 100mg/5ml</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Iron Sucrose</field>
+        <field name="dosage_form">injection</field>
+        <field name="strength">100mg/5ml</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_22" model="stock.lot">
+        <field name="name">BATCH-022</field>
+        <field name="product_id" ref="demo_medicine_22"/>
+        <field name="expiry_date">2026-07-25</field>
+    </record>
+
+    <record id="demo_medicine_quant_22" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_22"/>
+        <field name="lot_id" ref="demo_medicine_lot_22"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">76.0</field>
+    </record>
+
+    <record id="demo_medicine_23" model="product.product">
+        <field name="name">Ondansetron 4mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Ondansetron</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">4mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_23" model="stock.lot">
+        <field name="name">BATCH-023</field>
+        <field name="product_id" ref="demo_medicine_23"/>
+        <field name="expiry_date">2027-02-06</field>
+    </record>
+
+    <record id="demo_medicine_quant_23" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_23"/>
+        <field name="lot_id" ref="demo_medicine_lot_23"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">79.0</field>
+    </record>
+
+    <record id="demo_medicine_24" model="product.product">
+        <field name="name">Domperidone 10mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Domperidone</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">10mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_24" model="stock.lot">
+        <field name="name">BATCH-024</field>
+        <field name="product_id" ref="demo_medicine_24"/>
+        <field name="expiry_date">2026-05-25</field>
+    </record>
+
+    <record id="demo_medicine_quant_24" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_24"/>
+        <field name="lot_id" ref="demo_medicine_lot_24"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">82.0</field>
+    </record>
+
+    <record id="demo_medicine_25" model="product.product">
+        <field name="name">Losartan 50mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Losartan</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">50mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">20.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_25" model="stock.lot">
+        <field name="name">BATCH-025</field>
+        <field name="product_id" ref="demo_medicine_25"/>
+        <field name="expiry_date">2026-07-03</field>
+    </record>
+
+    <record id="demo_medicine_quant_25" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_25"/>
+        <field name="lot_id" ref="demo_medicine_lot_25"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">3.0</field>
+    </record>
+
+    <record id="demo_medicine_26" model="product.product">
+        <field name="name">Pantoprazole 40mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Pantoprazole</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">40mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_26" model="stock.lot">
+        <field name="name">BATCH-026</field>
+        <field name="product_id" ref="demo_medicine_26"/>
+        <field name="expiry_date">2027-02-09</field>
+    </record>
+
+    <record id="demo_medicine_quant_26" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_26"/>
+        <field name="lot_id" ref="demo_medicine_lot_26"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">88.0</field>
+    </record>
+
+    <record id="demo_medicine_27" model="product.product">
+        <field name="name">Doxycycline 100mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Doxycycline</field>
+        <field name="dosage_form">capsule</field>
+        <field name="strength">100mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_27" model="stock.lot">
+        <field name="name">BATCH-027</field>
+        <field name="product_id" ref="demo_medicine_27"/>
+        <field name="expiry_date">2026-05-22</field>
+    </record>
+
+    <record id="demo_medicine_quant_27" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_27"/>
+        <field name="lot_id" ref="demo_medicine_lot_27"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">51.0</field>
+    </record>
+
+    <record id="demo_medicine_28" model="product.product">
+        <field name="name">Metronidazole 400mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Metronidazole</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">400mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">10.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_28" model="stock.lot">
+        <field name="name">BATCH-028</field>
+        <field name="product_id" ref="demo_medicine_28"/>
+        <field name="expiry_date">2026-07-06</field>
+    </record>
+
+    <record id="demo_medicine_29" model="product.product">
+        <field name="name">Tramadol 50mg/ml</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Tramadol</field>
+        <field name="dosage_form">injection</field>
+        <field name="strength">50mg/ml</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="True"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_29" model="stock.lot">
+        <field name="name">BATCH-029</field>
+        <field name="product_id" ref="demo_medicine_29"/>
+        <field name="expiry_date">2027-02-12</field>
+    </record>
+
+    <record id="demo_medicine_quant_29" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_29"/>
+        <field name="lot_id" ref="demo_medicine_lot_29"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">57.0</field>
+    </record>
+
+    <record id="demo_medicine_30" model="product.product">
+        <field name="name">Morphine Sulfate 10mg/ml</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Morphine Sulfate</field>
+        <field name="dosage_form">injection</field>
+        <field name="strength">10mg/ml</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="True"/>
+        <field name="reorder_threshold">20.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_30" model="stock.lot">
+        <field name="name">BATCH-030</field>
+        <field name="product_id" ref="demo_medicine_30"/>
+        <field name="expiry_date">2026-05-19</field>
+    </record>
+
+    <record id="demo_medicine_quant_30" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_30"/>
+        <field name="lot_id" ref="demo_medicine_lot_30"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">3.0</field>
+    </record>
+
+    <record id="demo_medicine_31" model="product.product">
+        <field name="name">Diazepam 5mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Diazepam</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">5mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="True"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_31" model="stock.lot">
+        <field name="name">BATCH-031</field>
+        <field name="product_id" ref="demo_medicine_31"/>
+        <field name="expiry_date">2026-07-09</field>
+    </record>
+
+    <record id="demo_medicine_quant_31" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_31"/>
+        <field name="lot_id" ref="demo_medicine_lot_31"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">63.0</field>
+    </record>
+
+    <record id="demo_medicine_32" model="product.product">
+        <field name="name">Levothyroxine 50mcg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Levothyroxine</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">50mcg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_32" model="stock.lot">
+        <field name="name">BATCH-032</field>
+        <field name="product_id" ref="demo_medicine_32"/>
+        <field name="expiry_date">2027-02-15</field>
+    </record>
+
+    <record id="demo_medicine_quant_32" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_32"/>
+        <field name="lot_id" ref="demo_medicine_lot_32"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">66.0</field>
+    </record>
+
+    <record id="demo_medicine_33" model="product.product">
+        <field name="name">Clopidogrel 75mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Clopidogrel</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">75mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_33" model="stock.lot">
+        <field name="name">BATCH-033</field>
+        <field name="product_id" ref="demo_medicine_33"/>
+        <field name="expiry_date">2026-05-16</field>
+    </record>
+
+    <record id="demo_medicine_quant_33" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_33"/>
+        <field name="lot_id" ref="demo_medicine_lot_33"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">69.0</field>
+    </record>
+
+    <record id="demo_medicine_34" model="product.product">
+        <field name="name">Aspirin 75mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Aspirin</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">75mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_34" model="stock.lot">
+        <field name="name">BATCH-034</field>
+        <field name="product_id" ref="demo_medicine_34"/>
+        <field name="expiry_date">2026-07-12</field>
+    </record>
+
+    <record id="demo_medicine_quant_34" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_34"/>
+        <field name="lot_id" ref="demo_medicine_lot_34"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">72.0</field>
+    </record>
+
+    <record id="demo_medicine_35" model="product.product">
+        <field name="name">Furosemide 40mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Furosemide</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">40mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">20.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_35" model="stock.lot">
+        <field name="name">BATCH-035</field>
+        <field name="product_id" ref="demo_medicine_35"/>
+        <field name="expiry_date">2027-02-18</field>
+    </record>
+
+    <record id="demo_medicine_quant_35" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_35"/>
+        <field name="lot_id" ref="demo_medicine_lot_35"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">3.0</field>
+    </record>
+
+    <record id="demo_medicine_36" model="product.product">
+        <field name="name">Spironolactone 25mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Spironolactone</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">25mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_36" model="stock.lot">
+        <field name="name">BATCH-036</field>
+        <field name="product_id" ref="demo_medicine_36"/>
+        <field name="expiry_date">2026-05-13</field>
+    </record>
+
+    <record id="demo_medicine_quant_36" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_36"/>
+        <field name="lot_id" ref="demo_medicine_lot_36"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">78.0</field>
+    </record>
+
+    <record id="demo_medicine_37" model="product.product">
+        <field name="name">Prednisolone 5mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Prednisolone</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">5mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_37" model="stock.lot">
+        <field name="name">BATCH-037</field>
+        <field name="product_id" ref="demo_medicine_37"/>
+        <field name="expiry_date">2026-07-15</field>
+    </record>
+
+    <record id="demo_medicine_quant_37" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_37"/>
+        <field name="lot_id" ref="demo_medicine_lot_37"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">81.0</field>
+    </record>
+
+    <record id="demo_medicine_38" model="product.product">
+        <field name="name">Albuterol Nebulizer Solution 2.5mg/3ml</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Albuterol Nebulizer Solution</field>
+        <field name="dosage_form">drops</field>
+        <field name="strength">2.5mg/3ml</field>
+        <field name="requires_prescription" eval="False"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_38" model="stock.lot">
+        <field name="name">BATCH-038</field>
+        <field name="product_id" ref="demo_medicine_38"/>
+        <field name="expiry_date">2027-02-21</field>
+    </record>
+
+    <record id="demo_medicine_quant_38" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_38"/>
+        <field name="lot_id" ref="demo_medicine_lot_38"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">84.0</field>
+    </record>
+
+    <record id="demo_medicine_39" model="product.product">
+        <field name="name">Multivitamin Syrup 200ml</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Multivitamin Syrup</field>
+        <field name="dosage_form">syrup</field>
+        <field name="strength">200ml</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_39" model="stock.lot">
+        <field name="name">BATCH-039</field>
+        <field name="product_id" ref="demo_medicine_39"/>
+        <field name="expiry_date">2026-05-10</field>
+    </record>
+
+    <record id="demo_medicine_quant_39" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_39"/>
+        <field name="lot_id" ref="demo_medicine_lot_39"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">87.0</field>
+    </record>
+
+    <record id="demo_medicine_40" model="product.product">
+        <field name="name">Betadine Antiseptic Cream 5%</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Betadine Antiseptic Cream</field>
+        <field name="dosage_form">cream</field>
+        <field name="strength">5%</field>
+        <field name="requires_prescription" eval="False"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">20.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_40" model="stock.lot">
+        <field name="name">BATCH-040</field>
+        <field name="product_id" ref="demo_medicine_40"/>
+        <field name="expiry_date">2026-07-18</field>
+    </record>
+
+    <record id="demo_medicine_quant_40" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_40"/>
+        <field name="lot_id" ref="demo_medicine_lot_40"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">3.0</field>
+    </record>
+
+    <record id="demo_medicine_41" model="product.product">
+        <field name="name">Chlorpheniramine 4mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Chlorpheniramine</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">4mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_41" model="stock.lot">
+        <field name="name">BATCH-041</field>
+        <field name="product_id" ref="demo_medicine_41"/>
+        <field name="expiry_date">2027-02-24</field>
+    </record>
+
+    <record id="demo_medicine_quant_41" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_41"/>
+        <field name="lot_id" ref="demo_medicine_lot_41"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">53.0</field>
+    </record>
+
+    <record id="demo_medicine_42" model="product.product">
+        <field name="name">Ketorolac Eye Drops 0.5%</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Ketorolac Eye Drops</field>
+        <field name="dosage_form">drops</field>
+        <field name="strength">0.5%</field>
+        <field name="requires_prescription" eval="False"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">10.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_42" model="stock.lot">
+        <field name="name">BATCH-042</field>
+        <field name="product_id" ref="demo_medicine_42"/>
+        <field name="expiry_date">2026-05-07</field>
+    </record>
+
+    <record id="demo_medicine_43" model="product.product">
+        <field name="name">Vancomycin 500mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Vancomycin</field>
+        <field name="dosage_form">injection</field>
+        <field name="strength">500mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_43" model="stock.lot">
+        <field name="name">BATCH-043</field>
+        <field name="product_id" ref="demo_medicine_43"/>
+        <field name="expiry_date">2026-07-21</field>
+    </record>
+
+    <record id="demo_medicine_quant_43" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_43"/>
+        <field name="lot_id" ref="demo_medicine_lot_43"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">59.0</field>
+    </record>
+
+    <record id="demo_medicine_44" model="product.product">
+        <field name="name">Gentamicin Eye Drops 0.3%</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Gentamicin Eye Drops</field>
+        <field name="dosage_form">drops</field>
+        <field name="strength">0.3%</field>
+        <field name="requires_prescription" eval="False"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_44" model="stock.lot">
+        <field name="name">BATCH-044</field>
+        <field name="product_id" ref="demo_medicine_44"/>
+        <field name="expiry_date">2027-02-27</field>
+    </record>
+
+    <record id="demo_medicine_quant_44" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_44"/>
+        <field name="lot_id" ref="demo_medicine_lot_44"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">62.0</field>
+    </record>
+
+    <record id="demo_medicine_45" model="product.product">
+        <field name="name">Salbutamol Syrup 2mg/5ml</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Salbutamol Syrup</field>
+        <field name="dosage_form">syrup</field>
+        <field name="strength">2mg/5ml</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">20.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_45" model="stock.lot">
+        <field name="name">BATCH-045</field>
+        <field name="product_id" ref="demo_medicine_45"/>
+        <field name="expiry_date">2026-05-04</field>
+    </record>
+
+    <record id="demo_medicine_quant_45" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_45"/>
+        <field name="lot_id" ref="demo_medicine_lot_45"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">3.0</field>
+    </record>
+
+    <record id="demo_medicine_46" model="product.product">
+        <field name="name">Codeine Phosphate 30mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Codeine Phosphate</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">30mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="True"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_46" model="stock.lot">
+        <field name="name">BATCH-046</field>
+        <field name="product_id" ref="demo_medicine_46"/>
+        <field name="expiry_date">2026-07-24</field>
+    </record>
+
+    <record id="demo_medicine_quant_46" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_46"/>
+        <field name="lot_id" ref="demo_medicine_lot_46"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">68.0</field>
+    </record>
+
+    <record id="demo_medicine_47" model="product.product">
+        <field name="name">Fentanyl Injection 50mcg/ml</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Fentanyl Injection</field>
+        <field name="dosage_form">injection</field>
+        <field name="strength">50mcg/ml</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="True"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_47" model="stock.lot">
+        <field name="name">BATCH-047</field>
+        <field name="product_id" ref="demo_medicine_47"/>
+        <field name="expiry_date">2027-03-02</field>
+    </record>
+
+    <record id="demo_medicine_quant_47" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_47"/>
+        <field name="lot_id" ref="demo_medicine_lot_47"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">71.0</field>
+    </record>
+
+    <record id="demo_medicine_48" model="product.product">
+        <field name="name">Lorazepam 1mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Lorazepam</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">1mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="True"/>
+        <field name="reorder_threshold">15.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_48" model="stock.lot">
+        <field name="name">BATCH-048</field>
+        <field name="product_id" ref="demo_medicine_48"/>
+        <field name="expiry_date">2026-05-01</field>
+    </record>
+
+    <record id="demo_medicine_quant_48" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_48"/>
+        <field name="lot_id" ref="demo_medicine_lot_48"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">74.0</field>
+    </record>
+
+    <record id="demo_medicine_49" model="product.product">
+        <field name="name">Esomeprazole 40mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Esomeprazole</field>
+        <field name="dosage_form">capsule</field>
+        <field name="strength">40mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">10.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_49" model="stock.lot">
+        <field name="name">BATCH-049</field>
+        <field name="product_id" ref="demo_medicine_49"/>
+        <field name="expiry_date">2026-07-27</field>
+    </record>
+
+    <record id="demo_medicine_50" model="product.product">
+        <field name="name">Calcium Carbonate 500mg</field>
+        <field name="is_hospital_medicine" eval="True"/>
+        <field name="generic_name">Calcium Carbonate</field>
+        <field name="dosage_form">tablet</field>
+        <field name="strength">500mg</field>
+        <field name="requires_prescription" eval="True"/>
+        <field name="controlled_substance" eval="False"/>
+        <field name="reorder_threshold">20.0</field>
+        <field name="type">consu</field>
+        <field name="is_storable" eval="True"/>
+        <field name="tracking">lot</field>
+        <field name="categ_id" ref="hospital_inventory.product_category_hospital_medicines"/>
+    </record>
+
+    <record id="demo_medicine_lot_50" model="stock.lot">
+        <field name="name">BATCH-050</field>
+        <field name="product_id" ref="demo_medicine_50"/>
+        <field name="expiry_date">2027-03-05</field>
+    </record>
+
+    <record id="demo_medicine_quant_50" model="stock.quant">
+        <field name="product_id" ref="demo_medicine_50"/>
+        <field name="lot_id" ref="demo_medicine_lot_50"/>
+        <field name="location_id" ref="hospital_inventory.stock_location_pharmacy_store"/>
+        <field name="inventory_quantity">3.0</field>
+    </record>
+
+</odoo>

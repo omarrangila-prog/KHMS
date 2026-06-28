@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- ACL/group-assignment decision (see README "Security" section for
+         the full writeup): group_hospital_inventory_manager implies BOTH
+         hospital_base.group_hospital_user (the established hospital-suite
+         pattern, every other hospital_* group does this) AND Odoo's own
+         stock.group_stock_manager. Odoo's native product.template/
+         stock.lot/stock.quant ACLs are already broad and stock-group
+         gated; this module does not re-declare or override them (Phase 11
+         §1 — no duplicated business logic/config that could drift from
+         upstream). Implying stock.group_stock_manager means simply
+         assigning a user "Hospital Inventory Manager" is enough to also
+         unlock the native Inventory app (adjust stock, see Pharmacy
+         warehouse, manage stock.lot expiry dates, etc.) — no separate,
+         easy-to-forget manual assignment of an Odoo-native group at the
+         user-record level is required. -->
+    <record id="group_hospital_inventory_manager" model="res.groups">
+        <field name="name">Hospital Inventory Manager</field>
+        <field name="category_id" ref="hospital_base.module_hospital_category"/>
+        <field name="implied_ids" eval="[(4, ref('hospital_base.group_hospital_user')),
+                                          (4, ref('stock.group_stock_manager'))]"/>
+        <field name="comment">Manages the medicine catalog, stock levels, expiry alerts, and low-stock alerts. Also grants the native Odoo Inventory manager group.</field>
+    </record>
+
+    <!-- hospital.inventory.dashboard is a SQL view (_auto = False) with
+         no real rows to isolate by company on its own table (it has no
+         stored company_id column written by the ORM — company_id is
+         read straight off product_template in the view query), so no
+         ir.rule multi-company record rule is declared here; the
+         dashboard already only ever surfaces is_hospital_medicine
+         products, and product.template's own multi-company behavior
+         (shared catalog unless company_id is set) is inherited as-is. -->
+
+</odoo>

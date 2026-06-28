@@ -1,0 +1,105 @@
+// Inventory Dashboard styling. Reuses the shared design tokens defined
+// once in hospital_base/static/src/scss/_variables.scss (Phase 7 §2,
+// Phase 11 §5) -- never redefine the palette here.
+@import "/hospital_base/static/src/scss/_variables";
+
+.o_hospital_inventory_dashboard {
+    padding: $o-hospital-spacing-lg;
+    max-width: 960px;
+    margin: 0 auto;
+
+    .o_hospital_dashboard_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: $o-hospital-spacing-md;
+
+        h2 {
+            color: $o-hospital-secondary;
+            margin: 0;
+        }
+    }
+
+    .o_hospital_inventory_kpi_row {
+        display: flex;
+        gap: $o-hospital-spacing-md;
+        margin-bottom: $o-hospital-spacing-lg;
+        align-items: stretch;
+    }
+
+    .o_hospital_inventory_kpi_card {
+        flex: 1;
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        padding: $o-hospital-spacing-lg;
+        text-align: center;
+        cursor: pointer;
+        min-height: 44px;
+
+        .o_hospital_kpi_value {
+            font-size: 32px;
+            font-weight: 600;
+            color: $o-hospital-secondary;
+        }
+
+        .o_hospital_kpi_label {
+            color: #6c757d;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        &.o_hospital_kpi_warning {
+            border-left: 6px solid $o-hospital-warning;
+        }
+
+        &.o_hospital_kpi_danger {
+            border-left: 6px solid $o-hospital-danger;
+        }
+    }
+
+    .o_hospital_inventory_kpi_actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        button {
+            min-height: 44px;
+        }
+    }
+
+    .o_hospital_inventory_empty {
+        text-align: center;
+        color: #6c757d;
+        font-style: italic;
+        padding: $o-hospital-spacing-lg;
+    }
+
+    .o_hospital_inventory_table {
+        background-color: #fff;
+    }
+
+    .o_hospital_skeleton {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: o-hospital-inventory-skeleton-loading 1.5s infinite;
+        border-radius: 6px;
+        min-height: 120px;
+        margin-bottom: $o-hospital-spacing-lg;
+    }
+}
+
+@keyframes o-hospital-inventory-skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+@media (max-width: 768px) {
+    .o_hospital_inventory_dashboard {
+        padding: $o-hospital-spacing-md;
+
+        .o_hospital_inventory_kpi_row {
+            flex-direction: column;
+        }
+    }
+}

@@ -1,0 +1,39 @@
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Hospital Inventory</h2>
+        <h3 class="oe_slogan">Medicine catalog and stock visibility on native Odoo Inventory</h3>
+        <div class="oe_span12">
+            <p class="oe_mt32">
+                Hospital Inventory is a thin clinical layer over Odoo's
+                native Inventory app. It adds medicine-specific fields to
+                the product catalog, expiry tracking to stock lots, and a
+                dashboard that aggregates on-hand quantity, reorder
+                thresholds, and batch expiry -- all in PostgreSQL, not
+                looped in Python.
+            </p>
+        </div>
+    </div>
+    <div class="oe_row oe_spaced">
+        <h3 class="oe_slogan">Key Capabilities</h3>
+        <ul>
+            <li>Clinical fields on the product catalog: generic name, dosage form, strength, prescription/controlled-substance flags, and a reorder threshold.</li>
+            <li>Expiry-date tracking on stock lots/serials, with live (non-stored) expiring-soon and expired flags.</li>
+            <li>An Inventory Dashboard: KPI cards for low stock and expiring/expired batches, plus a drill-down table, backed entirely by a SQL view.</li>
+            <li>Daily automated alerts: expiry reminders within 30 days, and low-stock reminders against the reorder threshold, both as Activities.</li>
+            <li>A dedicated Pharmacy warehouse and stock location, and a Hospital Medicines product category.</li>
+            <li>A Low Stock QWeb report.</li>
+        </ul>
+    </div>
+    <div class="oe_row oe_spaced">
+        <h3 class="oe_slogan">Built for the Full Suite</h3>
+        <p>
+            Hospital Inventory depends only on ``hospital_base`` and
+            Odoo's native ``stock`` app -- deliberately not
+            ``hospital_doctor`` -- so that the future ``hospital_pharmacy``
+            module can depend on both ``hospital_doctor`` and
+            ``hospital_inventory`` together without creating a dependency
+            cycle. A medicine is a real ``product.product``, so stock,
+            valuation, and purchasing stay 100% native Odoo Inventory.
+        </p>
+    </div>
+</section>

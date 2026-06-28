@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="hospital_inventory_menu_root"
+              name="Inventory"
+              parent="hospital_base.hospital_menu_root"
+              groups="group_hospital_inventory_manager"
+              sequence="40"/>
+
+    <menuitem id="hospital_inventory_menu_dashboard"
+              name="Dashboard"
+              parent="hospital_inventory_menu_root"
+              action="hospital_inventory_dashboard_action_client"
+              sequence="5"/>
+
+    <menuitem id="hospital_inventory_menu_medicines"
+              name="Medicines"
+              parent="hospital_inventory_menu_root"
+              action="product_template_action_hospital_medicine"
+              sequence="10"/>
+
+    <menuitem id="hospital_inventory_menu_stock_levels"
+              name="Stock Levels"
+              parent="hospital_inventory_menu_root"
+              action="hospital_inventory_dashboard_action"
+              sequence="20"/>
+
+    <menuitem id="hospital_inventory_menu_expiry_alerts"
+              name="Expiry Alerts"
+              parent="hospital_inventory_menu_root"
+              action="hospital_medicine_batch_action_expiring"
+              sequence="30"/>
+
+</odoo>

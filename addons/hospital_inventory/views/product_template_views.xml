@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Medicine catalog form (Phase 6 §6): adds a "Hospital Medicine"
+         tab onto the standard product form. The fields are always
+         present on the model (per the task spec) so they save correctly
+         regardless of is_hospital_medicine, but the page itself only
+         shows when is_hospital_medicine is set, keeping the standard
+         product form uncluttered for non-medicine products. -->
+    <record id="product_template_view_form_inherit_hospital_inventory" model="ir.ui.view">
+        <field name="name">product.template.view.form.inherit.hospital.inventory</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <field name="categ_id" position="after">
+                <field name="is_hospital_medicine"/>
+            </field>
+            <page name="general_information" position="after">
+                <page string="Hospital Medicine" name="hospital_medicine"
+                      invisible="not is_hospital_medicine">
+                    <group>
+                        <group name="hospital_medicine_clinical" string="Clinical Details">
+                            <field name="generic_name"/>
+                            <field name="dosage_form"/>
+                            <field name="strength"/>
+                            <field name="requires_prescription"/>
+                            <field name="controlled_substance"/>
+                        </group>
+                        <group name="hospital_medicine_stock" string="Stock">
+                            <field name="reorder_threshold"/>
+                            <field name="qty_available" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+            </page>
+        </field>
+    </record>
+
+    <record id="product_template_view_list_hospital_medicine" model="ir.ui.view">
+        <field name="name">product.template.view.list.hospital.medicine</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <list string="Medicines">
+                <field name="name" string="Medicine"/>
+                <field name="generic_name"/>
+                <field name="dosage_form"/>
+                <field name="strength"/>
+                <field name="qty_available"/>
+                <field name="reorder_threshold"/>
+                <field name="requires_prescription" widget="boolean_toggle"/>
+                <field name="controlled_substance" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="product_template_view_kanban_hospital_medicine" model="ir.ui.view">
+        <field name="name">product.template.view.kanban.hospital.medicine</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="generic_name"/>
+                <field name="dosage_form"/>
+                <field name="strength"/>
+                <field name="qty_available"/>
+                <field name="reorder_threshold"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="o_hospital_medicine_kanban_card">
+                            <strong t-esc="record.name.value"/>
+                            <div t-esc="record.generic_name.value"/>
+                            <div>
+                                <span t-esc="record.dosage_form.value"/>
+                                <span t-esc="record.strength.value"/>
+                            </div>
+                            <div>
+                                Qty: <span t-esc="record.qty_available.value"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="product_template_action_hospital_medicine" model="ir.actions.act_window">
+        <field name="name">Medicines</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[("is_hospital_medicine", "=", True)]</field>
+        <field name="context">{'default_is_hospital_medicine': True, 'default_categ_id': ref('hospital_inventory.product_category_hospital_medicines')}</field>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'list', 'view_id': ref('product_template_view_list_hospital_medicine')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'kanban', 'view_id': ref('product_template_view_kanban_hospital_medicine')}),
+            (0, 0, {'sequence': 3, 'view_mode': 'form'}),
+        ]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No medicines yet. Create your first medicine to get started.
+            </p>
+        </field>
+    </record>
+
+</odoo>

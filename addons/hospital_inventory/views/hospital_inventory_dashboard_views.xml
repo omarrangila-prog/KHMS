@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_inventory_dashboard_action_client" model="ir.actions.client">
+        <field name="name">Inventory Dashboard</field>
+        <field name="tag">hospital_inventory.inventory_dashboard</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Fallback / drill-down list+graph view on the SQL-view model
+         itself (Phase 7's allowance for admin/config-adjacent screens):
+         the OWL dashboard above is the primary UI, but every row is also
+         reachable as a plain list/graph for export, grouping, and
+         filtering that the KPI-card view doesn't try to replicate. -->
+    <record id="hospital_inventory_dashboard_view_search" model="ir.ui.view">
+        <field name="name">hospital.inventory.dashboard.view.search</field>
+        <field name="model">hospital.inventory.dashboard</field>
+        <field name="arch" type="xml">
+            <search string="Stock Levels">
+                <field name="product_name" string="Medicine"/>
+                <field name="categ_id"/>
+                <filter string="Low Stock" name="filter_low_stock" domain="[('is_low_stock', '=', True)]"/>
+                <filter string="Expiring Soon" name="filter_expiring_soon" domain="[('is_expiring_soon', '=', True)]"/>
+                <filter string="Expired" name="filter_expired" domain="[('is_expired', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="group_by_categ" context="{'group_by': 'categ_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hospital_inventory_dashboard_view_list" model="ir.ui.view">
+        <field name="name">hospital.inventory.dashboard.view.list</field>
+        <field name="model">hospital.inventory.dashboard</field>
+        <field name="arch" type="xml">
+            <list string="Stock Levels" create="0" edit="0" delete="0">
+                <field name="product_name" string="Medicine"/>
+                <field name="default_code"/>
+                <field name="categ_id"/>
+                <field name="qty_available"/>
+                <field name="reorder_threshold"/>
+                <field name="is_low_stock" widget="boolean_toggle" decoration-danger="is_low_stock"/>
+                <field name="nearest_expiry_date"/>
+                <field name="is_expiring_soon" widget="boolean_toggle" decoration-warning="is_expiring_soon"/>
+                <field name="is_expired" widget="boolean_toggle" decoration-danger="is_expired"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hospital_inventory_dashboard_view_graph" model="ir.ui.view">
+        <field name="name">hospital.inventory.dashboard.view.graph</field>
+        <field name="model">hospital.inventory.dashboard</field>
+        <field name="arch" type="xml">
+            <graph string="Stock Levels" type="bar">
+                <field name="product_name"/>
+                <field name="qty_available" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="hospital_inventory_dashboard_action" model="ir.actions.act_window">
+        <field name="name">Stock Levels</field>
+        <field name="res_model">hospital.inventory.dashboard</field>
+        <field name="view_mode">list,graph</field>
+        <field name="search_view_id" ref="hospital_inventory_dashboard_view_search"/>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'list', 'view_id': ref('hospital_inventory_dashboard_view_list')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'graph', 'view_id': ref('hospital_inventory_dashboard_view_graph')}),
+        ]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                All stock levels healthy.
+            </p>
+        </field>
+    </record>
+
+    <record id="hospital_inventory_dashboard_action_low_stock" model="ir.actions.act_window">
+        <field name="name">Low Stock</field>
+        <field name="res_model">hospital.inventory.dashboard</field>
+        <field name="view_mode">list,graph</field>
+        <field name="search_view_id" ref="hospital_inventory_dashboard_view_search"/>
+        <field name="domain">[("is_low_stock", "=", True)]</field>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'list', 'view_id': ref('hospital_inventory_dashboard_view_list')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'graph', 'view_id': ref('hospital_inventory_dashboard_view_graph')}),
+        ]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                All stock levels healthy.
+            </p>
+        </field>
+    </record>
+
+</odoo>

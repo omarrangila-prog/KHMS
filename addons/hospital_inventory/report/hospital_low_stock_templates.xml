@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="hospital_low_stock_template">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <h2>Low Stock Report</h2>
+                    <p>
+                        Medicines at or below their reorder threshold, as of
+                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/>.
+                    </p>
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Medicine</th>
+                                <th>Reference</th>
+                                <th>Category</th>
+                                <th>On Hand</th>
+                                <th>Reorder Threshold</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs" t-as="o">
+                                <tr t-if="o.is_low_stock">
+                                    <td><span t-esc="o.product_name"/></td>
+                                    <td><span t-esc="o.default_code"/></td>
+                                    <td><span t-esc="o.categ_id.name"/></td>
+                                    <td><span t-esc="o.qty_available"/></td>
+                                    <td><span t-esc="o.reorder_threshold"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <p t-if="not any(o.is_low_stock for o in docs)">
+                        All stock levels healthy.
+                    </p>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>
