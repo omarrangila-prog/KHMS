@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Minimal demo res.users for demo doctors. Each is created without
+         a login group beyond the internal user defaults so they exist
+         purely to satisfy hospital.doctor.user_id's "required, login
+         identity" design (Phase 5 §2.2) in demo data; real deployments
+         link doctors to real staff accounts created through normal user
+         administration. -->
+
+    <record id="demo_user_doctor_1" model="res.users">
+        <field name="name">Dr. Aisha Khan</field>
+        <field name="login">doctor.aisha.khan@hospital-demo.local</field>
+        <field name="email">doctor.aisha.khan@hospital-demo.local</field>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_user')])]"/>
+    </record>
+
+    <record id="demo_user_doctor_2" model="res.users">
+        <field name="name">Dr. Brian Otieno</field>
+        <field name="login">doctor.brian.otieno@hospital-demo.local</field>
+        <field name="email">doctor.brian.otieno@hospital-demo.local</field>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_user')])]"/>
+    </record>
+
+    <record id="demo_user_doctor_3" model="res.users">
+        <field name="name">Dr. Carla Mendes</field>
+        <field name="login">doctor.carla.mendes@hospital-demo.local</field>
+        <field name="email">doctor.carla.mendes@hospital-demo.local</field>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_user')])]"/>
+    </record>
+
+    <record id="demo_user_doctor_4" model="res.users">
+        <field name="name">Dr. Daniyar Suleimenov</field>
+        <field name="login">doctor.daniyar.suleimenov@hospital-demo.local</field>
+        <field name="email">doctor.daniyar.suleimenov@hospital-demo.local</field>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_user')])]"/>
+    </record>
+
+    <record id="demo_user_doctor_5" model="res.users">
+        <field name="name">Dr. Elena Petrova</field>
+        <field name="login">doctor.elena.petrova@hospital-demo.local</field>
+        <field name="email">doctor.elena.petrova@hospital-demo.local</field>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_user')])]"/>
+    </record>
+
+    <record id="demo_doctor_1" model="hospital.doctor">
+        <field name="user_id" ref="demo_user_doctor_1"/>
+        <field name="department_id" ref="demo_department_general_medicine"/>
+        <field name="specialization">Internal Medicine</field>
+        <field name="license_number">LIC-GM-1001</field>
+    </record>
+
+    <record id="demo_doctor_2" model="hospital.doctor">
+        <field name="user_id" ref="demo_user_doctor_2"/>
+        <field name="department_id" ref="demo_department_cardiology"/>
+        <field name="specialization">Cardiology</field>
+        <field name="license_number">LIC-CD-1002</field>
+    </record>
+
+    <record id="demo_doctor_3" model="hospital.doctor">
+        <field name="user_id" ref="demo_user_doctor_3"/>
+        <field name="department_id" ref="demo_department_orthopedics"/>
+        <field name="specialization">Orthopedic Surgery</field>
+        <field name="license_number">LIC-OR-1003</field>
+    </record>
+
+    <record id="demo_doctor_4" model="hospital.doctor">
+        <field name="user_id" ref="demo_user_doctor_4"/>
+        <field name="department_id" ref="demo_department_pediatrics"/>
+        <field name="specialization">Pediatrics</field>
+        <field name="license_number">LIC-PD-1004</field>
+    </record>
+
+    <record id="demo_doctor_5" model="hospital.doctor">
+        <field name="user_id" ref="demo_user_doctor_5"/>
+        <field name="department_id" ref="demo_department_emergency"/>
+        <field name="specialization">Emergency Medicine</field>
+        <field name="license_number">LIC-ER-1005</field>
+    </record>
+
+    <!-- Weekly schedules: Mon-Fri, 09:00-17:00 -->
+    <record id="demo_schedule_1_mon" model="hospital.doctor.schedule">
+        <field name="doctor_id" ref="demo_doctor_1"/>
+        <field name="weekday">0</field>
+        <field name="start_time">9.0</field>
+        <field name="end_time">17.0</field>
+        <field name="max_patients">20</field>
+    </record>
+
+    <record id="demo_schedule_1_wed" model="hospital.doctor.schedule">
+        <field name="doctor_id" ref="demo_doctor_1"/>
+        <field name="weekday">2</field>
+        <field name="start_time">9.0</field>
+        <field name="end_time">17.0</field>
+        <field name="max_patients">20</field>
+    </record>
+
+    <record id="demo_schedule_2_tue" model="hospital.doctor.schedule">
+        <field name="doctor_id" ref="demo_doctor_2"/>
+        <field name="weekday">1</field>
+        <field name="start_time">10.0</field>
+        <field name="end_time">16.0</field>
+        <field name="max_patients">15</field>
+    </record>
+
+    <record id="demo_schedule_3_thu" model="hospital.doctor.schedule">
+        <field name="doctor_id" ref="demo_doctor_3"/>
+        <field name="weekday">3</field>
+        <field name="start_time">8.0</field>
+        <field name="end_time">14.0</field>
+        <field name="max_patients">12</field>
+    </record>
+
+    <record id="demo_schedule_4_fri" model="hospital.doctor.schedule">
+        <field name="doctor_id" ref="demo_doctor_4"/>
+        <field name="weekday">4</field>
+        <field name="start_time">9.0</field>
+        <field name="end_time">15.0</field>
+        <field name="max_patients">25</field>
+    </record>
+
+    <record id="demo_schedule_5_everyday" model="hospital.doctor.schedule">
+        <field name="doctor_id" ref="demo_doctor_5"/>
+        <field name="weekday">5</field>
+        <field name="start_time">0.0</field>
+        <field name="end_time">23.5</field>
+        <field name="max_patients">50</field>
+    </record>
+
+</odoo>

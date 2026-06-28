@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="hospital_menu_root"
+              name="Hospital"
+              web_icon="hospital_base,static/description/icon.png"
+              groups="hospital_base.group_hospital_user"
+              sequence="5"/>
+
+    <menuitem id="hospital_menu_patients"
+              name="Patients"
+              parent="hospital_menu_root"
+              action="hospital_patient_action"
+              sequence="10"/>
+
+    <menuitem id="hospital_menu_visits"
+              name="Visits"
+              parent="hospital_menu_root"
+              action="hospital_visit_action"
+              sequence="20"/>
+
+    <menuitem id="hospital_menu_configuration"
+              name="Configuration"
+              parent="hospital_menu_root"
+              groups="hospital_base.group_hospital_admin"
+              sequence="90"/>
+
+    <menuitem id="hospital_menu_departments"
+              name="Departments"
+              parent="hospital_menu_configuration"
+              action="hospital_department_action"
+              sequence="10"/>
+
+    <menuitem id="hospital_menu_doctors"
+              name="Doctors"
+              parent="hospital_menu_configuration"
+              action="hospital_doctor_action"
+              sequence="20"/>
+
+    <menuitem id="hospital_menu_audit_log"
+              name="Audit Log"
+              parent="hospital_menu_configuration"
+              action="hospital_audit_log_action"
+              groups="hospital_base.group_hospital_admin"
+              sequence="90"/>
+
+</odoo>

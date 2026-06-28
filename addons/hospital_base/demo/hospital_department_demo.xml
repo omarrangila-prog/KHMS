@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="demo_department_general_medicine" model="hospital.department">
+        <field name="name">General Medicine</field>
+        <field name="code">GMED</field>
+    </record>
+
+    <record id="demo_department_cardiology" model="hospital.department">
+        <field name="name">Cardiology</field>
+        <field name="code">CARD</field>
+    </record>
+
+    <record id="demo_department_orthopedics" model="hospital.department">
+        <field name="name">Orthopedics</field>
+        <field name="code">ORTHO</field>
+    </record>
+
+    <record id="demo_department_pediatrics" model="hospital.department">
+        <field name="name">Pediatrics</field>
+        <field name="code">PEDS</field>
+    </record>
+
+    <record id="demo_department_emergency" model="hospital.department">
+        <field name="name">Emergency</field>
+        <field name="code">ER</field>
+    </record>
+
+</odoo>

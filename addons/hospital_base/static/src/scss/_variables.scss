@@ -1,0 +1,15 @@
+// Hospital Management System - shared design tokens.
+// Single source of truth for color palette / spacing used by every
+// hospital_* module's stylesheets (Phase 7 §2, Phase 11 §5). Imported by
+// downstream modules; never redefine these variables locally.
+
+$o-hospital-primary: #2c7a7b;
+$o-hospital-secondary: #2c3e50;
+$o-hospital-danger: #c0392b;
+$o-hospital-warning: #e67e22;
+$o-hospital-success: #27ae60;
+
+$o-hospital-spacing-xs: 4px;
+$o-hospital-spacing-sm: 8px;
+$o-hospital-spacing-md: 16px;
+$o-hospital-spacing-lg: 24px;

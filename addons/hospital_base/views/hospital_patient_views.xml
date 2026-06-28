@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_patient_view_form" model="ir.ui.view">
+        <field name="name">hospital.patient.view.form</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <form string="Patient">
+                <header>
+                    <button name="action_view_visits" type="object" string="Visits" class="oe_stat_button" icon="fa-stethoscope"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Patient Full Name"/>
+                        </h1>
+                        <h3>
+                            <field name="patient_code" readonly="1"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group string="Identity">
+                            <field name="date_of_birth"/>
+                            <field name="age" readonly="1"/>
+                            <field name="gender"/>
+                            <field name="blood_group"/>
+                            <field name="identity_type"/>
+                            <field name="identity_number" groups="hospital_base.group_hospital_admin"/>
+                        </group>
+                        <group string="Contact">
+                            <field name="phone"/>
+                            <field name="mobile"/>
+                            <field name="email"/>
+                            <field name="address_id"/>
+                        </group>
+                    </group>
+                    <group string="Emergency Contact">
+                        <field name="emergency_contact_name"/>
+                        <field name="emergency_contact_phone"/>
+                    </group>
+                    <notebook>
+                        <page string="Allergies" name="allergies">
+                            <field name="allergy_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="severity"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Chronic Conditions" name="chronic_conditions">
+                            <field name="chronic_condition_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="diagnosed_date"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Visits" name="visits">
+                            <field name="visit_ids" readonly="1">
+                                <list>
+                                    <field name="visit_code"/>
+                                    <field name="visit_type"/>
+                                    <field name="doctor_id"/>
+                                    <field name="department_id"/>
+                                    <field name="state"/>
+                                    <field name="checkin_datetime"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hospital_patient_view_list" model="ir.ui.view">
+        <field name="name">hospital.patient.view.list</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <list string="Patients">
+                <field name="patient_code"/>
+                <field name="name"/>
+                <field name="date_of_birth"/>
+                <field name="age"/>
+                <field name="gender"/>
+                <field name="phone"/>
+                <field name="mobile"/>
+                <field name="blood_group"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hospital_patient_view_kanban" model="ir.ui.view">
+        <field name="name">hospital.patient.view.kanban</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <kanban class="o_hospital_patient_kanban">
+                <field name="name"/>
+                <field name="patient_code"/>
+                <field name="phone"/>
+                <field name="age"/>
+                <field name="gender"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <strong><field name="name"/></strong>
+                            <div><field name="patient_code"/></div>
+                            <div>
+                                <span><field name="age"/> yrs</span>
+                                <span> - </span>
+                                <span><field name="gender"/></span>
+                            </div>
+                            <div><field name="phone"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="hospital_patient_view_search" model="ir.ui.view">
+        <field name="name">hospital.patient.view.search</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <search string="Search Patients">
+                <field name="name"/>
+                <field name="patient_code"/>
+                <field name="phone"/>
+                <field name="mobile"/>
+                <field name="identity_number"/>
+                <filter string="Male" name="filter_male" domain="[('gender', '=', 'male')]"/>
+                <filter string="Female" name="filter_female" domain="[('gender', '=', 'female')]"/>
+                <separator/>
+                <filter string="Archived" name="filter_inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Gender" name="groupby_gender" context="{'group_by': 'gender'}"/>
+                    <filter string="Blood Group" name="groupby_blood_group" context="{'group_by': 'blood_group'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hospital_patient_action" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="res_model">hospital.patient</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="hospital_patient_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Register your first patient
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hospital_patient_user,hospital.patient.user,model_hospital_patient,group_hospital_user,1,0,0,0
+access_hospital_patient_admin,hospital.patient.admin,model_hospital_patient,group_hospital_admin,1,1,1,1
+access_hospital_patient_allergy_user,hospital.patient.allergy.user,model_hospital_patient_allergy,group_hospital_user,1,0,0,0
+access_hospital_patient_allergy_admin,hospital.patient.allergy.admin,model_hospital_patient_allergy,group_hospital_admin,1,1,1,1
+access_hospital_patient_condition_user,hospital.patient.condition.user,model_hospital_patient_condition,group_hospital_user,1,0,0,0
+access_hospital_patient_condition_admin,hospital.patient.condition.admin,model_hospital_patient_condition,group_hospital_admin,1,1,1,1
+access_hospital_visit_user,hospital.visit.user,model_hospital_visit,group_hospital_user,1,0,0,0
+access_hospital_visit_admin,hospital.visit.admin,model_hospital_visit,group_hospital_admin,1,1,1,1
+access_hospital_department_user,hospital.department.user,model_hospital_department,group_hospital_user,1,0,0,0
+access_hospital_department_admin,hospital.department.admin,model_hospital_department,group_hospital_admin,1,1,1,1
+access_hospital_doctor_user,hospital.doctor.user,model_hospital_doctor,group_hospital_user,1,0,0,0
+access_hospital_doctor_admin,hospital.doctor.admin,model_hospital_doctor,group_hospital_admin,1,1,1,1
+access_hospital_doctor_schedule_user,hospital.doctor.schedule.user,model_hospital_doctor_schedule,group_hospital_user,1,0,0,0
+access_hospital_doctor_schedule_admin,hospital.doctor.schedule.admin,model_hospital_doctor_schedule,group_hospital_admin,1,1,1,1
+access_hospital_audit_log_admin,hospital.audit.log.admin,model_hospital_audit_log,group_hospital_admin,1,0,0,0
+access_hospital_patient_merge_wizard_admin,hospital.patient.merge.wizard.admin,model_hospital_patient_merge_wizard,group_hospital_admin,1,1,1,1

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="hospital_patient_id_card_template">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="o">
+                <div class="o_hospital_id_card page">
+                    <table style="width: 100%; height: 100%; border: 2px solid #2c3e50;">
+                        <tr>
+                            <td style="padding: 8px;">
+                                <h4 style="margin: 0;">
+                                    <span t-esc="o.name"/>
+                                </h4>
+                                <div>
+                                    <strong>ID: </strong>
+                                    <span t-esc="o.patient_code"/>
+                                </div>
+                                <div>
+                                    <strong>DOB: </strong>
+                                    <span t-esc="o.date_of_birth"/>
+                                </div>
+                                <div>
+                                    <strong>Blood Group: </strong>
+                                    <span t-esc="dict(o._fields['blood_group'].selection).get(o.blood_group)"/>
+                                </div>
+                                <div>
+                                    <strong>Emergency Contact: </strong>
+                                    <span t-esc="o.emergency_contact_name"/>
+                                    <span t-if="o.emergency_contact_phone">
+                                        (<span t-esc="o.emergency_contact_phone"/>)
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

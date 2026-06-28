@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_patient_merge_wizard_view_form" model="ir.ui.view">
+        <field name="name">hospital.patient.merge.wizard.view.form</field>
+        <field name="model">hospital.patient.merge.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Merge Duplicate Patients">
+                <group>
+                    <field name="survivor_id"/>
+                    <field name="duplicate_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="action_merge" type="object" string="Merge" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="hospital_patient_merge_wizard_action" model="ir.actions.act_window">
+        <field name="name">Merge Duplicate Patients</field>
+        <field name="res_model">hospital.patient.merge.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_hospital_patient"/>
+        <field name="binding_view_types">list</field>
+    </record>
+
+</odoo>

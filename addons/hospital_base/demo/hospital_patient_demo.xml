@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="demo_patient_01" model="hospital.patient">
+        <field name="name">John Mwangi</field>
+        <field name="date_of_birth">1985-03-12</field>
+        <field name="gender">male</field>
+        <field name="blood_group">a_pos</field>
+        <field name="phone">+254700000001</field>
+        <field name="mobile">+254700000001</field>
+        <field name="email">john.mwangi@example.com</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100001</field>
+        <field name="emergency_contact_name">Mary Mwangi</field>
+        <field name="emergency_contact_phone">+254700000101</field>
+    </record>
+
+    <record id="demo_patient_02" model="hospital.patient">
+        <field name="name">Grace Wanjiru</field>
+        <field name="date_of_birth">1990-07-25</field>
+        <field name="gender">female</field>
+        <field name="blood_group">o_pos</field>
+        <field name="phone">+254700000002</field>
+        <field name="mobile">+254700000002</field>
+        <field name="email">grace.wanjiru@example.com</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100002</field>
+        <field name="emergency_contact_name">Peter Wanjiru</field>
+        <field name="emergency_contact_phone">+254700000102</field>
+    </record>
+
+    <record id="demo_patient_03" model="hospital.patient">
+        <field name="name">Ahmed Hassan</field>
+        <field name="date_of_birth">1978-11-02</field>
+        <field name="gender">male</field>
+        <field name="blood_group">b_pos</field>
+        <field name="phone">+254700000003</field>
+        <field name="identity_type">passport</field>
+        <field name="identity_number">P-200003</field>
+        <field name="emergency_contact_name">Fatima Hassan</field>
+        <field name="emergency_contact_phone">+254700000103</field>
+    </record>
+
+    <record id="demo_patient_04" model="hospital.patient">
+        <field name="name">Linda Achieng</field>
+        <field name="date_of_birth">2001-01-18</field>
+        <field name="gender">female</field>
+        <field name="blood_group">ab_neg</field>
+        <field name="phone">+254700000004</field>
+        <field name="mobile">+254700000004</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100004</field>
+    </record>
+
+    <record id="demo_patient_05" model="hospital.patient">
+        <field name="name">Samuel Kiptoo</field>
+        <field name="date_of_birth">1965-05-30</field>
+        <field name="gender">male</field>
+        <field name="blood_group">o_neg</field>
+        <field name="phone">+254700000005</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100005</field>
+        <field name="emergency_contact_name">Joyce Kiptoo</field>
+        <field name="emergency_contact_phone">+254700000105</field>
+    </record>
+
+    <record id="demo_patient_06" model="hospital.patient">
+        <field name="name">Aisha Mohammed</field>
+        <field name="date_of_birth">1995-09-14</field>
+        <field name="gender">female</field>
+        <field name="blood_group">a_neg</field>
+        <field name="phone">+254700000006</field>
+        <field name="mobile">+254700000006</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100006</field>
+    </record>
+
+    <record id="demo_patient_07" model="hospital.patient">
+        <field name="name">David Otieno</field>
+        <field name="date_of_birth">1988-02-08</field>
+        <field name="gender">male</field>
+        <field name="blood_group">b_neg</field>
+        <field name="phone">+254700000007</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100007</field>
+    </record>
+
+    <record id="demo_patient_08" model="hospital.patient">
+        <field name="name">Esther Nyambura</field>
+        <field name="date_of_birth">1999-12-25</field>
+        <field name="gender">female</field>
+        <field name="blood_group">ab_pos</field>
+        <field name="phone">+254700000008</field>
+        <field name="mobile">+254700000008</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100008</field>
+        <field name="emergency_contact_name">James Nyambura</field>
+        <field name="emergency_contact_phone">+254700000108</field>
+    </record>
+
+    <record id="demo_patient_09" model="hospital.patient">
+        <field name="name">Michael Were</field>
+        <field name="date_of_birth">1972-04-19</field>
+        <field name="gender">male</field>
+        <field name="blood_group">unknown</field>
+        <field name="phone">+254700000009</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100009</field>
+    </record>
+
+    <record id="demo_patient_10" model="hospital.patient">
+        <field name="name">Catherine Adhiambo</field>
+        <field name="date_of_birth">2010-06-06</field>
+        <field name="gender">female</field>
+        <field name="blood_group">o_pos</field>
+        <field name="phone">+254700000010</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100010</field>
+        <field name="emergency_contact_name">Joseph Adhiambo</field>
+        <field name="emergency_contact_phone">+254700000110</field>
+    </record>
+
+    <record id="demo_patient_11" model="hospital.patient">
+        <field name="name">Brian Kamau</field>
+        <field name="date_of_birth">1992-08-21</field>
+        <field name="gender">male</field>
+        <field name="blood_group">a_pos</field>
+        <field name="phone">+254700000011</field>
+        <field name="mobile">+254700000011</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100011</field>
+    </record>
+
+    <record id="demo_patient_12" model="hospital.patient">
+        <field name="name">Patricia Njeri</field>
+        <field name="date_of_birth">1983-10-03</field>
+        <field name="gender">female</field>
+        <field name="blood_group">b_pos</field>
+        <field name="phone">+254700000012</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100012</field>
+    </record>
+
+    <record id="demo_patient_13" model="hospital.patient">
+        <field name="name">Omar Farah</field>
+        <field name="date_of_birth">1960-01-29</field>
+        <field name="gender">male</field>
+        <field name="blood_group">o_neg</field>
+        <field name="phone">+254700000013</field>
+        <field name="identity_type">passport</field>
+        <field name="identity_number">P-200013</field>
+        <field name="emergency_contact_name">Amina Farah</field>
+        <field name="emergency_contact_phone">+254700000113</field>
+    </record>
+
+    <record id="demo_patient_14" model="hospital.patient">
+        <field name="name">Nancy Wambui</field>
+        <field name="date_of_birth">1996-03-17</field>
+        <field name="gender">female</field>
+        <field name="blood_group">a_neg</field>
+        <field name="phone">+254700000014</field>
+        <field name="mobile">+254700000014</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100014</field>
+    </record>
+
+    <record id="demo_patient_15" model="hospital.patient">
+        <field name="name">Kevin Mutiso</field>
+        <field name="date_of_birth">1980-12-11</field>
+        <field name="gender">male</field>
+        <field name="blood_group">ab_pos</field>
+        <field name="phone">+254700000015</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100015</field>
+    </record>
+
+    <record id="demo_patient_16" model="hospital.patient">
+        <field name="name">Susan Chebet</field>
+        <field name="date_of_birth">1975-07-07</field>
+        <field name="gender">female</field>
+        <field name="blood_group">o_pos</field>
+        <field name="phone">+254700000016</field>
+        <field name="mobile">+254700000016</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100016</field>
+        <field name="emergency_contact_name">Daniel Chebet</field>
+        <field name="emergency_contact_phone">+254700000116</field>
+    </record>
+
+    <record id="demo_patient_17" model="hospital.patient">
+        <field name="name">Felix Onyango</field>
+        <field name="date_of_birth">2003-09-09</field>
+        <field name="gender">male</field>
+        <field name="blood_group">b_neg</field>
+        <field name="phone">+254700000017</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100017</field>
+    </record>
+
+    <record id="demo_patient_18" model="hospital.patient">
+        <field name="name">Rose Akinyi</field>
+        <field name="date_of_birth">1991-05-23</field>
+        <field name="gender">female</field>
+        <field name="blood_group">a_pos</field>
+        <field name="phone">+254700000018</field>
+        <field name="mobile">+254700000018</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100018</field>
+    </record>
+
+    <record id="demo_patient_19" model="hospital.patient">
+        <field name="name">Tom Mboya</field>
+        <field name="date_of_birth">1968-02-14</field>
+        <field name="gender">male</field>
+        <field name="blood_group">unknown</field>
+        <field name="phone">+254700000019</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100019</field>
+        <field name="emergency_contact_name">Beatrice Mboya</field>
+        <field name="emergency_contact_phone">+254700000119</field>
+    </record>
+
+    <record id="demo_patient_20" model="hospital.patient">
+        <field name="name">Diana Wairimu</field>
+        <field name="date_of_birth">2015-11-30</field>
+        <field name="gender">female</field>
+        <field name="blood_group">o_neg</field>
+        <field name="phone">+254700000020</field>
+        <field name="identity_type">national_id</field>
+        <field name="identity_number">ID-100020</field>
+        <field name="emergency_contact_name">Grace Wairimu</field>
+        <field name="emergency_contact_phone">+254700000120</field>
+    </record>
+
+</odoo>
