@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="hospital_doctor_menu_root"
+              name="Doctor Workspace"
+              parent="hospital_base.hospital_menu_root"
+              groups="group_hospital_doctor,hospital_base.group_hospital_admin"
+              sequence="8"/>
+
+    <menuitem id="hospital_doctor_menu_dashboard"
+              name="Dashboard"
+              parent="hospital_doctor_menu_root"
+              action="hospital_doctor_dashboard_action"
+              sequence="10"/>
+
+    <menuitem id="hospital_doctor_menu_my_queue"
+              name="My Queue"
+              parent="hospital_doctor_menu_root"
+              action="hospital_consultation_action_my_queue"
+              sequence="20"/>
+
+    <menuitem id="hospital_doctor_menu_my_patients"
+              name="My Patients"
+              parent="hospital_doctor_menu_root"
+              action="hospital_consultation_action_my_patients"
+              sequence="30"/>
+
+    <menuitem id="hospital_doctor_menu_consultations"
+              name="Consultations"
+              parent="hospital_doctor_menu_root"
+              action="hospital_consultation_action"
+              sequence="40"/>
+
+    <menuitem id="hospital_doctor_menu_prescriptions"
+              name="Prescriptions"
+              parent="hospital_doctor_menu_root"
+              action="hospital_prescription_action"
+              sequence="50"/>
+
+</odoo>

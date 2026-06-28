@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_doctor_dashboard_action" model="ir.actions.client">
+        <field name="name">Doctor Dashboard</field>
+        <field name="tag">hospital_doctor.doctor_dashboard</field>
+        <field name="target">current</field>
+    </record>
+
+</odoo>

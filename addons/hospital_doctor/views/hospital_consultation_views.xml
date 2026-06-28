@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Full patient-context consultation form (Phase 8 §8-9): vitals
+         inline via the visit's vitals_ids (read-only sub-list, no need to
+         depend on hospital_nurse for a dedicated widget since it's already
+         a transitive dependency), an allergy banner from the patient, then
+         diagnosis fields, outcome checkboxes, and the prescription builder
+         (an editable One2many list, per Phase 8 §9's documented minimum
+         bar, a bespoke OWL widget is nice-to-have, not required). -->
+    <record id="hospital_consultation_view_form" model="ir.ui.view">
+        <field name="name">hospital.consultation.view.form</field>
+        <field name="model">hospital.consultation</field>
+        <field name="arch" type="xml">
+            <form string="Consultation">
+                <header>
+                    <button name="action_done" type="object" string="Complete Consultation" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="%(hospital_consultation_amend_wizard_action)d" type="action" string="Amend (Same-Day)" invisible="state != 'done'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="patient_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    <div class="alert alert-danger" role="alert" invisible="not allergy_summary">
+                        <strong>Allergy Alert: </strong>
+                        <field name="allergy_summary" readonly="1" nolabel="1"/>
+                    </div>
+                    <group>
+                        <group string="Visit">
+                            <field name="visit_id" readonly="1"/>
+                            <field name="doctor_id"/>
+                            <field name="amended_from_id" invisible="not amended_from_id" readonly="1"/>
+                        </group>
+                        <group string="Diagnosis">
+                            <field name="diagnosis_code"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="History &amp; Vitals" name="history_vitals">
+                            <field name="vitals_history_ids" readonly="1">
+                                <list>
+                                    <field name="create_date" string="Recorded On"/>
+                                    <field name="blood_pressure_systolic"/>
+                                    <field name="blood_pressure_diastolic"/>
+                                    <field name="pulse_rate"/>
+                                    <field name="temperature"/>
+                                    <field name="spo2"/>
+                                    <field name="bmi"/>
+                                    <field name="is_abnormal" widget="boolean_toggle"/>
+                                </list>
+                            </field>
+                            <separator string="Previous Consultations"/>
+                            <field name="patient_consultation_history_ids" readonly="1">
+                                <list>
+                                    <field name="create_date" string="Date"/>
+                                    <field name="doctor_id"/>
+                                    <field name="diagnosis_text"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Diagnosis &amp; Notes" name="diagnosis">
+                            <group>
+                                <field name="diagnosis_text" nolabel="1" placeholder="Diagnosis details..."/>
+                            </group>
+                            <group string="Clinical Notes">
+                                <field name="clinical_notes" nolabel="1" placeholder="Clinical notes..."/>
+                            </group>
+                        </page>
+                        <page string="Outcome" name="outcome">
+                            <group string="Select one or more outcomes">
+                                <field name="outcome_prescribe"/>
+                                <field name="outcome_lab_requested"/>
+                                <field name="outcome_radiology_requested"/>
+                                <field name="outcome_admit_requested"/>
+                                <field name="outcome_discharge"/>
+                            </group>
+                            <div class="alert alert-info" role="alert" invisible="not outcome_lab_requested and not outcome_radiology_requested and not outcome_admit_requested">
+                                Lab / Radiology / Admission outcomes are recorded as intent only
+                                until the corresponding module (hospital_lab / hospital_radiology /
+                                hospital_ipd) is installed. No order or admission record is created yet.
+                            </div>
+                        </page>
+                        <page string="Prescription" name="prescription" invisible="not outcome_prescribe">
+                            <field name="prescription_ids" context="{'default_visit_id': visit_id, 'default_doctor_id': doctor_id, 'default_consultation_id': id}">
+                                <list editable="bottom">
+                                    <field name="state" widget="badge"/>
+                                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('cancelled', 'dispensed')"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hospital_consultation_view_list" model="ir.ui.view">
+        <field name="name">hospital.consultation.view.list</field>
+        <field name="model">hospital.consultation</field>
+        <field name="arch" type="xml">
+            <list string="Consultations">
+                <field name="create_date" string="Date"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="diagnosis_text"/>
+                <field name="outcome_prescribe" widget="boolean_toggle"/>
+                <field name="outcome_lab_requested" widget="boolean_toggle"/>
+                <field name="outcome_radiology_requested" widget="boolean_toggle"/>
+                <field name="outcome_admit_requested" widget="boolean_toggle"/>
+                <field name="outcome_discharge" widget="boolean_toggle"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hospital_consultation_view_search" model="ir.ui.view">
+        <field name="name">hospital.consultation.view.search</field>
+        <field name="model">hospital.consultation</field>
+        <field name="arch" type="xml">
+            <search string="Search Consultations">
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="diagnosis_code"/>
+                <filter string="My Consultations" name="filter_mine" domain="[('doctor_id.user_id', '=', uid)]"/>
+                <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Done" name="filter_done" domain="[('state', '=', 'done')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Doctor" name="groupby_doctor" context="{'group_by': 'doctor_id'}"/>
+                    <filter string="Status" name="groupby_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hospital_consultation_action" model="ir.actions.act_window">
+        <field name="name">Consultations</field>
+        <field name="res_model">hospital.consultation</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hospital_consultation_view_search"/>
+        <field name="context">{'search_default_filter_mine': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Start the first consultation
+            </p>
+        </field>
+    </record>
+
+    <record id="hospital_consultation_action_my_queue" model="ir.actions.act_window">
+        <field name="name">My Queue</field>
+        <field name="res_model">hospital.visit</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('doctor_id.user_id', '=', uid), ('state', 'in', ['waiting_doctor', 'in_progress_multi'])]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Your queue is empty
+            </p>
+        </field>
+    </record>
+
+    <record id="hospital_consultation_action_my_patients" model="ir.actions.act_window">
+        <field name="name">My Patients</field>
+        <field name="res_model">hospital.patient</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('visit_ids.doctor_id.user_id', '=', uid)]</field>
+    </record>
+
+</odoo>

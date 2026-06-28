@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Doctor-specific addition to hospital_base's visit form: a "New
+         Consultation" shortcut and two read-only notebook pages
+         (Consultations, Prescriptions), mirroring hospital_nurse's own
+         xpath-based additions onto the same base form (Phase 11 §2). -->
+    <record id="hospital_visit_view_form_inherit_doctor" model="ir.ui.view">
+        <field name="name">hospital.visit.view.form.inherit.doctor</field>
+        <field name="model">hospital.visit</field>
+        <field name="inherit_id" ref="hospital_base.hospital_visit_view_form"/>
+        <field name="arch" type="xml">
+            <button name="action_send_to_doctor" position="before">
+                <button name="%(hospital_doctor.hospital_consultation_action_new)d"
+                        type="action" string="New Consultation" class="oe_highlight"
+                        context="{'default_visit_id': active_id}"
+                        invisible="state not in ('waiting_doctor', 'in_progress_multi')"/>
+            </button>
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Consultations" name="consultations">
+                        <field name="consultation_ids" readonly="1">
+                            <list>
+                                <field name="create_date" string="Date"/>
+                                <field name="doctor_id"/>
+                                <field name="diagnosis_text"/>
+                                <field name="state" widget="badge"/>
+                            </list>
+                        </field>
+                    </page>
+                    <page string="Prescriptions" name="prescriptions">
+                        <field name="prescription_ids" readonly="1">
+                            <list>
+                                <field name="create_date" string="Date"/>
+                                <field name="doctor_id"/>
+                                <field name="state" widget="badge"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hospital_consultation_action_new" model="ir.actions.act_window">
+        <field name="name">New Consultation</field>
+        <field name="res_model">hospital.consultation</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+</odoo>

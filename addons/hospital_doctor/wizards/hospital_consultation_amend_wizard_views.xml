@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_consultation_amend_wizard_view_form" model="ir.ui.view">
+        <field name="name">hospital.consultation.amend.wizard.view.form</field>
+        <field name="model">hospital.consultation.amend.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Amend Consultation">
+                <group>
+                    <field name="consultation_id" readonly="1"/>
+                    <field name="reason" placeholder="Why is this consultation being amended?"/>
+                </group>
+                <footer>
+                    <button name="action_confirm_amend" type="object" string="Confirm Amendment" class="btn-primary"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="hospital_consultation_amend_wizard_action" model="ir.actions.act_window">
+        <field name="name">Amend Consultation</field>
+        <field name="res_model">hospital.consultation.amend.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_hospital_consultation"/>
+        <field name="binding_view_types">form</field>
+    </record>
+
+</odoo>

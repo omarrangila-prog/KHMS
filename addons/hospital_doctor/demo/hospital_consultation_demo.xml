@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- hospital_nurse's own demo data only records vitals for 4 of
+         hospital_reception's 10 demo visits (01, 02, 03, 06), leaving
+         04/05/07/08/09/10 parked in waiting_nurse. To have a realistic
+         spread of patients ready for consultation across all 5 demo
+         doctors, this module's demo data records vitals (via the real
+         hospital.vitals.create() codepath, exactly like hospital_nurse's
+         own demo file does) for 4 more of them, 07, 08, 09, 10, so
+         8 of the 10 demo visits reach waiting_doctor. 04 and 05 are left
+         untouched in waiting_nurse so the Nurse Dashboard demo still has
+         a non-empty queue too. -->
+    <function model="hospital.vitals" name="create">
+        <value eval="[{
+            'visit_id': ref('hospital_reception.demo_visit_07'),
+            'blood_pressure_systolic': 124,
+            'blood_pressure_diastolic': 79,
+            'pulse_rate': 76,
+            'temperature': 36.9,
+            'spo2': 98,
+            'respiratory_rate': 17,
+            'height_cm': 175.0,
+            'weight_kg': 74.0,
+        }]"/>
+    </function>
+    <function model="hospital.vitals" name="create">
+        <value eval="[{
+            'visit_id': ref('hospital_reception.demo_visit_08'),
+            'blood_pressure_systolic': 130,
+            'blood_pressure_diastolic': 84,
+            'pulse_rate': 88,
+            'temperature': 37.1,
+            'spo2': 97,
+            'respiratory_rate': 18,
+            'height_cm': 162.0,
+            'weight_kg': 60.0,
+        }]"/>
+    </function>
+    <function model="hospital.vitals" name="create">
+        <value eval="[{
+            'visit_id': ref('hospital_reception.demo_visit_09'),
+            'blood_pressure_systolic': 142,
+            'blood_pressure_diastolic': 90,
+            'pulse_rate': 82,
+            'temperature': 37.0,
+            'spo2': 96,
+            'respiratory_rate': 18,
+            'height_cm': 170.0,
+            'weight_kg': 78.0,
+            'notes': 'Long-standing hypertension follow-up.',
+        }]"/>
+    </function>
+    <function model="hospital.vitals" name="create">
+        <value eval="[{
+            'visit_id': ref('hospital_reception.demo_visit_10'),
+            'blood_pressure_systolic': 100,
+            'blood_pressure_diastolic': 64,
+            'pulse_rate': 92,
+            'temperature': 37.6,
+            'spo2': 98,
+            'respiratory_rate': 20,
+            'height_cm': 130.0,
+            'weight_kg': 28.0,
+            'notes': 'Pediatric visit, mild fever.',
+        }]"/>
+    </function>
+
+    <!-- A couple of demo medicines (plain product.product, category
+         Consumable, this module depends on bare `product`, not
+         `stock`, so no warehouse/stock-quant setup is attempted here;
+         hospital_inventory will turn these into real
+         hospital.medicine-extended products later). -->
+    <record id="demo_medicine_amoxicillin" model="product.product">
+        <field name="name">Amoxicillin 500mg</field>
+        <field name="type">consu</field>
+        <field name="sale_ok" eval="False"/>
+        <field name="purchase_ok" eval="False"/>
+    </record>
+
+    <record id="demo_medicine_paracetamol" model="product.product">
+        <field name="name">Paracetamol 500mg</field>
+        <field name="type">consu</field>
+        <field name="sale_ok" eval="False"/>
+        <field name="purchase_ok" eval="False"/>
+    </record>
+
+    <record id="demo_medicine_amlodipine" model="product.product">
+        <field name="name">Amlodipine 5mg</field>
+        <field name="type">consu</field>
+        <field name="sale_ok" eval="False"/>
+        <field name="purchase_ok" eval="False"/>
+    </record>
+
+    <record id="demo_medicine_cetirizine" model="product.product">
+        <field name="name">Cetirizine 10mg</field>
+        <field name="type">consu</field>
+        <field name="sale_ok" eval="False"/>
+        <field name="purchase_ok" eval="False"/>
+    </record>
+
+    <!-- 10 demo consultations spanning every outcome combination called
+         out in Phase 3 §3 / Phase 6 §4's demo-data spec. Created via the
+         real create()+action_done() codepath (not raw record tags with
+         state='done' set by hand) so the visit's aggregate-state routing
+         (hospital.visit.action_route_from_consultation()) actually runs,
+         exactly mirroring how hospital_nurse's demo data calls
+         action_vitals_recorded() for real rather than faking state. -->
+
+    <!-- 1. demo_visit_01: discharge only -> visit should reach billing. -->
+    <record id="demo_consultation_01" model="hospital.consultation">
+        <field name="visit_id" ref="hospital_reception.demo_visit_01"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="diagnosis_code">J00</field>
+        <field name="diagnosis_text">Acute viral upper respiratory infection (common cold).</field>
+        <field name="clinical_notes">Mild symptoms, no red flags. Advised rest and fluids.</field>
+        <field name="outcome_discharge" eval="True"/>
+    </record>
+
+    <!-- 2. demo_visit_02: prescribe only -> visit stays in_progress_multi
+         until the prescription branch resolves (which it won't in this
+         module since hospital_pharmacy doesn't exist yet to dispense). -->
+    <record id="demo_consultation_02" model="hospital.consultation">
+        <field name="visit_id" ref="hospital_reception.demo_visit_02"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="diagnosis_code">I10</field>
+        <field name="diagnosis_text">Essential (primary) hypertension.</field>
+        <field name="clinical_notes">Starting antihypertensive therapy, review in 2 weeks.</field>
+        <field name="outcome_prescribe" eval="True"/>
+    </record>
+    <record id="demo_prescription_02" model="hospital.prescription">
+        <field name="visit_id" ref="hospital_reception.demo_visit_02"/>
+        <field name="consultation_id" ref="demo_consultation_02"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="line_ids" eval="[(0, 0, {
+            'medicine_id': ref('demo_medicine_amlodipine'),
+            'dosage': '5mg',
+            'frequency': 'OD',
+            'duration_days': 14,
+            'route': 'oral',
+            'qty_prescribed': 14,
+        })]"/>
+    </record>
+
+    <!-- 3. demo_visit_03: prescribe + lab requested (multi-branch). -->
+    <record id="demo_consultation_03" model="hospital.consultation">
+        <field name="visit_id" ref="hospital_reception.demo_visit_03"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="diagnosis_code">R50.9</field>
+        <field name="diagnosis_text">Fever of unknown origin, investigating.</field>
+        <field name="clinical_notes">High BP and fever at triage; ordering bloodwork and starting symptomatic treatment.</field>
+        <field name="outcome_prescribe" eval="True"/>
+        <field name="outcome_lab_requested" eval="True"/>
+    </record>
+    <record id="demo_prescription_03" model="hospital.prescription">
+        <field name="visit_id" ref="hospital_reception.demo_visit_03"/>
+        <field name="consultation_id" ref="demo_consultation_03"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="line_ids" eval="[(0, 0, {
+            'medicine_id': ref('demo_medicine_paracetamol'),
+            'dosage': '500mg',
+            'frequency': 'QID',
+            'duration_days': 5,
+            'route': 'oral',
+            'qty_prescribed': 20,
+        })]"/>
+    </record>
+
+    <!-- 4. demo_visit_06: admit requested alone -> intent-only flag,
+         visit stays in_progress_multi (cannot resolve to admitted without
+         hospital_ipd). -->
+    <record id="demo_consultation_06" model="hospital.consultation">
+        <field name="visit_id" ref="hospital_reception.demo_visit_06"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="diagnosis_code">J18.9</field>
+        <field name="diagnosis_text">Suspected pneumonia, hypoxic at triage.</field>
+        <field name="clinical_notes">Low SpO2 on triage vitals. Recommending admission for observation and IV therapy.</field>
+        <field name="outcome_admit_requested" eval="True"/>
+    </record>
+
+    <!-- 5. demo_visit_07: radiology requested alone. -->
+    <record id="demo_consultation_07" model="hospital.consultation">
+        <field name="visit_id" ref="hospital_reception.demo_visit_07"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="diagnosis_code">S52.5</field>
+        <field name="diagnosis_text">Suspected distal radius fracture, right wrist.</field>
+        <field name="clinical_notes">Fell on outstretched hand. Ordering an X-ray before treatment decision.</field>
+        <field name="outcome_radiology_requested" eval="True"/>
+    </record>
+
+    <!-- 6. demo_visit_08: lab + radiology requested together (two
+         intent-only branches at once, no prescription). -->
+    <record id="demo_consultation_08" model="hospital.consultation">
+        <field name="visit_id" ref="hospital_reception.demo_visit_08"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="diagnosis_code">M54.5</field>
+        <field name="diagnosis_text">Low back pain, investigating cause.</field>
+        <field name="clinical_notes">Ordering bloodwork and a lumbar X-ray to rule out underlying pathology.</field>
+        <field name="outcome_lab_requested" eval="True"/>
+        <field name="outcome_radiology_requested" eval="True"/>
+    </record>
+
+    <!-- 7. demo_visit_09: prescribe + admit requested (multi-branch
+         including the intent-only admission flag). -->
+    <record id="demo_consultation_09" model="hospital.consultation">
+        <field name="visit_id" ref="hospital_reception.demo_visit_09"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_4"/>
+        <field name="diagnosis_code">I10</field>
+        <field name="diagnosis_text">Hypertensive urgency.</field>
+        <field name="clinical_notes">BP significantly elevated; starting medication and admitting for monitoring.</field>
+        <field name="outcome_prescribe" eval="True"/>
+        <field name="outcome_admit_requested" eval="True"/>
+    </record>
+    <record id="demo_prescription_09" model="hospital.prescription">
+        <field name="visit_id" ref="hospital_reception.demo_visit_09"/>
+        <field name="consultation_id" ref="demo_consultation_09"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_4"/>
+        <field name="line_ids" eval="[(0, 0, {
+            'medicine_id': ref('demo_medicine_amlodipine'),
+            'dosage': '5mg',
+            'frequency': 'OD',
+            'duration_days': 7,
+            'route': 'oral',
+            'qty_prescribed': 7,
+        })]"/>
+    </record>
+
+    <!-- 8. demo_visit_10: discharge + prescribe together (discharge is
+         not exclusive of other outcomes, the visit still has an open
+         prescription branch, so it must stay in_progress_multi, not jump
+         straight to billing just because discharge was also ticked). -->
+    <record id="demo_consultation_10" model="hospital.consultation">
+        <field name="visit_id" ref="hospital_reception.demo_visit_10"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_5"/>
+        <field name="diagnosis_code">J00</field>
+        <field name="diagnosis_text">Common cold, mild fever.</field>
+        <field name="clinical_notes">Pediatric patient, sending home with symptomatic treatment.</field>
+        <field name="outcome_prescribe" eval="True"/>
+        <field name="outcome_discharge" eval="True"/>
+    </record>
+    <record id="demo_prescription_10" model="hospital.prescription">
+        <field name="visit_id" ref="hospital_reception.demo_visit_10"/>
+        <field name="consultation_id" ref="demo_consultation_10"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_5"/>
+        <field name="line_ids" eval="[(0, 0, {
+            'medicine_id': ref('demo_medicine_cetirizine'),
+            'dosage': '10mg',
+            'frequency': 'OD',
+            'duration_days': 5,
+            'route': 'oral',
+            'qty_prescribed': 5,
+        })]"/>
+    </record>
+
+    <!-- 9. A second consultation on demo_visit_01 (already discharged
+         above) demonstrating the same-day-amendment data shape: a doctor
+         catching a forgotten lab order. amended_from_id points back to
+         demo_consultation_01. Created directly with amended_from_id set
+         (rather than via the wizard) since demo data has no interactive
+         "today" concept to drive the wizard's same-day check, but the
+         resulting record shape is identical to what the wizard produces. -->
+    <record id="demo_consultation_01_amend" model="hospital.consultation">
+        <field name="visit_id" ref="hospital_reception.demo_visit_01"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="amended_from_id" ref="demo_consultation_01"/>
+        <field name="diagnosis_code">J00</field>
+        <field name="diagnosis_text">Acute viral upper respiratory infection (common cold).</field>
+        <field name="clinical_notes">Amendment: patient called back reporting worsening symptoms; ordering bloodwork before confirming discharge.</field>
+        <field name="outcome_lab_requested" eval="True"/>
+    </record>
+
+    <!-- 10. demo_visit_04 stays in waiting_nurse (no vitals recorded by
+         design, see hospital_nurse's own demo data note) so it cannot
+         have a consultation yet, instead, demo_visit_05 (also left in
+         waiting_nurse) is intentionally skipped too, keeping the Nurse
+         Dashboard queue non-empty. To still reach 10 demo consultations,
+         a second consultation is added on demo_visit_02 showing
+         discharge-only resolving a previously multi-branch visit is NOT
+         attempted here (that would require dispensing the prescription
+         first, which belongs to hospital_pharmacy); instead this 10th
+         record demonstrates prescribe + lab + radiology all at once on
+         demo_visit_07 via a second consultation. -->
+    <record id="demo_consultation_07_followup" model="hospital.consultation">
+        <field name="visit_id" ref="hospital_reception.demo_visit_07"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="amended_from_id" ref="demo_consultation_07"/>
+        <field name="diagnosis_code">S52.5</field>
+        <field name="diagnosis_text">Confirmed distal radius fracture on X-ray.</field>
+        <field name="clinical_notes">X-ray confirmed fracture; casting performed, prescribing analgesia and ordering follow-up bloodwork pre-surgery clearance.</field>
+        <field name="outcome_prescribe" eval="True"/>
+        <field name="outcome_lab_requested" eval="True"/>
+        <field name="outcome_radiology_requested" eval="True"/>
+    </record>
+    <record id="demo_prescription_07_followup" model="hospital.prescription">
+        <field name="visit_id" ref="hospital_reception.demo_visit_07"/>
+        <field name="consultation_id" ref="demo_consultation_07_followup"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="line_ids" eval="[(0, 0, {
+            'medicine_id': ref('demo_medicine_paracetamol'),
+            'dosage': '500mg',
+            'frequency': 'TID',
+            'duration_days': 5,
+            'route': 'oral',
+            'qty_prescribed': 15,
+        })]"/>
+    </record>
+
+    <!-- Mark every demo consultation above as done, which runs the real
+         action_done() codepath (outcome validation + visit aggregate-
+         state routing), exactly as a doctor completing the consultation
+         in the UI would trigger. -->
+    <function model="hospital.consultation" name="action_done">
+        <value model="hospital.consultation" eval="[
+            ref('demo_consultation_01'), ref('demo_consultation_02'),
+            ref('demo_consultation_03'), ref('demo_consultation_06'),
+            ref('demo_consultation_07'), ref('demo_consultation_08'),
+            ref('demo_consultation_09'), ref('demo_consultation_10'),
+            ref('demo_consultation_01_amend'), ref('demo_consultation_07_followup'),
+        ]"/>
+    </function>
+
+</odoo>

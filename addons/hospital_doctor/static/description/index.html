@@ -1,0 +1,40 @@
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Hospital Doctor</h2>
+        <h3 class="oe_slogan">Consultation workspace and multi-branch outcome routing</h3>
+        <div class="oe_span12">
+            <p class="oe_mt32">
+                Hospital Doctor is the clinical-core addon of the Hospital
+                Management System suite, built on ``hospital_nurse``. It
+                gives doctors a single-screen consultation workspace --
+                history, vitals, and allergy context alongside diagnosis
+                entry and multi-select outcome routing -- plus a fast
+                prescription builder.
+            </p>
+        </div>
+    </div>
+    <div class="oe_row oe_spaced">
+        <h3 class="oe_slogan">Key Capabilities</h3>
+        <ul>
+            <li>Single-screen consultation: patient history, vitals, and an allergy banner alongside diagnosis entry.</li>
+            <li>Multi-select outcome routing: prescribe, lab, radiology, admit, and discharge can all be selected at once.</li>
+            <li>Extensible aggregate visit-state computation: a visit can sit in multiple department queues simultaneously, only reaching Billing once every branch is resolved.</li>
+            <li>Built-in prescription builder with medicine autocomplete and dosage/frequency/duration/route lines.</li>
+            <li>Same-day consultation amendment, fully audit-logged.</li>
+            <li>A 3-pane Doctor Dashboard: queue, consultation, and collapsible patient-history panel.</li>
+            <li>Prescription printout report.</li>
+        </ul>
+    </div>
+    <div class="oe_row oe_spaced">
+        <h3 class="oe_slogan">Built for the Full Suite</h3>
+        <p>
+            Hospital Doctor defines the extension point
+            (``hospital.visit._compute_pending_branches()``) that the
+            future ``hospital_pharmacy``, ``hospital_lab``,
+            ``hospital_radiology``, and ``hospital_ipd`` modules will hook
+            into once built -- the routing logic is honest about what it
+            can resolve today and clearly documents what each future
+            module must add.
+        </p>
+    </div>
+</section>

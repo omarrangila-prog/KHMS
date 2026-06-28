@@ -1,0 +1,151 @@
+// Doctor Dashboard styling. Reuses the shared design tokens defined once
+// in hospital_base/static/src/scss/_variables.scss (Phase 7 §2, Phase 11
+// §5) -- never redefine the palette here. 3-pane desktop layout (Phase 8
+// §8) collapsing to a tab switcher on tablet (<992px).
+@import "/hospital_base/static/src/scss/_variables";
+
+.o_hospital_doctor_dashboard {
+    padding: $o-hospital-spacing-lg;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .o_hospital_dashboard_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: $o-hospital-spacing-md;
+
+        h2 {
+            color: $o-hospital-secondary;
+            margin: 0;
+        }
+    }
+
+    .o_hospital_doctor_mobile_tabs {
+        display: none;
+        gap: $o-hospital-spacing-sm;
+        margin-bottom: $o-hospital-spacing-md;
+    }
+
+    .o_hospital_doctor_3pane {
+        display: grid;
+        grid-template-columns: 280px 1fr 320px;
+        gap: $o-hospital-spacing-lg;
+        flex: 1;
+        min-height: 0;
+    }
+
+    .o_hospital_doctor_pane_queue,
+    .o_hospital_doctor_pane_context {
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        padding: $o-hospital-spacing-md;
+        overflow-y: auto;
+    }
+
+    .o_hospital_doctor_pane_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: $o-hospital-spacing-sm;
+
+        h3 {
+            color: $o-hospital-secondary;
+            margin: 0;
+            font-size: 16px;
+        }
+    }
+
+    .o_hospital_call_next_btn {
+        min-height: 36px;
+    }
+
+    .o_hospital_doctor_queue_row {
+        border: 1px solid #e0e0e0;
+        border-left: 4px solid $o-hospital-primary;
+        border-radius: 4px;
+        padding: $o-hospital-spacing-sm;
+        margin-bottom: $o-hospital-spacing-xs;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #f8f9fa;
+        }
+
+        .o_hospital_doctor_queue_row_main {
+            display: flex;
+            align-items: center;
+            gap: $o-hospital-spacing-sm;
+            font-weight: 500;
+        }
+
+        .o_hospital_doctor_queue_row_meta {
+            display: flex;
+            gap: $o-hospital-spacing-sm;
+            color: #6c757d;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+    }
+
+    .o_hospital_doctor_queue_empty,
+    .o_hospital_doctor_context_empty,
+    .o_hospital_doctor_center_empty,
+    .o_hospital_doctor_center_prompt {
+        color: #6c757d;
+        font-style: italic;
+        padding: $o-hospital-spacing-md;
+        text-align: center;
+    }
+
+    .o_hospital_doctor_pane_center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .o_hospital_skeleton {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: o-hospital-doctor-skeleton-loading 1.5s infinite;
+        border-radius: 6px;
+        min-height: 160px;
+    }
+}
+
+@keyframes o-hospital-doctor-skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+// Tablet breakpoint (Phase 8 §8: "collapses to tabs on tablet") -- switch
+// the 3-pane grid to a single active pane, toggled by the JS-driven
+// activeMobileTab state.
+@media (max-width: 992px) {
+    .o_hospital_doctor_dashboard {
+        .o_hospital_doctor_mobile_tabs {
+            display: flex;
+        }
+
+        .o_hospital_doctor_3pane {
+            grid-template-columns: 1fr;
+        }
+
+        .o_hospital_doctor_pane_queue,
+        .o_hospital_doctor_pane_context {
+            display: none;
+        }
+
+        .o_hospital_doctor_pane_queue.o_hospital_pane_active_mobile,
+        .o_hospital_doctor_pane_context.o_hospital_pane_active_mobile {
+            display: block;
+        }
+
+        .o_hospital_doctor_pane_center {
+            display: none;
+        }
+    }
+}

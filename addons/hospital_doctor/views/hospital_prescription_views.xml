@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_prescription_view_form" model="ir.ui.view">
+        <field name="name">hospital.prescription.view.form</field>
+        <field name="model">hospital.prescription</field>
+        <field name="arch" type="xml">
+            <form string="Prescription">
+                <header>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('cancelled', 'dispensed')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,partially_dispensed,dispensed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="patient_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Visit">
+                            <field name="visit_id"/>
+                            <field name="consultation_id"/>
+                        </group>
+                        <group string="Prescriber">
+                            <field name="doctor_id"/>
+                        </group>
+                    </group>
+                    <!-- Prescription Builder (Phase 8 §9): editable list of
+                         lines with medicine autocomplete + dosage/frequency/
+                         duration/route. Live stock display is intentionally
+                         omitted, this module depends on bare `product`,
+                         not `stock`, so qty_available would not be a
+                         meaningful figure (see README). hospital_pharmacy /
+                         hospital_inventory will add a stock badge column via
+                         view inheritance once `stock` is in the dependency
+                         graph. -->
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="medicine_id"/>
+                            <field name="dosage" placeholder="e.g. 500mg"/>
+                            <field name="frequency" placeholder="e.g. TID"/>
+                            <field name="duration_days"/>
+                            <field name="route"/>
+                            <field name="qty_prescribed"/>
+                            <field name="qty_dispensed" readonly="1"/>
+                            <field name="state" widget="badge"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hospital_prescription_view_list" model="ir.ui.view">
+        <field name="name">hospital.prescription.view.list</field>
+        <field name="model">hospital.prescription</field>
+        <field name="arch" type="xml">
+            <list string="Prescriptions">
+                <field name="create_date" string="Date"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hospital_prescription_view_search" model="ir.ui.view">
+        <field name="name">hospital.prescription.view.search</field>
+        <field name="model">hospital.prescription</field>
+        <field name="arch" type="xml">
+            <search string="Search Prescriptions">
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <filter string="My Prescriptions" name="filter_mine" domain="[('doctor_id.user_id', '=', uid)]"/>
+                <filter string="Open" name="filter_open" domain="[('state', 'in', ['draft', 'partially_dispensed'])]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="groupby_state" context="{'group_by': 'state'}"/>
+                    <filter string="Doctor" name="groupby_doctor" context="{'group_by': 'doctor_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hospital_prescription_action" model="ir.actions.act_window">
+        <field name="name">Prescriptions</field>
+        <field name="res_model">hospital.prescription</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hospital_prescription_view_search"/>
+        <field name="context">{'search_default_filter_mine': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No prescriptions yet
+            </p>
+        </field>
+    </record>
+
+</odoo>

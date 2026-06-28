@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record id="group_hospital_doctor" model="res.groups">
+        <field name="name">Hospital Doctor</field>
+        <field name="category_id" ref="hospital_base.module_hospital_category"/>
+        <field name="implied_ids" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+        <field name="comment">Doctors: consult patients, diagnose, route multi-branch outcomes, write prescriptions.</field>
+    </record>
+
+    <!-- Multi-company record rules, consistent with the hospital_base
+         ['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]
+         pattern (Phase 9 §3). hospital.consultation/hospital.prescription
+         carry company_id as a related, stored field off visit_id, exactly
+         like hospital_nurse's hospital.vitals/hospital.nurse.task. -->
+    <record id="hospital_consultation_company_rule" model="ir.rule">
+        <field name="name">Hospital Consultation: multi-company isolation</field>
+        <field name="model_id" ref="model_hospital_consultation"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <record id="hospital_prescription_company_rule" model="ir.rule">
+        <field name="name">Hospital Prescription: multi-company isolation</field>
+        <field name="model_id" ref="model_hospital_prescription"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <!-- Doctor-owns-own-consultations record rule (Phase 9 §3): "Doctors
+         can write only where doctor_id.user_id = uid; read access to
+         consultations for patients in their own queue is broader (history
+         visibility, Phase 3 FR-15), write is restricted." Implemented as
+         TWO separate ir.rule records on the same group/model, a broad
+         read-only rule scoped to the doctor's own visits (visit_id.doctor_id
+         = the visit's assigned doctor, not just the consultation's author),
+         and a narrower read+write rule scoped to consultations the doctor
+         actually authored. Odoo ORs together multiple ir.rule domains for
+         the same operation within a group, so combining a read-scoped rule
+         with a write-scoped rule on perm_read/perm_write respectively gives
+         exactly the asymmetric read/write visibility the spec calls for. -->
+    <record id="hospital_consultation_doctor_read_rule" model="ir.rule">
+        <field name="name">Hospital Consultation: doctor reads all consultations for their assigned visits</field>
+        <field name="model_id" ref="model_hospital_consultation"/>
+        <field name="domain_force">[('visit_id.doctor_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_hospital_doctor'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+
+    <record id="hospital_consultation_doctor_write_rule" model="ir.rule">
+        <field name="name">Hospital Consultation: doctor writes only their own authored consultations</field>
+        <field name="model_id" ref="model_hospital_consultation"/>
+        <field name="domain_force">[('doctor_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_hospital_doctor'))]"/>
+        <field name="perm_read">0</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+
+    <record id="hospital_prescription_doctor_rule" model="ir.rule">
+        <field name="name">Hospital Prescription: doctor scoped to own-authored prescriptions</field>
+        <field name="model_id" ref="model_hospital_prescription"/>
+        <field name="domain_force">[('doctor_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_hospital_doctor'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+
+</odoo>

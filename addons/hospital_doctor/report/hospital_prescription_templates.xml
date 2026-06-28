@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="hospital_prescription_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Prescription</h2>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Patient: </strong>
+                                <span t-esc="o.patient_id.name"/><br/>
+                                <strong>Patient Code: </strong>
+                                <span t-esc="o.patient_id.patient_code"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Doctor: </strong>
+                                <span t-esc="o.doctor_id.name"/><br/>
+                                <strong>Date: </strong>
+                                <span t-esc="o.create_date"/>
+                            </div>
+                        </div>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Medicine</th>
+                                    <th>Dosage</th>
+                                    <th>Frequency</th>
+                                    <th>Duration (days)</th>
+                                    <th>Route</th>
+                                    <th>Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <td><span t-esc="line.medicine_id.display_name"/></td>
+                                    <td><span t-esc="line.dosage"/></td>
+                                    <td><span t-esc="line.frequency"/></td>
+                                    <td><span t-esc="line.duration_days"/></td>
+                                    <td><span t-esc="dict(line._fields['route'].selection).get(line.route)"/></td>
+                                    <td><span t-esc="line.qty_prescribed"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

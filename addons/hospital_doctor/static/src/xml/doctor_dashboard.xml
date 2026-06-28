@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="hospital_doctor.DoctorDashboard">
+        <div class="o_hospital_doctor_dashboard">
+
+            <div class="o_hospital_dashboard_header">
+                <h2>Doctor Workspace</h2>
+                <span class="badge text-bg-success o_hospital_doctor_seen_badge"
+                      t-if="!state.loading" t-esc="state.seenToday + ' seen today'"/>
+            </div>
+
+            <div class="o_hospital_dashboard_error alert alert-danger" t-if="state.error" role="alert">
+                Couldn't load the dashboard.
+                <button class="btn btn-link" t-on-click="onRetry">Retry</button>
+            </div>
+
+            <!-- Mobile/tablet tab switcher: only visible below the
+                 breakpoint (CSS-driven), per Phase 8 §8 "collapses to
+                 tabs on tablet". -->
+            <div class="o_hospital_doctor_mobile_tabs">
+                <button t-att-class="'btn btn-sm ' + (state.activeMobileTab === 'queue' ? 'btn-primary' : 'btn-outline-secondary')"
+                        t-on-click="() => this.setMobileTab('queue')">Queue</button>
+                <button t-att-class="'btn btn-sm ' + (state.activeMobileTab === 'context' ? 'btn-primary' : 'btn-outline-secondary')"
+                        t-on-click="() => this.setMobileTab('context')">Patient Info</button>
+            </div>
+
+            <div class="o_hospital_doctor_3pane">
+
+                <!-- Left pane: queue -->
+                <div t-attf-class="o_hospital_doctor_pane_queue {{ state.activeMobileTab === 'queue' ? 'o_hospital_pane_active_mobile' : '' }}">
+                    <div class="o_hospital_doctor_pane_header">
+                        <h3>Queue</h3>
+                        <button class="btn btn-primary o_hospital_call_next_btn"
+                                t-if="state.queue.length"
+                                t-on-click="callNext">
+                            Call Next
+                        </button>
+                    </div>
+                    <div class="o_hospital_skeleton" t-if="state.loading"/>
+                    <div class="o_hospital_doctor_queue_empty" t-if="!state.loading and !state.queue.length">
+                        Your queue is empty.
+                    </div>
+                    <div class="o_hospital_doctor_queue_list" t-if="!state.loading">
+                        <div t-foreach="state.queue" t-as="visit" t-key="visit.id"
+                             class="o_hospital_doctor_queue_row"
+                             t-on-click="() => this.openConsultation(visit.id)">
+                            <div class="o_hospital_doctor_queue_row_main">
+                                <span class="o_hospital_doctor_queue_patient" t-esc="visit.patient_id[1]"/>
+                                <span class="badge text-bg-danger" t-if="visit.priority === 'emergency'">Emergency</span>
+                                <span class="badge text-bg-warning" t-if="visit.priority === 'urgent'">Urgent</span>
+                            </div>
+                            <div class="o_hospital_doctor_queue_row_meta">
+                                <span t-esc="visit.visit_code"/>
+                                <span class="badge text-bg-info" t-if="visit.state === 'in_progress_multi'">Multi</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center pane: main content / call to action -->
+                <div class="o_hospital_doctor_pane_center">
+                    <div class="o_hospital_doctor_center_empty" t-if="!state.loading and !state.queue.length">
+                        <p>No patients waiting. Today's summary stats are still shown above.</p>
+                    </div>
+                    <div class="o_hospital_doctor_center_prompt" t-if="!state.loading and state.queue.length">
+                        <p>Select a patient from the queue, or press Call Next / <kbd>Space</kbd> to start the next consultation.</p>
+                    </div>
+                </div>
+
+                <!-- Right pane: collapsible patient-history context -->
+                <div t-attf-class="o_hospital_doctor_pane_context {{ state.activeMobileTab === 'context' ? 'o_hospital_pane_active_mobile' : '' }}">
+                    <div class="o_hospital_doctor_pane_header">
+                        <h3>Patient Context</h3>
+                    </div>
+                    <div class="o_hospital_doctor_context_empty">
+                        Open a consultation to see history, vitals, and allergies here.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </t>
+
+</templates>
