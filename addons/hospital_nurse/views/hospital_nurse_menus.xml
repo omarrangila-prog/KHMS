@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="hospital_nurse_menu_root"
+              name="Nurse Station"
+              parent="hospital_base.hospital_menu_root"
+              groups="group_hospital_nurse,hospital_base.group_hospital_admin"
+              sequence="7"/>
+
+    <menuitem id="hospital_nurse_menu_dashboard"
+              name="Dashboard"
+              parent="hospital_nurse_menu_root"
+              action="hospital_nurse_dashboard_action"
+              sequence="10"/>
+
+    <menuitem id="hospital_nurse_menu_vitals_history"
+              name="Vitals History"
+              parent="hospital_nurse_menu_root"
+              action="hospital_vitals_action"
+              sequence="20"/>
+
+    <menuitem id="hospital_nurse_menu_tasks"
+              name="Nurse Tasks"
+              parent="hospital_nurse_menu_root"
+              action="hospital_nurse_task_action"
+              sequence="30"/>
+
+</odoo>

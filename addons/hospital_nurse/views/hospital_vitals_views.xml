@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_vitals_view_form" model="ir.ui.view">
+        <field name="name">hospital.vitals.view.form</field>
+        <field name="model">hospital.vitals</field>
+        <field name="arch" type="xml">
+            <form string="Vitals">
+                <sheet>
+                    <div class="alert alert-danger" role="alert" invisible="not is_abnormal">
+                        Abnormal vitals detected -- visit priority escalated to Urgent.
+                    </div>
+                    <group>
+                        <group string="Visit">
+                            <field name="visit_id"/>
+                            <field name="patient_id" readonly="1"/>
+                            <field name="recorded_by"/>
+                        </group>
+                        <group string="Status">
+                            <field name="is_abnormal" readonly="1"/>
+                            <field name="bmi" readonly="1"/>
+                            <field name="bmi_status" readonly="1" widget="badge"
+                                   decoration-success="bmi_status == 'normal'"
+                                   decoration-warning="bmi_status in ('underweight', 'overweight')"
+                                   decoration-danger="bmi_status == 'obese'"/>
+                        </group>
+                    </group>
+                    <group string="Vital Signs">
+                        <group>
+                            <label for="blood_pressure_systolic" string="Blood Pressure (mmHg)"/>
+                            <div class="o_row">
+                                <field name="blood_pressure_systolic"/> /
+                                <field name="blood_pressure_diastolic"/>
+                            </div>
+                            <field name="pulse_rate"/>
+                            <field name="temperature"/>
+                        </group>
+                        <group>
+                            <field name="spo2"/>
+                            <field name="respiratory_rate"/>
+                            <field name="height_cm"/>
+                            <field name="weight_kg"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hospital_vitals_view_list" model="ir.ui.view">
+        <field name="name">hospital.vitals.view.list</field>
+        <field name="model">hospital.vitals</field>
+        <field name="arch" type="xml">
+            <list string="Vitals History">
+                <field name="create_date" string="Recorded On"/>
+                <field name="patient_id"/>
+                <field name="visit_id"/>
+                <field name="blood_pressure_systolic"/>
+                <field name="blood_pressure_diastolic"/>
+                <field name="pulse_rate"/>
+                <field name="temperature"/>
+                <field name="spo2"/>
+                <field name="bmi"/>
+                <field name="is_abnormal" widget="boolean_toggle" readonly="1"/>
+                <field name="recorded_by"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hospital_vitals_view_search" model="ir.ui.view">
+        <field name="name">hospital.vitals.view.search</field>
+        <field name="model">hospital.vitals</field>
+        <field name="arch" type="xml">
+            <search string="Search Vitals">
+                <field name="patient_id"/>
+                <field name="visit_id"/>
+                <field name="recorded_by"/>
+                <filter string="Abnormal" name="filter_abnormal" domain="[('is_abnormal', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Patient" name="groupby_patient" context="{'group_by': 'patient_id'}"/>
+                    <filter string="Recorded By" name="groupby_recorded_by" context="{'group_by': 'recorded_by'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hospital_vitals_action" model="ir.actions.act_window">
+        <field name="name">Vitals History</field>
+        <field name="res_model">hospital.vitals</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hospital_vitals_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No vitals recorded yet
+            </p>
+        </field>
+    </record>
+
+</odoo>

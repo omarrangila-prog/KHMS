@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Vitals for a few of hospital_reception's 10 demo visits (all
+         parked in waiting_nurse by that module's demo data). Using the
+         function tag to call the model's create() method (not a plain
+         record tag) so the normal hospital.vitals.create() codepath
+         runs in full: BMI computation, range constraints, and crucially
+         the abnormal-vitals escalation and waiting_nurse to
+         waiting_doctor auto-transition (Phase 3 Section 2), exactly as
+         it would for a real nurse, rather than setting visit.state by
+         hand. This is also why no state field appears anywhere in this
+         file. -->
+
+    <!-- demo_visit_01: normal vitals, stays priority=normal, moves to
+         waiting_doctor. -->
+    <function model="hospital.vitals" name="create">
+        <value eval="[{
+            'visit_id': ref('hospital_reception.demo_visit_01'),
+            'blood_pressure_systolic': 118,
+            'blood_pressure_diastolic': 76,
+            'pulse_rate': 72,
+            'temperature': 36.7,
+            'spo2': 98,
+            'respiratory_rate': 16,
+            'height_cm': 172.0,
+            'weight_kg': 68.0,
+            'notes': 'Patient comfortable, no complaints at triage.',
+        }]"/>
+    </function>
+
+    <!-- demo_visit_02: already priority=urgent (set by reception demo
+         data); normal vitals must not change that. -->
+    <function model="hospital.vitals" name="create">
+        <value eval="[{
+            'visit_id': ref('hospital_reception.demo_visit_02'),
+            'blood_pressure_systolic': 122,
+            'blood_pressure_diastolic': 80,
+            'pulse_rate': 78,
+            'temperature': 37.0,
+            'spo2': 97,
+            'respiratory_rate': 18,
+            'height_cm': 165.0,
+            'weight_kg': 72.0,
+        }]"/>
+    </function>
+
+    <!-- demo_visit_03: abnormal vitals (high BP + fever) demonstrates
+         the auto-escalation rule: priority is pushed from normal to
+         urgent as a side effect of create(). -->
+    <function model="hospital.vitals" name="create">
+        <value eval="[{
+            'visit_id': ref('hospital_reception.demo_visit_03'),
+            'blood_pressure_systolic': 192,
+            'blood_pressure_diastolic': 110,
+            'pulse_rate': 110,
+            'temperature': 39.4,
+            'spo2': 94,
+            'respiratory_rate': 22,
+            'height_cm': 178.0,
+            'weight_kg': 95.0,
+            'notes': 'Patient reports headache and dizziness. BP re-checked twice.',
+        }]"/>
+    </function>
+
+    <!-- demo_visit_06: low SpO2, another abnormal-escalation example. -->
+    <function model="hospital.vitals" name="create">
+        <value eval="[{
+            'visit_id': ref('hospital_reception.demo_visit_06'),
+            'blood_pressure_systolic': 128,
+            'blood_pressure_diastolic': 82,
+            'pulse_rate': 100,
+            'temperature': 37.2,
+            'spo2': 89,
+            'respiratory_rate': 24,
+            'height_cm': 160.0,
+            'weight_kg': 58.0,
+            'notes': 'Mild respiratory distress observed.',
+        }]"/>
+    </function>
+
+    <!-- demo_visits 04, 05, 07, 08, 09, 10 are intentionally left without
+         vitals so the Nurse Dashboard/Vitals History demo still shows a
+         non-empty waiting_nurse queue alongside the waiting_doctor
+         transitions above. -->
+
+</odoo>

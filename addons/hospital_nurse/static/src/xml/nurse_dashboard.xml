@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="hospital_nurse.NurseDashboard">
+        <div class="o_hospital_nurse_dashboard">
+            <div class="o_hospital_dashboard_header">
+                <h2>Nurse Station</h2>
+                <span class="badge text-bg-primary o_hospital_nurse_waiting_badge"
+                      t-if="!state.loading" t-esc="state.waitingCount + ' waiting'"/>
+            </div>
+
+            <div class="o_hospital_dashboard_error alert alert-danger" t-if="state.error" role="alert">
+                Couldn't load the dashboard.
+                <button class="btn btn-link" t-on-click="onRetry">Retry</button>
+            </div>
+
+            <div class="o_hospital_next_patient_card o_hospital_skeleton" t-if="state.loading"/>
+
+            <t t-elif="!state.nextPatient">
+                <div class="o_hospital_next_patient_empty">
+                    No patients waiting for vitals.
+                </div>
+            </t>
+
+            <div class="o_hospital_next_patient_card" t-else="">
+                <div class="o_hospital_next_patient_label">Next Patient</div>
+                <div class="o_hospital_next_patient_name" t-esc="state.nextPatient.patient_id[1]"/>
+                <div class="o_hospital_next_patient_meta">
+                    <span t-if="state.nextPatient.age" t-esc="state.nextPatient.age + ' yrs'"/>
+                    <span class="badge text-bg-danger" t-if="state.nextPatient.priority === 'emergency'">Emergency</span>
+                    <span class="badge text-bg-warning" t-if="state.nextPatient.priority === 'urgent'">Urgent</span>
+                    <span t-esc="state.nextPatient.visit_code"/>
+                </div>
+                <button class="btn btn-primary btn-lg o_hospital_record_vitals_btn"
+                        t-on-click="openVitalsEntry">
+                    Record Vitals
+                </button>
+                <button class="btn btn-link" t-on-click="() => this.openVisit(state.nextPatient.id)">
+                    View Visit
+                </button>
+            </div>
+
+            <div class="o_hospital_nurse_task_section">
+                <h3>Nurse Tasks</h3>
+                <div class="o_hospital_nurse_task_empty" t-if="!state.loading and state.tasks.length === 0">
+                    No pending tasks.
+                </div>
+                <div class="o_hospital_nurse_task_list" t-if="!state.loading">
+                    <div class="o_hospital_nurse_task_row" t-foreach="state.tasks" t-as="task" t-key="task.id">
+                        <span class="o_hospital_nurse_task_name" t-esc="task.name"/>
+                        <span class="o_hospital_nurse_task_visit" t-if="task.visit_id" t-esc="task.visit_id[1]"/>
+                        <button class="btn btn-sm btn-success" t-on-click="() => this.markTaskDone(task.id)">
+                            Done
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

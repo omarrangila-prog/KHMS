@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_nurse_dashboard_action" model="ir.actions.client">
+        <field name="name">Nurse Dashboard</field>
+        <field name="tag">hospital_nurse.nurse_dashboard</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Vitals Quick-Entry (Phase 8 §7): tablet-optimized OWL client
+         action with numeric steppers and a single "Save & Send to
+         Doctor" button. Opened as a dialog from the Nurse Dashboard's
+         "Record Vitals" shortcut, with default_visit_id in the context. -->
+    <record id="hospital_vitals_quick_entry_action" model="ir.actions.client">
+        <field name="name">Vitals Quick-Entry</field>
+        <field name="tag">hospital_nurse.vitals_quick_entry</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="hospital_vitals_action_new" model="ir.actions.act_window">
+        <field name="name">Record Vitals</field>
+        <field name="res_model">hospital.vitals</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="hospital_vitals_view_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Nurse-specific addition to hospital_base's visit form: a "Record
+         Vitals" shortcut and an inline Vitals History tab, mirroring how
+         hospital_reception adds its own buttons/fields via xpath onto the
+         same base form (Phase 11 §2 "Inherited views use xpath/position
+         precisely targeted"). -->
+    <record id="hospital_visit_view_form_inherit_nurse" model="ir.ui.view">
+        <field name="name">hospital.visit.view.form.inherit.nurse</field>
+        <field name="model">hospital.visit</field>
+        <field name="inherit_id" ref="hospital_base.hospital_visit_view_form"/>
+        <field name="arch" type="xml">
+            <button name="action_send_to_doctor" position="before">
+                <button name="%(hospital_nurse.hospital_vitals_action_new)d"
+                        type="action" string="Record Vitals" class="oe_highlight"
+                        context="{'default_visit_id': active_id}"
+                        invisible="state != 'waiting_nurse'"/>
+            </button>
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Vitals History" name="vitals_history">
+                        <field name="vitals_ids" readonly="1">
+                            <list>
+                                <field name="create_date" string="Recorded On"/>
+                                <field name="blood_pressure_systolic"/>
+                                <field name="blood_pressure_diastolic"/>
+                                <field name="pulse_rate"/>
+                                <field name="temperature"/>
+                                <field name="spo2"/>
+                                <field name="bmi"/>
+                                <field name="is_abnormal" widget="boolean_toggle"/>
+                                <field name="recorded_by"/>
+                            </list>
+                        </field>
+                    </page>
+                    <page string="Nurse Tasks" name="nurse_tasks">
+                        <field name="nurse_task_ids">
+                            <list editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="name"/>
+                                <field name="state" widget="badge" decoration-success="state == 'done'"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

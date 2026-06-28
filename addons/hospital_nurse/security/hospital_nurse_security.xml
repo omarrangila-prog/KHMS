@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record id="group_hospital_nurse" model="res.groups">
+        <field name="name">Hospital Nurse</field>
+        <field name="category_id" ref="hospital_base.module_hospital_category"/>
+        <field name="implied_ids" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+        <field name="comment">Nursing staff: record vitals, manage nurse tasks, work the nurse station queue.</field>
+    </record>
+
+    <!-- Multi-company record rules, consistent with the hospital_base
+         ['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]
+         pattern (Phase 9 §3). hospital.vitals/hospital.nurse.task derive
+         company_id from visit_id.company_id as a related stored field
+         (mirroring how hospital_reception's hospital.appointment carries
+         its own company_id), so the same domain_force pattern applies. -->
+    <record id="hospital_vitals_company_rule" model="ir.rule">
+        <field name="name">Hospital Vitals: multi-company isolation</field>
+        <field name="model_id" ref="model_hospital_vitals"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <record id="hospital_nurse_task_company_rule" model="ir.rule">
+        <field name="name">Hospital Nurse Task: multi-company isolation</field>
+        <field name="model_id" ref="model_hospital_nurse_task"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+</odoo>

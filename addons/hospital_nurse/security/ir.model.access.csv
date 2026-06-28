@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hospital_vitals_nurse,hospital.vitals.nurse,model_hospital_vitals,group_hospital_nurse,1,1,1,0
+access_hospital_vitals_admin,hospital.vitals.admin,model_hospital_vitals,hospital_base.group_hospital_admin,1,1,1,1
+access_hospital_vitals_user,hospital.vitals.user,model_hospital_vitals,hospital_base.group_hospital_user,1,0,0,0
+access_hospital_nurse_task_nurse,hospital.nurse.task.nurse,model_hospital_nurse_task,group_hospital_nurse,1,1,1,1
+access_hospital_nurse_task_admin,hospital.nurse.task.admin,model_hospital_nurse_task,hospital_base.group_hospital_admin,1,1,1,1
+access_hospital_nurse_task_user,hospital.nurse.task.user,model_hospital_nurse_task,hospital_base.group_hospital_user,1,0,0,0

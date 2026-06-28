@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_nurse_task_view_list" model="ir.ui.view">
+        <field name="name">hospital.nurse.task.view.list</field>
+        <field name="model">hospital.nurse.task</field>
+        <field name="arch" type="xml">
+            <list string="Nurse Tasks" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="visit_id"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'"/>
+                <field name="done_by"/>
+                <field name="done_at"/>
+                <button name="action_mark_done" type="object" string="Mark Done"
+                        icon="fa-check" invisible="state == 'done'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hospital_nurse_task_view_kanban" model="ir.ui.view">
+        <field name="name">hospital.nurse.task.view.kanban</field>
+        <field name="model">hospital.nurse.task</field>
+        <field name="arch" type="xml">
+            <kanban class="o_hospital_nurse_task_kanban" default_group_by="state">
+                <field name="name"/>
+                <field name="visit_id"/>
+                <field name="state"/>
+                <field name="done_by"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <strong><field name="name"/></strong>
+                            <div><field name="visit_id"/></div>
+                            <div>
+                                <button name="action_mark_done" type="object"
+                                        string="Mark Done" class="btn btn-sm btn-primary"
+                                        invisible="state == 'done'"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="hospital_nurse_task_view_form" model="ir.ui.view">
+        <field name="name">hospital.nurse.task.view.form</field>
+        <field name="model">hospital.nurse.task</field>
+        <field name="arch" type="xml">
+            <form string="Nurse Task">
+                <header>
+                    <button name="action_mark_done" type="object" string="Mark Done"
+                            class="oe_highlight" invisible="state == 'done'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="visit_id"/>
+                        <field name="sequence"/>
+                        <field name="done_by" readonly="1"/>
+                        <field name="done_at" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hospital_nurse_task_view_search" model="ir.ui.view">
+        <field name="name">hospital.nurse.task.view.search</field>
+        <field name="model">hospital.nurse.task</field>
+        <field name="arch" type="xml">
+            <search string="Search Nurse Tasks">
+                <field name="name"/>
+                <field name="visit_id"/>
+                <filter string="Pending" name="filter_pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="Done" name="filter_done" domain="[('state', '=', 'done')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="groupby_state" context="{'group_by': 'state'}"/>
+                    <filter string="Visit" name="groupby_visit" context="{'group_by': 'visit_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hospital_nurse_task_action" model="ir.actions.act_window">
+        <field name="name">Nurse Tasks</field>
+        <field name="res_model">hospital.nurse.task</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="hospital_nurse_task_view_search"/>
+        <field name="context">{'search_default_filter_pending': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No nurse tasks yet
+            </p>
+        </field>
+    </record>
+
+</odoo>

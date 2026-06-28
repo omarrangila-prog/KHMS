@@ -1,0 +1,98 @@
+// Vitals Quick-Entry styling (Phase 8 §7). Reuses the shared design
+// tokens from hospital_base/static/src/scss/_variables.scss -- never
+// redefine the palette here. Tablet Mode (Phase 7 §7): large numeric
+// steppers (>=44px touch targets), color-flagged BMI, bottom action bar.
+@import "/hospital_base/static/src/scss/_variables";
+
+.o_hospital_vitals_quick_entry {
+    padding: $o-hospital-spacing-lg;
+    max-width: 480px;
+    margin: 0 auto;
+
+    h2 {
+        color: $o-hospital-secondary;
+        margin-bottom: $o-hospital-spacing-md;
+    }
+
+    .o_hospital_vitals_row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: $o-hospital-spacing-sm;
+
+        label {
+            flex: 0 0 45%;
+            font-weight: 500;
+        }
+
+        textarea {
+            flex: 1;
+            min-height: 60px;
+        }
+    }
+
+    .o_hospital_stepper_group {
+        display: flex;
+        align-items: center;
+        gap: $o-hospital-spacing-xs;
+
+        button {
+            min-width: 44px;
+            min-height: 44px;
+            font-size: 18px;
+        }
+
+        input {
+            width: 64px;
+            min-height: 44px;
+            text-align: center;
+            font-size: 18px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+
+            &.o_hospital_input_abnormal {
+                border-color: $o-hospital-danger;
+                background-color: rgba($o-hospital-danger, 0.08);
+                color: $o-hospital-danger;
+                font-weight: 600;
+            }
+        }
+    }
+
+    .o_hospital_bmi_display {
+        text-align: center;
+        font-size: 20px;
+        font-weight: 600;
+        padding: $o-hospital-spacing-sm;
+        border-radius: 4px;
+        margin: $o-hospital-spacing-md 0;
+        background-color: #f8f9fa;
+
+        &.o_hospital_bmi_success {
+            color: $o-hospital-success;
+        }
+
+        &.o_hospital_bmi_warning {
+            color: $o-hospital-warning;
+        }
+
+        &.o_hospital_bmi_danger {
+            color: $o-hospital-danger;
+        }
+    }
+
+    .o_hospital_vitals_actions {
+        display: flex;
+        gap: $o-hospital-spacing-sm;
+        justify-content: flex-end;
+        margin-top: $o-hospital-spacing-lg;
+        position: sticky;
+        bottom: 0;
+        background-color: #fff;
+        padding-top: $o-hospital-spacing-sm;
+
+        button {
+            min-height: 44px;
+        }
+    }
+}
