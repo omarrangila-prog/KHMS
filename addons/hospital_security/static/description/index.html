@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Hospital Security</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
+        h1 { color: #2c7be5; }
+        h2 { color: #495057; border-bottom: 1px solid #dee2e6; padding-bottom: 6px; }
+        ul { line-height: 1.8; }
+        .badge { background: #2c7be5; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>Hospital Security</h1>
+    <p>
+        Centralised security hardening for the Hospital Management System.
+        Module 12/12 - the final layer applied on top of all other hospital_* modules.
+    </p>
+
+    <h2>Key Features</h2>
+    <ul>
+        <li>Cross-module multi-company isolation: every clinical model is scoped
+            to the user's allowed companies via <code>ir.rule</code>.</li>
+        <li>Append-only audit log enforcement: no group (including Administrator)
+            can delete <code>hospital.audit.log</code> entries.</li>
+        <li>Security Overview admin view: pre-filtered audit log with date and
+            action presets, grouped by model.</li>
+        <li>Configuration &rarr; Security Overview menu (admin-only).</li>
+    </ul>
+
+    <h2>Dependencies</h2>
+    <p>
+        <span class="badge">hospital_base</span>
+        <span class="badge">hospital_reception</span>
+        <span class="badge">hospital_nurse</span>
+        <span class="badge">hospital_doctor</span>
+        <span class="badge">hospital_inventory</span>
+        <span class="badge">hospital_pharmacy</span>
+        <span class="badge">hospital_lab</span>
+        <span class="badge">hospital_radiology</span>
+        <span class="badge">hospital_ipd</span>
+        <span class="badge">hospital_dashboard</span>
+        <span class="badge">hospital_reports</span>
+    </p>
+</body>
+</html>

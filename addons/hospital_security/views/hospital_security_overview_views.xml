@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Security Overview: read-only admin view that surfaces active groups,
+        total audit log entries, and a filtered view of recent audit activity.
+        No new model is needed - this is a server action + act_window on the
+        existing hospital.audit.log model with a dedicated search preset.
+    -->
+
+    <!-- Enhanced audit log search view with date filter presets -->
+    <record id="hospital_audit_log_security_search" model="ir.ui.view">
+        <field name="name">hospital.audit.log.security.search</field>
+        <field name="model">hospital.audit.log</field>
+        <field name="inherit_id" ref="hospital_base.hospital_audit_log_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter string="Today"
+                        name="filter_today"
+                        domain="[('timestamp', '>=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"/>
+                <filter string="This Week"
+                        name="filter_week"
+                        domain="[('timestamp', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter string="Create Actions" name="filter_create" domain="[('action', '=', 'create')]"/>
+                <filter string="Write Actions"  name="filter_write"  domain="[('action', '=', 'write')]"/>
+                <filter string="Unlink Actions" name="filter_unlink" domain="[('action', '=', 'unlink')]"/>
+                <filter string="Sensitive Reads" name="filter_sensitive" domain="[('action', '=', 'read_sensitive')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Security Overview act_window: audit log pre-filtered to today -->
+    <record id="action_hospital_security_overview" model="ir.actions.act_window">
+        <field name="name">Security Overview</field>
+        <field name="res_model">hospital.audit.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hospital_base.hospital_audit_log_view_search"/>
+        <field name="context">{'search_default_filter_today': 1, 'search_default_groupby_model': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No audit events recorded yet.
+            </p>
+            <p>
+                Every create, write, and sensitive read on tracked hospital models
+                is recorded here automatically. Audit log entries cannot be deleted
+                by any user or group.
+            </p>
+        </field>
+    </record>
+
+</odoo>

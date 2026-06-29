@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Security Overview under Configuration (admin-only) -->
+    <menuitem id="hospital_menu_security_overview"
+              name="Security Overview"
+              parent="hospital_base.hospital_menu_configuration"
+              action="action_hospital_security_overview"
+              groups="hospital_base.group_hospital_admin"
+              sequence="95"/>
+
+</odoo>

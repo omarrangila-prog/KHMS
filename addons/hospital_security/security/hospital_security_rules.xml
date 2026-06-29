@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!--
+        Cross-module multi-company isolation rules.
+
+        hospital_base already seeds company rules for patient/visit/dept/doctor.
+        This module adds the same guard for every downstream clinical model so
+        that a user belonging to Company A cannot read Company B records even if
+        they navigate directly to the model.
+    -->
+
+    <!-- hospital_reception: appointment -->
+    <record id="hospital_appointment_company_rule" model="ir.rule">
+        <field name="name">Hospital Appointment: multi-company isolation</field>
+        <field name="model_id" ref="hospital_reception.model_hospital_appointment"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <!-- hospital_nurse: vitals -->
+    <record id="hospital_vitals_company_rule" model="ir.rule">
+        <field name="name">Hospital Vitals: multi-company isolation</field>
+        <field name="model_id" ref="hospital_nurse.model_hospital_vitals"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <!-- hospital_nurse: nurse task -->
+    <record id="hospital_nurse_task_company_rule" model="ir.rule">
+        <field name="name">Hospital Nurse Task: multi-company isolation</field>
+        <field name="model_id" ref="hospital_nurse.model_hospital_nurse_task"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <!-- hospital_doctor: consultation -->
+    <record id="hospital_consultation_company_rule" model="ir.rule">
+        <field name="name">Hospital Consultation: multi-company isolation</field>
+        <field name="model_id" ref="hospital_doctor.model_hospital_consultation"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <!-- hospital_doctor: prescription -->
+    <record id="hospital_prescription_company_rule" model="ir.rule">
+        <field name="name">Hospital Prescription: multi-company isolation</field>
+        <field name="model_id" ref="hospital_doctor.model_hospital_prescription"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <!-- hospital_lab: lab order -->
+    <record id="hospital_lab_order_company_rule" model="ir.rule">
+        <field name="name">Hospital Lab Order: multi-company isolation</field>
+        <field name="model_id" ref="hospital_lab.model_hospital_lab_order"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <!-- hospital_radiology: radiology order -->
+    <record id="hospital_radiology_order_company_rule" model="ir.rule">
+        <field name="name">Hospital Radiology Order: multi-company isolation</field>
+        <field name="model_id" ref="hospital_radiology.model_hospital_radiology_order"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <!-- hospital_ipd: admission -->
+    <record id="hospital_ipd_admission_company_rule" model="ir.rule">
+        <field name="name">Hospital IPD Admission: multi-company isolation</field>
+        <field name="model_id" ref="hospital_ipd.model_hospital_ipd_admission"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <!-- hospital_ipd: discharge -->
+    <record id="hospital_discharge_company_rule" model="ir.rule">
+        <field name="name">Hospital Discharge: multi-company isolation</field>
+        <field name="model_id" ref="hospital_ipd.model_hospital_discharge"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <!-- hospital_ipd: ward -->
+    <record id="hospital_ward_company_rule" model="ir.rule">
+        <field name="name">Hospital Ward: multi-company isolation</field>
+        <field name="model_id" ref="hospital_ipd.model_hospital_ward"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+</odoo>
