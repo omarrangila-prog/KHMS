@@ -1,15 +1,71 @@
-// Hospital Management System - shared design tokens.
-// Single source of truth for color palette / spacing used by every
-// hospital_* module's stylesheets (Phase 7 §2, Phase 11 §5). Imported by
-// downstream modules; never redefine these variables locally.
+// ============================================================
+// Hospital Management System — macOS-inspired Design Tokens
+// Single source of truth. All hospital_* modules import this.
+// ============================================================
 
-$o-hospital-primary: #2c7a7b;
-$o-hospital-secondary: #2c3e50;
-$o-hospital-danger: #c0392b;
-$o-hospital-warning: #e67e22;
-$o-hospital-success: #27ae60;
+// --- Colour Palette (macOS Aqua / Ventura palette) ---
+$o-hospital-primary:        #0A84FF;   // macOS blue
+$o-hospital-primary-dark:   #0066CC;
+$o-hospital-primary-light:  rgba(10, 132, 255, 0.12);
 
+$o-hospital-green:          #30D158;   // macOS green
+$o-hospital-red:            #FF453A;   // macOS red
+$o-hospital-orange:         #FF9F0A;   // macOS orange
+$o-hospital-purple:         #BF5AF2;   // macOS purple
+$o-hospital-teal:           #5AC8FA;   // macOS teal
+$o-hospital-indigo:         #5E5CE6;   // macOS indigo
+
+// Aliases kept for backward compat
+$o-hospital-secondary:      #1C1C1E;
+$o-hospital-danger:         $o-hospital-red;
+$o-hospital-warning:        $o-hospital-orange;
+$o-hospital-success:        $o-hospital-green;
+
+// --- Backgrounds ---
+$o-hospital-bg:             #F2F2F7;   // macOS sidebar/window bg
+$o-hospital-surface:        rgba(255, 255, 255, 0.82);  // frosted glass
+$o-hospital-surface-hover:  rgba(255, 255, 255, 0.95);
+$o-hospital-surface-dark:   rgba(28, 28, 30, 0.06);
+
+// --- Text ---
+$o-hospital-text-primary:   #1C1C1E;
+$o-hospital-text-secondary: #636366;
+$o-hospital-text-tertiary:  #AEAEB2;
+
+// --- Borders ---
+$o-hospital-border:         rgba(60, 60, 67, 0.12);
+$o-hospital-border-strong:  rgba(60, 60, 67, 0.25);
+
+// --- Shadows (macOS layered depth) ---
+$o-hospital-shadow-xs:  0 1px 2px rgba(0,0,0,0.06);
+$o-hospital-shadow-sm:  0 2px 8px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+$o-hospital-shadow-md:  0 4px 16px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.06);
+$o-hospital-shadow-lg:  0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
+$o-hospital-shadow-xl:  0 20px 60px rgba(0,0,0,0.15), 0 4px 16px rgba(0,0,0,0.08);
+
+// --- Radius (macOS rounded corners) ---
+$o-hospital-radius-xs:  6px;
+$o-hospital-radius-sm:  10px;
+$o-hospital-radius-md:  14px;
+$o-hospital-radius-lg:  18px;
+$o-hospital-radius-xl:  24px;
+
+// --- Spacing ---
 $o-hospital-spacing-xs: 4px;
 $o-hospital-spacing-sm: 8px;
 $o-hospital-spacing-md: 16px;
 $o-hospital-spacing-lg: 24px;
+$o-hospital-spacing-xl: 36px;
+
+// --- Typography (SF Pro stack) ---
+$o-hospital-font: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+                  "Segoe UI", Helvetica, Arial, sans-serif;
+$o-hospital-font-mono: "SF Mono", "Fira Code", "Cascadia Code",
+                        Menlo, Monaco, monospace;
+
+// --- Transitions ---
+$o-hospital-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+$o-hospital-transition-fast: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+
+// --- Blur (frosted glass) ---
+$o-hospital-blur: blur(20px) saturate(180%);

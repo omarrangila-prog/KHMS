@@ -1,98 +1,186 @@
-// Vitals Quick-Entry styling (Phase 8 §7). Reuses the shared design
-// tokens from hospital_base/static/src/scss/_variables.scss -- never
-// redefine the palette here. Tablet Mode (Phase 7 §7): large numeric
-// steppers (>=44px touch targets), color-flagged BMI, bottom action bar.
 @import "/hospital_base/static/src/scss/_variables";
 
+// ============================================================
+// Vitals Quick-Entry — macOS design (tablet-optimised)
+// ============================================================
+
 .o_hospital_vitals_quick_entry {
-    padding: $o-hospital-spacing-lg;
-    max-width: 480px;
+    font-family: $o-hospital-font;
+    padding: $o-hospital-spacing-xl;
+    max-width: 520px;
     margin: 0 auto;
 
     h2 {
-        color: $o-hospital-secondary;
-        margin-bottom: $o-hospital-spacing-md;
+        font-size: 24px;
+        font-weight: 700;
+        color: $o-hospital-text-primary;
+        letter-spacing: -0.5px;
+        margin-bottom: $o-hospital-spacing-xl;
     }
 
+    .alert-danger {
+        background: rgba(255,69,58,0.08);
+        border: 1px solid rgba(255,69,58,0.22);
+        border-radius: $o-hospital-radius-sm;
+        color: $o-hospital-red;
+        padding: $o-hospital-spacing-md;
+        margin-bottom: $o-hospital-spacing-md;
+        font-size: 14px;
+    }
+
+    // ── Each vital row ───────────────────────────────────────
     .o_hospital_vitals_row {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: $o-hospital-spacing-sm;
+        margin-bottom: $o-hospital-spacing-md;
+        padding: 14px $o-hospital-spacing-md;
+        background: $o-hospital-surface;
+        border: 1px solid $o-hospital-border;
+        border-radius: $o-hospital-radius-md;
+        box-shadow: $o-hospital-shadow-xs;
+        transition: $o-hospital-transition-fast;
+
+        &:hover { box-shadow: $o-hospital-shadow-sm; }
 
         label {
-            flex: 0 0 45%;
+            flex: 0 0 44%;
+            font-size: 14px;
             font-weight: 500;
+            color: $o-hospital-text-primary;
         }
 
         textarea {
             flex: 1;
-            min-height: 60px;
-        }
-    }
+            min-height: 72px;
+            border: 1px solid $o-hospital-border;
+            border-radius: $o-hospital-radius-xs;
+            padding: $o-hospital-spacing-sm;
+            font-family: $o-hospital-font;
+            font-size: 14px;
+            resize: vertical;
 
-    .o_hospital_stepper_group {
-        display: flex;
-        align-items: center;
-        gap: $o-hospital-spacing-xs;
-
-        button {
-            min-width: 44px;
-            min-height: 44px;
-            font-size: 18px;
-        }
-
-        input {
-            width: 64px;
-            min-height: 44px;
-            text-align: center;
-            font-size: 18px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-
-            &.o_hospital_input_abnormal {
-                border-color: $o-hospital-danger;
-                background-color: rgba($o-hospital-danger, 0.08);
-                color: $o-hospital-danger;
-                font-weight: 600;
+            &:focus {
+                outline: none;
+                border-color: $o-hospital-primary;
+                box-shadow: 0 0 0 3px $o-hospital-primary-light;
             }
         }
     }
 
-    .o_hospital_bmi_display {
-        text-align: center;
-        font-size: 20px;
-        font-weight: 600;
-        padding: $o-hospital-spacing-sm;
-        border-radius: 4px;
-        margin: $o-hospital-spacing-md 0;
-        background-color: #f8f9fa;
+    // ── Stepper +/- controls ─────────────────────────────────
+    .o_hospital_stepper_group {
+        display: flex;
+        align-items: center;
+        gap: 6px;
 
-        &.o_hospital_bmi_success {
-            color: $o-hospital-success;
+        button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1.5px solid $o-hospital-border;
+            background: $o-hospital-surface;
+            font-size: 18px;
+            line-height: 1;
+            color: $o-hospital-text-primary;
+            cursor: pointer;
+            transition: $o-hospital-transition-fast;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+                background: $o-hospital-primary;
+                border-color: $o-hospital-primary;
+                color: #fff;
+            }
+            &:active { transform: scale(0.92); }
         }
 
-        &.o_hospital_bmi_warning {
-            color: $o-hospital-warning;
-        }
+        input[type="number"] {
+            width: 72px;
+            height: 44px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            border: 1.5px solid $o-hospital-border;
+            border-radius: $o-hospital-radius-xs;
+            color: $o-hospital-text-primary;
+            background: #fff;
+            transition: $o-hospital-transition-fast;
 
-        &.o_hospital_bmi_danger {
-            color: $o-hospital-danger;
+            &:focus {
+                outline: none;
+                border-color: $o-hospital-primary;
+                box-shadow: 0 0 0 3px $o-hospital-primary-light;
+            }
+
+            &.o_hospital_input_abnormal {
+                border-color: $o-hospital-red;
+                background: rgba(255,69,58,0.06);
+                color: $o-hospital-red;
+                font-weight: 700;
+            }
         }
     }
 
+    // ── BMI display ──────────────────────────────────────────
+    .o_hospital_bmi_display {
+        text-align: center;
+        font-size: 22px;
+        font-weight: 700;
+        padding: $o-hospital-spacing-md;
+        border-radius: $o-hospital-radius-md;
+        margin: $o-hospital-spacing-lg 0;
+        background: $o-hospital-surface;
+        border: 1px solid $o-hospital-border;
+        letter-spacing: -0.5px;
+
+        &.o_hospital_bmi_success { color: $o-hospital-green; }
+        &.o_hospital_bmi_warning { color: $o-hospital-orange; }
+        &.o_hospital_bmi_danger  { color: $o-hospital-red;    }
+    }
+
+    // ── Bottom action bar ────────────────────────────────────
     .o_hospital_vitals_actions {
         display: flex;
         gap: $o-hospital-spacing-sm;
         justify-content: flex-end;
-        margin-top: $o-hospital-spacing-lg;
+        margin-top: $o-hospital-spacing-xl;
         position: sticky;
-        bottom: 0;
-        background-color: #fff;
-        padding-top: $o-hospital-spacing-sm;
+        bottom: $o-hospital-spacing-md;
 
-        button {
+        .btn-secondary {
+            background: $o-hospital-surface;
+            border: 1px solid $o-hospital-border;
+            color: $o-hospital-text-primary;
+            border-radius: $o-hospital-radius-sm;
+            font-weight: 500;
             min-height: 44px;
+            padding: 0 $o-hospital-spacing-lg;
+        }
+
+        .btn-primary {
+            background: $o-hospital-primary;
+            border: none;
+            color: #fff;
+            border-radius: $o-hospital-radius-sm;
+            font-weight: 600;
+            font-size: 15px;
+            min-height: 44px;
+            padding: 0 $o-hospital-spacing-xl;
+            box-shadow: $o-hospital-shadow-md;
+            transition: $o-hospital-transition-fast;
+
+            &:hover {
+                background: $o-hospital-primary-dark;
+                transform: translateY(-1px);
+                box-shadow: $o-hospital-shadow-lg;
+            }
+            &:disabled {
+                opacity: 0.5;
+                transform: none;
+            }
         }
     }
 }

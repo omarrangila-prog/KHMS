@@ -1,60 +1,82 @@
-// Inventory Dashboard styling. Reuses the shared design tokens defined
-// once in hospital_base/static/src/scss/_variables.scss (Phase 7 §2,
-// Phase 11 §5) -- never redefine the palette here.
 @import "/hospital_base/static/src/scss/_variables";
 
+// ============================================================
+// Inventory Dashboard — macOS design
+// ============================================================
+
 .o_hospital_inventory_dashboard {
-    padding: $o-hospital-spacing-lg;
-    max-width: 960px;
+    font-family: $o-hospital-font;
+    background: $o-hospital-bg;
+    padding: $o-hospital-spacing-xl;
+    max-width: 1040px;
     margin: 0 auto;
 
     .o_hospital_dashboard_header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: $o-hospital-spacing-md;
+        margin-bottom: $o-hospital-spacing-xl;
 
         h2 {
-            color: $o-hospital-secondary;
+            font-size: 28px;
+            font-weight: 700;
+            color: $o-hospital-text-primary;
+            letter-spacing: -0.5px;
             margin: 0;
         }
     }
 
+    // ── KPI row ──────────────────────────────────────────────
     .o_hospital_inventory_kpi_row {
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
         gap: $o-hospital-spacing-md;
-        margin-bottom: $o-hospital-spacing-lg;
+        margin-bottom: $o-hospital-spacing-xl;
         align-items: stretch;
     }
 
     .o_hospital_inventory_kpi_card {
-        flex: 1;
-        background-color: #fff;
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
+        background: $o-hospital-surface;
+        backdrop-filter: $o-hospital-blur;
+        border: 1px solid $o-hospital-border;
+        border-radius: $o-hospital-radius-lg;
         padding: $o-hospital-spacing-lg;
         text-align: center;
         cursor: pointer;
-        min-height: 44px;
+        box-shadow: $o-hospital-shadow-sm;
+        transition: $o-hospital-transition;
+        position: relative;
+        overflow: hidden;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: $o-hospital-shadow-md;
+        }
 
         .o_hospital_kpi_value {
-            font-size: 32px;
-            font-weight: 600;
-            color: $o-hospital-secondary;
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 6px;
         }
 
         .o_hospital_kpi_label {
-            color: #6c757d;
+            font-size: 12px;
+            font-weight: 600;
             text-transform: uppercase;
-            font-size: 13px;
+            letter-spacing: 0.6px;
+            color: $o-hospital-text-secondary;
         }
 
         &.o_hospital_kpi_warning {
-            border-left: 6px solid $o-hospital-warning;
+            border-top: 3px solid $o-hospital-orange;
+            .o_hospital_kpi_value { color: $o-hospital-orange; }
         }
 
         &.o_hospital_kpi_danger {
-            border-left: 6px solid $o-hospital-danger;
+            border-top: 3px solid $o-hospital-red;
+            .o_hospital_kpi_value { color: $o-hospital-red; }
         }
     }
 
@@ -62,44 +84,114 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: $o-hospital-spacing-md;
 
         button {
+            background: $o-hospital-surface;
+            border: 1px solid $o-hospital-border;
+            border-radius: $o-hospital-radius-sm;
+            font-family: $o-hospital-font;
+            font-size: 14px;
+            font-weight: 500;
+            color: $o-hospital-text-primary;
+            padding: 10px 20px;
             min-height: 44px;
+            cursor: pointer;
+            transition: $o-hospital-transition-fast;
+            box-shadow: $o-hospital-shadow-xs;
+
+            &:hover {
+                box-shadow: $o-hospital-shadow-sm;
+                transform: translateY(-1px);
+            }
+        }
+    }
+
+    // ── Stock table ──────────────────────────────────────────
+    .o_hospital_inventory_table {
+        width: 100%;
+        border-collapse: collapse;
+        background: $o-hospital-surface;
+        backdrop-filter: $o-hospital-blur;
+        border: 1px solid $o-hospital-border;
+        border-radius: $o-hospital-radius-lg;
+        box-shadow: $o-hospital-shadow-sm;
+        overflow: hidden;
+
+        thead tr {
+            background: rgba(0,0,0,0.025);
+            border-bottom: 1px solid $o-hospital-border;
+
+            th {
+                font-size: 11px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.6px;
+                color: $o-hospital-text-secondary;
+                padding: 12px $o-hospital-spacing-md;
+            }
+        }
+
+        tbody tr {
+            border-bottom: 1px solid $o-hospital-border;
+            transition: $o-hospital-transition-fast;
+
+            &:last-child { border-bottom: none; }
+            &:hover { background: rgba(10,132,255,0.03); }
+
+            td {
+                padding: 13px $o-hospital-spacing-md;
+                font-size: 13px;
+                color: $o-hospital-text-primary;
+                vertical-align: middle;
+            }
+
+            a {
+                color: $o-hospital-primary;
+                font-weight: 500;
+                text-decoration: none;
+                &:hover { text-decoration: underline; }
+            }
+        }
+
+        .badge {
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
         }
     }
 
     .o_hospital_inventory_empty {
+        background: $o-hospital-surface;
+        border: 1px solid $o-hospital-border;
+        border-radius: $o-hospital-radius-lg;
+        padding: $o-hospital-spacing-xl;
         text-align: center;
-        color: #6c757d;
-        font-style: italic;
-        padding: $o-hospital-spacing-lg;
-    }
-
-    .o_hospital_inventory_table {
-        background-color: #fff;
+        color: $o-hospital-green;
+        font-size: 15px;
+        font-weight: 500;
+        box-shadow: $o-hospital-shadow-xs;
     }
 
     .o_hospital_skeleton {
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background: linear-gradient(90deg, rgba(0,0,0,0.04) 25%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.04) 75%);
         background-size: 200% 100%;
-        animation: o-hospital-inventory-skeleton-loading 1.5s infinite;
-        border-radius: 6px;
+        animation: o-inv-shimmer 1.4s ease-in-out infinite;
+        border-radius: $o-hospital-radius-lg;
         min-height: 120px;
         margin-bottom: $o-hospital-spacing-lg;
     }
-}
 
-@keyframes o-hospital-inventory-skeleton-loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    @keyframes o-inv-shimmer {
+        0%   { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
 }
 
 @media (max-width: 768px) {
     .o_hospital_inventory_dashboard {
         padding: $o-hospital-spacing-md;
-
-        .o_hospital_inventory_kpi_row {
-            flex-direction: column;
-        }
+        .o_hospital_inventory_kpi_row { grid-template-columns: 1fr; }
     }
 }

@@ -1,137 +1,212 @@
-// Nurse Dashboard styling. Reuses the shared design tokens defined once
-// in hospital_base/static/src/scss/_variables.scss (Phase 7 §2, Phase 11
-// §5) -- never redefine the palette here. Tablet Mode (Phase 7 §7): large
-// touch targets (>=44px), single-column flow, bottom-reachable primary
-// action.
 @import "/hospital_base/static/src/scss/_variables";
 
+// ============================================================
+// Nurse Station Dashboard — macOS design
+// ============================================================
+
 .o_hospital_nurse_dashboard {
-    padding: $o-hospital-spacing-lg;
-    max-width: 640px;
+    font-family: $o-hospital-font;
+    background: $o-hospital-bg;
+    min-height: 100%;
+    padding: $o-hospital-spacing-xl;
+    max-width: 780px;
     margin: 0 auto;
 
     .o_hospital_dashboard_header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: $o-hospital-spacing-md;
+        margin-bottom: $o-hospital-spacing-xl;
 
         h2 {
-            color: $o-hospital-secondary;
+            font-size: 28px;
+            font-weight: 700;
+            color: $o-hospital-text-primary;
+            letter-spacing: -0.5px;
             margin: 0;
         }
     }
 
-    .o_hospital_next_patient_card {
-        background-color: #fff;
-        border: 1px solid #e0e0e0;
-        border-left: 6px solid $o-hospital-primary;
-        border-radius: 6px;
-        padding: $o-hospital-spacing-lg;
+    // ── Abnormal alert banner ────────────────────────────────
+    .o_hospital_abnormal_alert {
+        background: rgba(255, 69, 58, 0.07);
+        border: 1px solid rgba(255, 69, 58, 0.22);
+        border-radius: $o-hospital-radius-md;
+        padding: $o-hospital-spacing-md $o-hospital-spacing-lg;
         margin-bottom: $o-hospital-spacing-lg;
+        display: flex;
+        align-items: center;
+        gap: $o-hospital-spacing-md;
+
+        &-icon { font-size: 20px; }
+        &-text {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+            color: $o-hospital-red;
+        }
+    }
+
+    h3 {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: $o-hospital-text-secondary;
+        margin: 0 0 $o-hospital-spacing-md 0;
+    }
+
+    // ── Next patient hero card ───────────────────────────────
+    .o_hospital_next_patient_card {
+        background: linear-gradient(135deg, $o-hospital-primary 0%, #0055CC 100%);
+        border-radius: $o-hospital-radius-xl;
+        padding: $o-hospital-spacing-xl;
+        margin-bottom: $o-hospital-spacing-lg;
+        box-shadow: $o-hospital-shadow-lg;
+        color: #fff;
         text-align: center;
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
 
         .o_hospital_next_patient_label {
+            font-size: 11px;
+            font-weight: 700;
             text-transform: uppercase;
-            font-size: 13px;
-            color: #6c757d;
-            margin-bottom: $o-hospital-spacing-xs;
+            letter-spacing: 1px;
+            opacity: 0.75;
+            margin-bottom: $o-hospital-spacing-sm;
         }
 
         .o_hospital_next_patient_name {
-            font-size: 32px;
-            font-weight: 600;
-            color: $o-hospital-secondary;
+            font-size: 34px;
+            font-weight: 700;
+            letter-spacing: -1px;
             margin-bottom: $o-hospital-spacing-sm;
         }
 
         .o_hospital_next_patient_meta {
             display: flex;
-            gap: $o-hospital-spacing-sm;
+            gap: $o-hospital-spacing-md;
             justify-content: center;
-            align-items: center;
-            margin-bottom: $o-hospital-spacing-md;
-            color: #6c757d;
+            opacity: 0.80;
+            font-size: 14px;
+            margin-bottom: $o-hospital-spacing-lg;
         }
 
         .o_hospital_record_vitals_btn {
-            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.22);
+            backdrop-filter: blur(8px);
+            border: 1.5px solid rgba(255,255,255,0.40);
+            border-radius: $o-hospital-radius-md;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 32px;
+            min-height: 48px;
             width: 100%;
-            font-size: 18px;
-            margin-bottom: $o-hospital-spacing-sm;
+            cursor: pointer;
+            transition: $o-hospital-transition-fast;
+
+            &:hover {
+                background: rgba(255,255,255,0.32);
+                transform: translateY(-1px);
+            }
         }
     }
 
     .o_hospital_next_patient_empty {
+        background: $o-hospital-surface;
+        border: 1px solid $o-hospital-border;
+        border-radius: $o-hospital-radius-lg;
+        padding: $o-hospital-spacing-xl;
         text-align: center;
-        color: #6c757d;
-        font-style: italic;
-        padding: $o-hospital-spacing-lg;
+        color: $o-hospital-text-tertiary;
+        font-size: 14px;
+        margin-bottom: $o-hospital-spacing-lg;
     }
 
+    // ── Task rows ────────────────────────────────────────────
     .o_hospital_nurse_task_section {
-        h3 {
-            color: $o-hospital-secondary;
-        }
+        background: $o-hospital-surface;
+        backdrop-filter: $o-hospital-blur;
+        border: 1px solid $o-hospital-border;
+        border-radius: $o-hospital-radius-lg;
+        overflow: hidden;
+        box-shadow: $o-hospital-shadow-xs;
     }
 
     .o_hospital_nurse_task_row {
         display: flex;
         align-items: center;
-        gap: $o-hospital-spacing-sm;
-        background-color: #fff;
-        border: 1px solid #e0e0e0;
-        border-radius: 4px;
-        padding: $o-hospital-spacing-sm $o-hospital-spacing-md;
-        margin-bottom: $o-hospital-spacing-xs;
-        min-height: 44px;
+        gap: $o-hospital-spacing-md;
+        padding: 13px $o-hospital-spacing-lg;
+        border-bottom: 1px solid $o-hospital-border;
+        transition: $o-hospital-transition-fast;
+        min-height: 52px;
+
+        &:last-child { border-bottom: none; }
+        &:hover { background: rgba(10,132,255,0.03); }
 
         .o_hospital_nurse_task_name {
             flex: 1;
+            font-size: 14px;
             font-weight: 500;
+            color: $o-hospital-text-primary;
         }
 
         .o_hospital_nurse_task_visit {
-            color: #6c757d;
-            font-size: 13px;
+            font-family: $o-hospital-font-mono;
+            font-size: 12px;
+            color: $o-hospital-primary;
         }
 
         button {
-            min-height: 44px;
-            min-width: 44px;
+            min-height: 34px;
+            min-width: 34px;
+            border-radius: $o-hospital-radius-xs;
+            font-size: 13px;
+            font-weight: 600;
         }
     }
 
     .o_hospital_nurse_task_empty {
-        color: #6c757d;
-        font-style: italic;
-        padding: $o-hospital-spacing-md;
+        padding: $o-hospital-spacing-xl;
         text-align: center;
+        color: $o-hospital-text-tertiary;
+        font-size: 14px;
     }
 
     .o_hospital_skeleton {
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background: linear-gradient(90deg, rgba(0,0,0,0.04) 25%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.04) 75%);
         background-size: 200% 100%;
-        animation: o-hospital-nurse-skeleton-loading 1.5s infinite;
-        border-radius: 6px;
-        min-height: 160px;
+        animation: o-nurse-shimmer 1.4s ease-in-out infinite;
+        border-radius: $o-hospital-radius-md;
+        min-height: 140px;
         margin-bottom: $o-hospital-spacing-lg;
+    }
+
+    @keyframes o-nurse-shimmer {
+        0%   { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
     }
 }
 
-@keyframes o-hospital-nurse-skeleton-loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-
-// Tablet-mode breakpoint (Phase 7 §8: <768px tablet portrait/nurse) --
-// widen touch targets further and stack meta info.
 @media (max-width: 768px) {
     .o_hospital_nurse_dashboard {
         padding: $o-hospital-spacing-md;
-
-        .o_hospital_next_patient_card .o_hospital_next_patient_name {
-            font-size: 28px;
-        }
+        .o_hospital_next_patient_card .o_hospital_next_patient_name { font-size: 26px; }
     }
 }

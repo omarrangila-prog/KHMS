@@ -3,92 +3,118 @@
 
     <t t-name="hospital_nurse.VitalsQuickEntry">
         <div class="o_hospital_vitals_quick_entry">
-            <h2>Vitals Quick-Entry</h2>
+            <h2>Record Vitals</h2>
 
-            <div class="alert alert-danger" t-if="state.error" role="alert" t-esc="state.error"/>
+            <div class="alert-danger" t-if="state.error" t-esc="state.error"/>
 
+            <!-- Blood Pressure -->
             <div class="o_hospital_vitals_row">
-                <label>Blood Pressure (mmHg)</label>
+                <label>Blood Pressure <small style="color:#AEAEB2">(mmHg)</small></label>
                 <div class="o_hospital_stepper_group">
-                    <button class="btn btn-outline-secondary" t-on-click="() => this.step('blood_pressure_systolic', -1)">-</button>
-                    <input type="number" t-att-class="isAbnormal('blood_pressure_systolic') ? 'o_hospital_input_abnormal' : ''"
+                    <button t-on-click="() => this.step('blood_pressure_systolic', -1)">&#8722;</button>
+                    <input type="number"
+                           t-att-class="'o_hospital_input_' + (isAbnormal('blood_pressure_systolic') ? 'abnormal' : 'normal')"
                            t-att-value="state.values.blood_pressure_systolic"
                            t-on-change="(ev) => this.onFieldInput('blood_pressure_systolic', ev)"/>
-                    <button class="btn btn-outline-secondary" t-on-click="() => this.step('blood_pressure_systolic', 1)">+</button>
-                    <span>/</span>
-                    <button class="btn btn-outline-secondary" t-on-click="() => this.step('blood_pressure_diastolic', -1)">-</button>
-                    <input type="number" t-att-value="state.values.blood_pressure_diastolic"
+                    <button t-on-click="() => this.step('blood_pressure_systolic', 1)">&#43;</button>
+                    <span style="color:#AEAEB2;font-weight:300;font-size:22px;padding:0 2px">/</span>
+                    <button t-on-click="() => this.step('blood_pressure_diastolic', -1)">&#8722;</button>
+                    <input type="number"
+                           t-att-value="state.values.blood_pressure_diastolic"
                            t-on-change="(ev) => this.onFieldInput('blood_pressure_diastolic', ev)"/>
-                    <button class="btn btn-outline-secondary" t-on-click="() => this.step('blood_pressure_diastolic', 1)">+</button>
+                    <button t-on-click="() => this.step('blood_pressure_diastolic', 1)">&#43;</button>
                 </div>
             </div>
 
+            <!-- Pulse -->
             <div class="o_hospital_vitals_row">
-                <label>Pulse (bpm)</label>
+                <label>Pulse <small style="color:#AEAEB2">(bpm)</small></label>
                 <div class="o_hospital_stepper_group">
-                    <button class="btn btn-outline-secondary" t-on-click="() => this.step('pulse_rate', -1)">-</button>
-                    <input type="number" t-att-class="isAbnormal('pulse_rate') ? 'o_hospital_input_abnormal' : ''"
+                    <button t-on-click="() => this.step('pulse_rate', -1)">&#8722;</button>
+                    <input type="number"
+                           t-att-class="'o_hospital_input_' + (isAbnormal('pulse_rate') ? 'abnormal' : 'normal')"
                            t-att-value="state.values.pulse_rate"
                            t-on-change="(ev) => this.onFieldInput('pulse_rate', ev)"/>
-                    <button class="btn btn-outline-secondary" t-on-click="() => this.step('pulse_rate', 1)">+</button>
+                    <button t-on-click="() => this.step('pulse_rate', 1)">&#43;</button>
                 </div>
             </div>
 
+            <!-- Temperature -->
             <div class="o_hospital_vitals_row">
-                <label>Temp (°C)</label>
+                <label>Temperature <small style="color:#AEAEB2">(&#176;C)</small></label>
                 <div class="o_hospital_stepper_group">
-                    <button class="btn btn-outline-secondary" t-on-click="() => this.step('temperature', -0.1)">-</button>
-                    <input type="number" step="0.1" t-att-class="isAbnormal('temperature') ? 'o_hospital_input_abnormal' : ''"
+                    <button t-on-click="() => this.step('temperature', -0.1)">&#8722;</button>
+                    <input type="number" step="0.1"
+                           t-att-class="'o_hospital_input_' + (isAbnormal('temperature') ? 'abnormal' : 'normal')"
                            t-att-value="state.values.temperature"
                            t-on-change="(ev) => this.onFieldInput('temperature', ev)"/>
-                    <button class="btn btn-outline-secondary" t-on-click="() => this.step('temperature', 0.1)">+</button>
+                    <button t-on-click="() => this.step('temperature', 0.1)">&#43;</button>
                 </div>
             </div>
 
+            <!-- SpO2 -->
             <div class="o_hospital_vitals_row">
-                <label>SpO2 (%)</label>
+                <label>SpO&#8322; <small style="color:#AEAEB2">(%)</small></label>
                 <div class="o_hospital_stepper_group">
-                    <button class="btn btn-outline-secondary" t-on-click="() => this.step('spo2', -1)">-</button>
-                    <input type="number" t-att-class="isAbnormal('spo2') ? 'o_hospital_input_abnormal' : ''"
+                    <button t-on-click="() => this.step('spo2', -1)">&#8722;</button>
+                    <input type="number"
+                           t-att-class="'o_hospital_input_' + (isAbnormal('spo2') ? 'abnormal' : 'normal')"
                            t-att-value="state.values.spo2"
                            t-on-change="(ev) => this.onFieldInput('spo2', ev)"/>
-                    <button class="btn btn-outline-secondary" t-on-click="() => this.step('spo2', 1)">+</button>
+                    <button t-on-click="() => this.step('spo2', 1)">&#43;</button>
                 </div>
             </div>
 
+            <!-- Respiratory Rate -->
             <div class="o_hospital_vitals_row">
-                <label>Respiratory Rate</label>
+                <label>Resp. Rate <small style="color:#AEAEB2">(/min)</small></label>
                 <div class="o_hospital_stepper_group">
-                    <button class="btn btn-outline-secondary" t-on-click="() => this.step('respiratory_rate', -1)">-</button>
-                    <input type="number" t-att-value="state.values.respiratory_rate"
+                    <button t-on-click="() => this.step('respiratory_rate', -1)">&#8722;</button>
+                    <input type="number"
+                           t-att-value="state.values.respiratory_rate"
                            t-on-change="(ev) => this.onFieldInput('respiratory_rate', ev)"/>
-                    <button class="btn btn-outline-secondary" t-on-click="() => this.step('respiratory_rate', 1)">+</button>
+                    <button t-on-click="() => this.step('respiratory_rate', 1)">&#43;</button>
                 </div>
             </div>
 
+            <!-- Height / Weight -->
             <div class="o_hospital_vitals_row">
-                <label>Height (cm) / Weight (kg)</label>
+                <label>Height / Weight <small style="color:#AEAEB2">(cm / kg)</small></label>
                 <div class="o_hospital_stepper_group">
-                    <input type="number" t-att-value="state.values.height_cm"
+                    <input type="number" style="width:80px"
+                           t-att-value="state.values.height_cm"
                            t-on-change="(ev) => this.onFieldInput('height_cm', ev)"/>
-                    <input type="number" t-att-value="state.values.weight_kg"
+                    <span style="color:#AEAEB2;font-size:18px">/</span>
+                    <input type="number" style="width:80px"
+                           t-att-value="state.values.weight_kg"
                            t-on-change="(ev) => this.onFieldInput('weight_kg', ev)"/>
                 </div>
             </div>
 
+            <!-- BMI -->
             <div class="o_hospital_bmi_display" t-att-class="bmiStatus.cssClass">
-                BMI: <t t-esc="bmi.toFixed(1)"/> (<t t-esc="bmiStatus.label"/>)
+                BMI&#160;<t t-esc="bmi.toFixed(1)"/>
+                <span style="font-size:14px;font-weight:500;margin-left:8px;opacity:0.75">
+                    <t t-esc="bmiStatus.label"/>
+                </span>
             </div>
 
+            <!-- Notes -->
             <div class="o_hospital_vitals_row">
                 <label>Notes</label>
-                <textarea t-on-change="onNotesInput" t-esc="state.values.notes"/>
+                <textarea placeholder="Optional clinical notes..." t-on-change="onNotesInput">
+                    <t t-esc="state.values.notes"/>
+                </textarea>
             </div>
 
+            <!-- Actions -->
             <div class="o_hospital_vitals_actions">
-                <button class="btn btn-secondary" t-on-click="onCancel" t-att-disabled="state.saving">Cancel</button>
-                <button class="btn btn-primary btn-lg" t-on-click="onSaveAndSendToDoctor" t-att-disabled="state.saving">
-                    Save &amp; Send to Doctor
+                <button class="btn-secondary" t-on-click="onCancel"
+                        t-att-disabled="state.saving">Cancel</button>
+                <button class="btn-primary" t-on-click="onSaveAndSendToDoctor"
+                        t-att-disabled="state.saving">
+                    <t t-if="state.saving">Saving&#8230;</t>
+                    <t t-else="">Save &#38;&#38; Send to Doctor</t>
                 </button>
             </div>
         </div>
