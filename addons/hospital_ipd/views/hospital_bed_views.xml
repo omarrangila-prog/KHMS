@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_bed_view_list" model="ir.ui.view">
+        <field name="name">hospital.bed.list</field>
+        <field name="model">hospital.bed</field>
+        <field name="arch" type="xml">
+            <list string="Beds">
+                <field name="ward_id"/>
+                <field name="bed_number"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'vacant'"
+                       decoration-danger="state == 'occupied'"
+                       decoration-warning="state in ('reserved', 'cleaning')"/>
+                <field name="current_patient_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hospital_bed_view_form" model="ir.ui.view">
+        <field name="name">hospital.bed.form</field>
+        <field name="model">hospital.bed</field>
+        <field name="arch" type="xml">
+            <form string="Bed">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="bed_number"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Location">
+                            <field name="ward_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Status">
+                            <field name="state" widget="badge"
+                                   decoration-success="state == 'vacant'"
+                                   decoration-danger="state == 'occupied'"
+                                   decoration-warning="state in ('reserved', 'cleaning')"/>
+                            <field name="current_admission_id"/>
+                            <field name="current_patient_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hospital_bed_view_search" model="ir.ui.view">
+        <field name="name">hospital.bed.search</field>
+        <field name="model">hospital.bed</field>
+        <field name="arch" type="xml">
+            <search string="Search Beds">
+                <field name="bed_number"/>
+                <field name="ward_id"/>
+                <filter string="Vacant" name="filter_vacant" domain="[('state', '=', 'vacant')]"/>
+                <filter string="Occupied" name="filter_occupied" domain="[('state', '=', 'occupied')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Ward" name="group_ward" context="{'group_by': 'ward_id'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hospital_bed" model="ir.actions.act_window">
+        <field name="name">Beds</field>
+        <field name="res_model">hospital.bed</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hospital_bed_view_search"/>
+        <field name="context">{'search_default_group_ward': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add beds to a ward to start tracking occupancy.
+            </p>
+        </field>
+    </record>
+
+</odoo>

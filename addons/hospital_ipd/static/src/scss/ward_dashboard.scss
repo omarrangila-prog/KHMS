@@ -1,0 +1,91 @@
+// Ward Dashboard (Phase 8 §14)
+// All custom classes scoped under .o_hospital_ward_* / .o_hospital_bed_* per Phase 11 §5.
+
+.o_hospital_ward_dashboard {
+    height: 100%;
+    overflow-y: auto;
+    padding: 1rem;
+
+    .o_hospital_dashboard_header {
+        display: flex;
+        align-items: baseline;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+
+        h2 {
+            margin: 0;
+        }
+    }
+
+    .o_hospital_ward_section {
+        margin-bottom: 1.5rem;
+    }
+
+    .o_hospital_ward_section_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+
+        h3 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+    }
+
+    .o_hospital_bed_grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 0.6rem;
+    }
+
+    .o_hospital_bed_tile {
+        border-radius: 6px;
+        padding: 0.6rem;
+        cursor: pointer;
+        border: 1px solid var(--o-border-color, #dee2e6);
+        text-align: center;
+
+        &:hover {
+            filter: brightness(0.96);
+        }
+    }
+
+    .o_hospital_bed_number {
+        font-weight: 600;
+    }
+
+    .o_hospital_bed_state {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        opacity: 0.8;
+    }
+
+    .o_hospital_bed_patient {
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .o_hospital_bed_vacant {
+        background: var(--hms-success-light, #d1f7e0);
+        border-color: var(--hms-success, #1e9e63);
+    }
+
+    .o_hospital_bed_occupied {
+        background: var(--hms-danger-light, #fbdada);
+        border-color: var(--hms-danger, #d9362e);
+    }
+
+    .o_hospital_bed_reserved {
+        background: var(--hms-warning-light, #fdf0d5);
+        border-color: var(--hms-warning, #d9a02e);
+    }
+
+    .o_hospital_bed_cleaning {
+        background: var(--o-gray-200, #e9ecef);
+        border-color: var(--o-gray-400, #ced4da);
+    }
+}

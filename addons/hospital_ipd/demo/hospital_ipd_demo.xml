@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Demo IPD data exercising the full admission -> bed assignment ->
+     transfer -> discharge lifecycle, per Phase 6 demo spec and Phase 10
+     Sprint 8 DoD.
+
+     Visit choice: demo_visit_04 and demo_visit_05 are deliberately used
+     here because neither is referenced anywhere in hospital_lab's,
+     hospital_radiology's, or hospital_pharmacy's demo data (checked by
+     grep before writing this file) - so a discharge confirm on either
+     visit will never be blocked by a leftover pending lab/radiology/
+     prescription branch from another module's demo data, regardless of
+     which of those optional modules happen to be installed alongside
+     hospital_ipd. demo_visit_09 IS referenced by hospital_lab/
+     hospital_radiology demo data, but is used below only for the
+     "waiting_for_bed" scenario, which never reaches discharge, so the
+     same concern does not apply there.
+
+     Medicines for discharge instructions reuse hospital_doctor's own
+     demo product.product records (demo_medicine_amlodipine etc.)
+     rather than hospital_inventory's catalog, since hospital_ipd does
+     not depend on hospital_inventory (Phase 12 dependency boundary). -->
+<odoo noupdate="1">
+
+    <!-- ====================================================================
+         WARDS AND BEDS
+         ==================================================================== -->
+    <record id="demo_ward_general" model="hospital.ward">
+        <field name="name">General Ward</field>
+        <field name="code">GEN-A</field>
+        <field name="ward_type">general</field>
+        <field name="daily_rate">45.0</field>
+    </record>
+    <record id="demo_ward_icu" model="hospital.ward">
+        <field name="name">Intensive Care Unit</field>
+        <field name="code">ICU-A</field>
+        <field name="ward_type">icu</field>
+        <field name="daily_rate">220.0</field>
+    </record>
+
+    <record id="demo_bed_gen_01" model="hospital.bed">
+        <field name="ward_id" ref="demo_ward_general"/>
+        <field name="bed_number">01</field>
+    </record>
+    <record id="demo_bed_gen_02" model="hospital.bed">
+        <field name="ward_id" ref="demo_ward_general"/>
+        <field name="bed_number">02</field>
+    </record>
+    <record id="demo_bed_gen_03" model="hospital.bed">
+        <field name="ward_id" ref="demo_ward_general"/>
+        <field name="bed_number">03</field>
+    </record>
+    <record id="demo_bed_icu_01" model="hospital.bed">
+        <field name="ward_id" ref="demo_ward_icu"/>
+        <field name="bed_number">01</field>
+    </record>
+    <record id="demo_bed_icu_02" model="hospital.bed">
+        <field name="ward_id" ref="demo_ward_icu"/>
+        <field name="bed_number">02</field>
+    </record>
+
+    <!-- ====================================================================
+         SCENARIO 1: Active admission, still in stay (visit_05, emergency
+         priority -> admitted for observation).
+         ==================================================================== -->
+    <record id="hospital_reception.demo_visit_05" model="hospital.visit">
+        <field name="visit_type">ipd</field>
+    </record>
+
+    <record id="demo_admission_01" model="hospital.ipd.admission">
+        <field name="patient_id" ref="hospital_base.demo_patient_05"/>
+        <field name="visit_id" ref="hospital_reception.demo_visit_05"/>
+        <field name="admitting_doctor_id" ref="hospital_base.demo_doctor_5"/>
+    </record>
+
+    <function model="hospital.ipd.admission" name="action_assign_bed">
+        <value eval="[ref('demo_admission_01')]"/>
+        <value eval="ref('demo_bed_icu_01')"/>
+    </function>
+
+    <!-- Mid-stay ward-round nurse task (Phase 6: hospital_nurse_task
+         admission_id extension point exercised here). -->
+    <record id="demo_nurse_task_ward_round_01" model="hospital.nurse.task">
+        <field name="admission_id" ref="demo_admission_01"/>
+        <field name="name">Evening ward round - vitals check</field>
+    </record>
+
+    <!-- ====================================================================
+         SCENARIO 2: Admitted, transferred mid-stay, then discharged with
+         length-of-stay billing computed (visit_04, pediatrics).
+         ==================================================================== -->
+    <record id="hospital_reception.demo_visit_04" model="hospital.visit">
+        <field name="visit_type">ipd</field>
+    </record>
+
+    <record id="demo_admission_02" model="hospital.ipd.admission">
+        <field name="patient_id" ref="hospital_base.demo_patient_04"/>
+        <field name="visit_id" ref="hospital_reception.demo_visit_04"/>
+        <field name="admitting_doctor_id" ref="hospital_base.demo_doctor_4"/>
+    </record>
+
+    <function model="hospital.ipd.admission" name="action_assign_bed">
+        <value eval="[ref('demo_admission_02')]"/>
+        <value eval="ref('demo_bed_gen_01')"/>
+    </function>
+
+    <!-- Backdate the admission so length_of_stay_days is meaningful in
+         the demo (3 days ago) rather than ~0 for a same-second demo
+         install - matches the pattern other modules use (collected_at/
+         entered_at backdating) for realistic-looking dashboards. -->
+    <record id="demo_admission_02" model="hospital.ipd.admission">
+        <field name="admission_datetime" eval="(DateTime.datetime.now() - relativedelta(days=3)).strftime('%Y-%m-%d %H:%M:%S')"/>
+    </record>
+
+    <record id="demo_bed_transfer_01" model="hospital.bed.transfer">
+        <field name="admission_id" ref="demo_admission_02"/>
+        <field name="to_bed_id" ref="demo_bed_gen_02"/>
+        <field name="reason">Transferred to a bed nearer the nursing station for closer monitoring.</field>
+    </record>
+    <function model="hospital.bed.transfer" name="action_confirm">
+        <value eval="[ref('demo_bed_transfer_01')]"/>
+    </function>
+
+    <record id="demo_discharge_02" model="hospital.discharge">
+        <field name="admission_id" ref="demo_admission_02"/>
+        <field name="discharge_type">normal</field>
+        <field name="discharge_summary">Admitted for observation; recovered well and tolerated the transfer to a step-down bed without incident. Discharged in stable condition.</field>
+        <field name="follow_up_instructions">Pediatric outpatient review in 1 week. Continue oral antibiotics for the full course. Return immediately if fever recurs.</field>
+        <field name="discharge_medication_ids" eval="[(0, 0, {
+            'medicine_id': ref('hospital_doctor.demo_medicine_amoxicillin'),
+            'dosage': '250mg',
+            'frequency': 'TID',
+            'duration_days': 7,
+            'instructions': 'Take with food, complete the full course.',
+        })]"/>
+    </record>
+    <function model="hospital.discharge" name="action_confirm">
+        <value eval="[ref('demo_discharge_02')]"/>
+    </function>
+
+    <!-- ====================================================================
+         SCENARIO 3: Admission requested but no bed available yet
+         (Phase 3 §4 "waiting_for_bed" edge case). All general/ICU beds
+         above are now occupied/cleaning, so this one genuinely has none
+         vacant - illustrates the cross-ward visibility for ward
+         managers. Never reaches discharge, so visit_09 already having
+         lab/radiology orders elsewhere is not a conflict here.
+         ==================================================================== -->
+    <record id="hospital_reception.demo_visit_09" model="hospital.visit">
+        <field name="visit_type">ipd</field>
+    </record>
+
+    <record id="demo_admission_03" model="hospital.ipd.admission">
+        <field name="patient_id" ref="hospital_base.demo_patient_09"/>
+        <field name="visit_id" ref="hospital_reception.demo_visit_09"/>
+        <field name="admitting_doctor_id" ref="hospital_base.demo_doctor_4"/>
+    </record>
+    <function model="hospital.ipd.admission" name="action_mark_waiting_for_bed">
+        <value eval="[ref('demo_admission_03')]"/>
+    </function>
+
+</odoo>

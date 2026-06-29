@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_hospital_ipd_root"
+              name="IPD"
+              sequence="50"
+              web_icon="hospital_ipd,static/description/icon.png"/>
+
+    <menuitem id="menu_hospital_ipd_dashboard"
+              name="Ward Dashboard"
+              parent="menu_hospital_ipd_root"
+              action="hospital_ward_dashboard_action"
+              sequence="10"/>
+
+    <menuitem id="menu_hospital_ipd_admission"
+              name="Admissions"
+              parent="menu_hospital_ipd_root"
+              action="action_hospital_ipd_admission"
+              sequence="20"/>
+
+    <menuitem id="menu_hospital_ipd_admit_wizard"
+              name="Admit Patient"
+              parent="menu_hospital_ipd_root"
+              action="action_hospital_admission_wizard"
+              sequence="15"/>
+
+    <menuitem id="menu_hospital_ipd_discharge"
+              name="Discharges"
+              parent="menu_hospital_ipd_root"
+              action="action_hospital_discharge"
+              sequence="30"/>
+
+    <menuitem id="menu_hospital_ipd_configuration"
+              name="Configuration"
+              parent="menu_hospital_ipd_root"
+              sequence="90"/>
+
+    <menuitem id="menu_hospital_ipd_ward"
+              name="Wards"
+              parent="menu_hospital_ipd_configuration"
+              action="action_hospital_ward"
+              sequence="10"/>
+
+    <menuitem id="menu_hospital_ipd_bed"
+              name="Beds"
+              parent="menu_hospital_ipd_configuration"
+              action="action_hospital_bed"
+              sequence="20"/>
+
+</odoo>

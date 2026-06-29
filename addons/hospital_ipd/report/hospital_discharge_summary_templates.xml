@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_hospital_discharge_summary">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- Header -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h2>Discharge Summary</h2>
+                                <p>
+                                    <strong>Admission:</strong>
+                                    <t t-esc="o.admission_id.admission_code"/>
+                                </p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p>
+                                    <strong>Discharge Type:</strong>
+                                    <span t-att-class="'badge ' + ('bg-dark' if o.discharge_type == 'deceased' else 'bg-warning' if o.discharge_type == 'ama' else 'bg-secondary')">
+                                        <t t-esc="dict(o.fields_get(['discharge_type'])['discharge_type']['selection'])[o.discharge_type]"/>
+                                    </span>
+                                </p>
+                                <p>
+                                    <strong>Discharge Date/Time:</strong>
+                                    <t t-esc="o.discharge_datetime" t-options="{'widget': 'datetime'}"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Patient and stay info -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h4>Patient</h4>
+                                <p>
+                                    <t t-esc="o.patient_id.name"/>
+                                </p>
+                                <p>
+                                    <strong>Visit:</strong>
+                                    <t t-esc="o.visit_id.visit_code if o.visit_id else ''"/>
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <h4>Stay Information</h4>
+                                <p>
+                                    <strong>Ward:</strong>
+                                    <t t-esc="o.admission_id.ward_id.display_name"/>
+                                </p>
+                                <p>
+                                    <strong>Admitted:</strong>
+                                    <t t-esc="o.admission_id.admission_datetime" t-options="{'widget': 'datetime'}"/>
+                                </p>
+                                <p>
+                                    <strong>Length of Stay:</strong>
+                                    <t t-esc="'%.1f' % o.admission_id.length_of_stay_days"/> day(s)
+                                </p>
+                                <p>
+                                    <strong>Admitting Doctor:</strong>
+                                    <t t-esc="o.admission_id.admitting_doctor_id.display_name"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Discharge summary -->
+                        <h4>Discharge Summary</h4>
+                        <p t-esc="o.discharge_summary or '—'"/>
+
+                        <!-- Follow-up instructions: skipped for deceased per Phase 3 §7 -->
+                        <t t-if="o.discharge_type != 'deceased'">
+                            <h4>Follow-up Instructions</h4>
+                            <p t-esc="o.follow_up_instructions or '—'"/>
+                        </t>
+
+                        <!-- Discharge medications -->
+                        <h4>Discharge Medications</h4>
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Medicine</th>
+                                    <th>Dosage</th>
+                                    <th>Frequency</th>
+                                    <th>Duration (days)</th>
+                                    <th>Instructions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.discharge_medication_ids" t-as="m">
+                                    <tr>
+                                        <td>
+                                            <t t-esc="m.medicine_id.display_name"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="m.dosage or ''"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="m.frequency or ''"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="m.duration_days or ''"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="m.instructions or ''"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr t-if="not o.discharge_medication_ids">
+                                    <td colspan="5" class="text-center text-muted">
+                                        No discharge medications.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Billing -->
+                        <p>
+                            <strong>Ward Charge (LOS x daily rate):</strong>
+                            <span t-esc="o.ward_charge_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                        </p>
+
+                        <!-- Footer signature block -->
+                        <div class="row mt-5">
+                            <div class="col-6">
+                                <p>_________________________________</p>
+                                <p>Discharging Staff Signature</p>
+                            </div>
+                            <div class="col-6">
+                                <p>_________________________________</p>
+                                <p>
+                                    <t t-esc="o.admission_id.admitting_doctor_id.display_name"/> (Attending Doctor)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

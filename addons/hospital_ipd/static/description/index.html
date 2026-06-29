@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Hospital In-Patient Department</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
+        h1 { color: #2c7be5; }
+        h2 { color: #495057; border-bottom: 1px solid #dee2e6; padding-bottom: 6px; }
+        ul { line-height: 1.8; }
+        .badge { background: #2c7be5; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        code { background: #f1f3f5; padding: 2px 6px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Hospital In-Patient Department</h1>
+    <p>
+        Full inpatient lifecycle for the Hospital Management System: ward/bed
+        management, admission requests, bed assignment, mid-stay transfers, and
+        discharge with length-of-stay billing.
+    </p>
+
+    <h2>Key Features</h2>
+    <ul>
+        <li>Ward and Bed master data with a real-time occupancy dashboard.</li>
+        <li>Admission state machine: Requested → Waiting for Bed → Admitted → Discharged.</li>
+        <li>Database-level partial unique index guaranteeing at most one active admission per bed, even under concurrent bed assignment attempts.</li>
+        <li>Mid-stay bed transfers recorded as a child of the same admission, never a new record.</li>
+        <li>Discharge blocked while any prescription/lab/radiology branch on the visit remains open.</li>
+        <li>Length-of-stay ward billing (days × daily rate), ready for a future billing module to post.</li>
+        <li>Discharge sub-types: Normal, Against Medical Advice, Deceased, Referred.</li>
+        <li>Ward-round nurse tasks linked to the admission, not just the OPD visit.</li>
+        <li>QWeb Discharge Summary PDF with take-home medication list.</li>
+        <li>Multi-company isolation via company record rules.</li>
+    </ul>
+
+    <h2>Dependencies</h2>
+    <p>
+        <span class="badge">hospital_doctor</span>
+        <span class="badge">hospital_nurse</span>
+        (bringing in hospital_reception, hospital_base).
+    </p>
+
+    <h2>Concurrency Guarantee</h2>
+    <p>
+        Two simultaneous admission attempts to the same bed: only one succeeds. The
+        second fails cleanly at the database level via
+        <code>CREATE UNIQUE INDEX ... WHERE state = 'admitted'</code>, not a
+        race-prone Python read-then-write check.
+    </p>
+</body>
+</html>

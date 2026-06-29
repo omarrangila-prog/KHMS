@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_ipd_admission_view_list" model="ir.ui.view">
+        <field name="name">hospital.ipd.admission.list</field>
+        <field name="model">hospital.ipd.admission</field>
+        <field name="arch" type="xml">
+            <list string="Admissions">
+                <field name="admission_code"/>
+                <field name="patient_id"/>
+                <field name="ward_id"/>
+                <field name="bed_id"/>
+                <field name="admitting_doctor_id"/>
+                <field name="admission_datetime"/>
+                <field name="length_of_stay_days"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('requested', 'waiting_for_bed')"
+                       decoration-success="state == 'admitted'"
+                       decoration-muted="state in ('discharged', 'cancelled')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hospital_ipd_admission_view_form" model="ir.ui.view">
+        <field name="name">hospital.ipd.admission.form</field>
+        <field name="model">hospital.ipd.admission</field>
+        <field name="arch" type="xml">
+            <form string="IPD Admission">
+                <header>
+                    <button name="action_assign_bed" type="object" string="Assign Bed"
+                            class="oe_highlight"
+                            invisible="state not in ('requested', 'waiting_for_bed')"
+                            context="{'default_admission_id': id}"/>
+                    <button name="action_mark_waiting_for_bed" type="object" string="Mark Waiting for Bed"
+                            invisible="state != 'requested'"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state in ('admitted', 'discharged', 'cancelled')"
+                            confirm="Are you sure you want to cancel this admission request?"/>
+                    <button name="%(action_hospital_transfer_wizard)d" type="action"
+                            string="Transfer Bed"
+                            invisible="state != 'admitted'"
+                            context="{'default_admission_id': id}"/>
+                    <button name="%(action_hospital_discharge_wizard)d" type="action"
+                            string="Discharge"
+                            invisible="state != 'admitted'"
+                            context="{'default_admission_id': id}"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="requested,waiting_for_bed,admitted,discharged"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="admission_code" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Patient &amp; Visit">
+                            <field name="patient_id"/>
+                            <field name="visit_id"/>
+                            <field name="admitting_doctor_id"/>
+                        </group>
+                        <group string="Bed Assignment">
+                            <field name="ward_id" readonly="1"/>
+                            <field name="bed_id" readonly="1"/>
+                            <field name="admission_datetime"/>
+                            <field name="length_of_stay_days"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="discharge_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Bed Transfers" name="transfers">
+                            <field name="transfer_ids">
+                                <list>
+                                    <field name="transfer_datetime"/>
+                                    <field name="from_bed_id"/>
+                                    <field name="to_bed_id"/>
+                                    <field name="reason"/>
+                                    <field name="transferred_by"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hospital_ipd_admission_view_search" model="ir.ui.view">
+        <field name="name">hospital.ipd.admission.search</field>
+        <field name="model">hospital.ipd.admission</field>
+        <field name="arch" type="xml">
+            <search string="Search Admissions">
+                <field name="admission_code"/>
+                <field name="patient_id"/>
+                <field name="ward_id"/>
+                <field name="bed_id"/>
+                <filter string="Requested" name="filter_requested" domain="[('state', '=', 'requested')]"/>
+                <filter string="Waiting for Bed" name="filter_waiting" domain="[('state', '=', 'waiting_for_bed')]"/>
+                <filter string="Admitted" name="filter_admitted" domain="[('state', '=', 'admitted')]"/>
+                <filter string="Discharged" name="filter_discharged" domain="[('state', '=', 'discharged')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Ward" name="group_ward" context="{'group_by': 'ward_id'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Admitting Doctor" name="group_doctor" context="{'group_by': 'admitting_doctor_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hospital_ipd_admission" model="ir.actions.act_window">
+        <field name="name">Admissions</field>
+        <field name="res_model">hospital.ipd.admission</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hospital_ipd_admission_view_search"/>
+        <field name="context">{'search_default_filter_admitted': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No admissions yet. Use the Admission Wizard to admit a patient.
+            </p>
+        </field>
+    </record>
+
+</odoo>

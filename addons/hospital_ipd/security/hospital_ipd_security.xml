@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record id="group_hospital_ward_manager" model="res.groups">
+        <field name="name">Hospital Ward Manager</field>
+        <field name="category_id" ref="hospital_base.module_hospital_category"/>
+        <field name="implied_ids" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+        <field name="comment">Ward/bed staff: assign beds, manage transfers, and finalize discharges.</field>
+    </record>
+
+    <!-- Multi-company record rule on hospital.ipd.admission (mirrors the
+         hospital_lab/hospital_radiology pattern: company_id is a stored
+         related from visit_id.company_id). -->
+    <record id="hospital_ipd_admission_company_rule" model="ir.rule">
+        <field name="name">IPD Admission: multi-company isolation</field>
+        <field name="model_id" ref="model_hospital_ipd_admission"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <record id="hospital_bed_company_rule" model="ir.rule">
+        <field name="name">Bed: multi-company isolation</field>
+        <field name="model_id" ref="model_hospital_bed"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <record id="hospital_ward_company_rule" model="ir.rule">
+        <field name="name">Ward: multi-company isolation</field>
+        <field name="model_id" ref="model_hospital_ward"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <record id="hospital_discharge_company_rule" model="ir.rule">
+        <field name="name">Discharge: multi-company isolation</field>
+        <field name="model_id" ref="model_hospital_discharge"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <!-- Optional ward-scoped record rule (Phase 9 §3): disabled by
+         default (active=False) - small hospitals with no per-ward
+         manager assignment configured see all wards, per Phase 9 §3
+         "defaults to all wards for small hospitals". A deployment that
+         wants per-ward scoping can activate this rule and populate a
+         ward_ids field on res.users via a separate configuration step;
+         left inactive here rather than guessing a field that does not
+         exist on res.users in this codebase. -->
+    <record id="hospital_bed_ward_scoped_rule" model="ir.rule">
+        <field name="name">Bed: optional ward-manager scoping (inactive by default)</field>
+        <field name="model_id" ref="model_hospital_bed"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hospital_ward_manager'))]"/>
+        <field name="active" eval="False"/>
+    </record>
+
+</odoo>

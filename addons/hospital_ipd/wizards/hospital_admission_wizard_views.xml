@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_admission_wizard_view_form" model="ir.ui.view">
+        <field name="name">hospital.admission.wizard.form</field>
+        <field name="model">hospital.admission.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Admit Patient">
+                <group>
+                    <field name="admission_id" invisible="1"/>
+                    <field name="visit_id" readonly="admission_id"/>
+                    <field name="patient_id" readonly="1"/>
+                    <field name="admitting_doctor_id"/>
+                </group>
+                <group string="Bed Assignment">
+                    <field name="ward_id"/>
+                    <field name="bed_id"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object"
+                            string="Admit" class="btn-primary"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hospital_admission_wizard" model="ir.actions.act_window">
+        <field name="name">Admit Patient</field>
+        <field name="res_model">hospital.admission.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

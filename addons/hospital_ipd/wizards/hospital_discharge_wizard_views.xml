@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_discharge_wizard_view_form" model="ir.ui.view">
+        <field name="name">hospital.discharge.wizard.form</field>
+        <field name="model">hospital.discharge.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Discharge Patient">
+                <div class="alert alert-warning" role="alert"
+                     invisible="not blocking_items_summary">
+                    <strong>Discharge blocked.</strong> The following branches are
+                    still pending for this visit:
+                    <field name="blocking_items_summary" readonly="1" nolabel="1"/>
+                </div>
+                <group>
+                    <field name="admission_id" readonly="1"/>
+                    <field name="patient_id" readonly="1"/>
+                    <field name="discharge_type"/>
+                </group>
+                <group string="Summary">
+                    <field name="discharge_summary" nolabel="1" colspan="2"
+                           placeholder="Discharge summary..."/>
+                </group>
+                <group string="Follow-up Instructions"
+                       invisible="discharge_type == 'deceased'">
+                    <field name="follow_up_instructions" nolabel="1" colspan="2"
+                           placeholder="Follow-up instructions..."/>
+                </group>
+                <notebook>
+                    <page string="Discharge Medications" name="medications">
+                        <field name="medication_line_ids">
+                            <list editable="bottom">
+                                <field name="medicine_id"/>
+                                <field name="dosage"/>
+                                <field name="frequency"/>
+                                <field name="duration_days"/>
+                                <field name="instructions"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+                <footer>
+                    <button name="action_confirm_discharge" type="object"
+                            string="Confirm Discharge" class="btn-primary"
+                            invisible="blocking_items_summary"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hospital_discharge_wizard" model="ir.actions.act_window">
+        <field name="name">Discharge Patient</field>
+        <field name="res_model">hospital.discharge.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

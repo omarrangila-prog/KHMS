@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_discharge_view_list" model="ir.ui.view">
+        <field name="name">hospital.discharge.list</field>
+        <field name="model">hospital.discharge</field>
+        <field name="arch" type="xml">
+            <list string="Discharges">
+                <field name="patient_id"/>
+                <field name="admission_id"/>
+                <field name="discharge_type"/>
+                <field name="discharge_datetime"/>
+                <field name="ward_charge_amount" widget="monetary"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'confirmed'"/>
+                <field name="currency_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hospital_discharge_view_form" model="ir.ui.view">
+        <field name="name">hospital.discharge.form</field>
+        <field name="model">hospital.discharge</field>
+        <field name="arch" type="xml">
+            <form string="Discharge">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm Discharge"
+                            class="oe_highlight"
+                            invisible="state == 'confirmed'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="not blocking_items_summary">
+                        <strong>Discharge blocked.</strong> The following branches are
+                        still pending for this visit:
+                        <field name="blocking_items_summary" readonly="1" nolabel="1"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="patient_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Admission">
+                            <field name="admission_id" readonly="1"/>
+                            <field name="visit_id" readonly="1"/>
+                            <field name="discharge_type"/>
+                            <field name="discharge_datetime"/>
+                        </group>
+                        <group string="Billing">
+                            <field name="ward_charge_amount" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="discharged_by"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Summary">
+                        <field name="discharge_summary" nolabel="1" colspan="2"
+                               placeholder="Discharge summary..."/>
+                    </group>
+                    <group string="Follow-up Instructions"
+                           invisible="discharge_type == 'deceased'">
+                        <field name="follow_up_instructions" nolabel="1" colspan="2"
+                               placeholder="Follow-up instructions..."/>
+                    </group>
+                    <notebook>
+                        <page string="Discharge Medications" name="medications">
+                            <field name="discharge_medication_ids">
+                                <list editable="bottom">
+                                    <field name="medicine_id"/>
+                                    <field name="dosage"/>
+                                    <field name="frequency"/>
+                                    <field name="duration_days"/>
+                                    <field name="instructions"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hospital_discharge_view_search" model="ir.ui.view">
+        <field name="name">hospital.discharge.search</field>
+        <field name="model">hospital.discharge</field>
+        <field name="arch" type="xml">
+            <search string="Search Discharges">
+                <field name="patient_id"/>
+                <field name="admission_id"/>
+                <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirmed" name="filter_confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Discharge Type" name="group_type" context="{'group_by': 'discharge_type'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hospital_discharge" model="ir.actions.act_window">
+        <field name="name">Discharges</field>
+        <field name="res_model">hospital.discharge</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hospital_discharge_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No discharges yet. Use the Discharge Wizard from an admitted patient.
+            </p>
+        </field>
+    </record>
+
+</odoo>

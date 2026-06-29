@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_ward_dashboard_action" model="ir.actions.client">
+        <field name="name">Ward Dashboard</field>
+        <field name="tag">hospital_ipd.ward_dashboard</field>
+    </record>
+
+</odoo>
