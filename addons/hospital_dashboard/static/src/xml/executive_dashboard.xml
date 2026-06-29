@@ -4,51 +4,80 @@
     <t t-name="hospital_dashboard.ExecutiveDashboard">
         <div class="o_hospital_executive_dashboard">
 
+            <!-- Header -->
             <div class="o_hospital_dashboard_header">
-                <h2>Executive Dashboard</h2>
-                <button t-on-click="onRetry">&#8635; Refresh</button>
+                <div class="o_hospital_header_left">
+                    <div class="o_hospital_header_icon">
+                        <i class="fa fa-line-chart"/>
+                    </div>
+                    <h2>
+                        Executive Dashboard
+                        <small>Hospital performance overview</small>
+                    </h2>
+                </div>
+                <button t-on-click="onRetry">
+                    <i class="fa fa-refresh"/> Refresh
+                </button>
             </div>
 
+            <!-- Error -->
             <div class="o_hospital_dashboard_error" t-if="state.error">
+                <i class="fa fa-exclamation-circle"/>
                 Could not load KPI data.
                 <button class="btn-link" t-on-click="onRetry">Retry</button>
             </div>
 
+            <!-- Skeleton -->
             <div class="o_hospital_skeleton" t-if="state.loading"/>
 
-            <div class="o_hospital_kpi_grid" t-if="!state.loading and !state.error and state.kpi">
+            <!-- KPI Grid -->
+            <div class="o_hospital_kpi_grid"
+                 t-if="!state.loading and !state.error and state.kpi">
 
                 <div class="o_hospital_kpi_card">
+                    <div class="o_hospital_kpi_icon"><i class="fa fa-users"/></div>
                     <div class="o_hospital_kpi_label">Patients Today</div>
                     <div class="o_hospital_kpi_value" t-esc="state.kpi.patients_today"/>
                 </div>
 
                 <div class="o_hospital_kpi_card">
+                    <div class="o_hospital_kpi_icon"><i class="fa fa-calendar-check-o"/></div>
                     <div class="o_hospital_kpi_label">Patients This Week</div>
                     <div class="o_hospital_kpi_value" t-esc="state.kpi.patients_this_week"/>
                 </div>
 
                 <div class="o_hospital_kpi_card">
+                    <div class="o_hospital_kpi_icon"><i class="fa fa-bed"/></div>
                     <div class="o_hospital_kpi_label">Bed Occupancy</div>
-                    <div class="o_hospital_kpi_value" t-esc="this.formatPercent(state.kpi.bed_occupancy_pct)"/>
+                    <div class="o_hospital_kpi_value"
+                         t-esc="this.formatPercent(state.kpi.bed_occupancy_pct)"/>
                 </div>
 
                 <div class="o_hospital_kpi_card">
+                    <div class="o_hospital_kpi_icon"><i class="fa fa-clock-o"/></div>
                     <div class="o_hospital_kpi_label">Avg. Doctor Wait</div>
-                    <div class="o_hospital_kpi_value" t-esc="this.formatMinutes(state.kpi.avg_wait_minutes)"/>
+                    <div class="o_hospital_kpi_value"
+                         t-esc="this.formatMinutes(state.kpi.avg_wait_minutes)"/>
                 </div>
 
                 <div class="o_hospital_kpi_card o_hospital_kpi_card_wide">
+                    <div class="o_hospital_kpi_icon"><i class="fa fa-money"/></div>
                     <div>
-                        <div class="o_hospital_kpi_label">Ward Revenue &#8212; Confirmed Discharges</div>
-                        <div class="o_hospital_kpi_value" t-esc="state.kpi.ward_revenue_total"/>
+                        <div class="o_hospital_kpi_label">
+                            Ward Revenue &#8212; Confirmed Discharges
+                        </div>
+                        <div class="o_hospital_kpi_value"
+                             t-esc="state.kpi.ward_revenue_total"/>
                     </div>
                 </div>
 
             </div>
 
-            <div class="o_hospital_kpi_empty" t-if="!state.loading and !state.error and !state.kpi">
-                No KPI data available yet. Data appears once patients are checked in.
+            <!-- Empty -->
+            <div class="o_hospital_kpi_empty"
+                 t-if="!state.loading and !state.error and !state.kpi">
+                <i class="fa fa-bar-chart"/>
+                No KPI data yet. Data appears once patients are checked in.
             </div>
 
         </div>

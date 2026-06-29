@@ -4,84 +4,113 @@
     <t t-name="hospital_pharmacy.PharmacyDashboard">
         <div class="o_hospital_pharmacy_dashboard">
 
+            <!-- Header -->
             <div class="o_hospital_dashboard_header">
-                <h2>Pharmacy</h2>
+                <div class="o_hospital_header_left">
+                    <div class="o_hospital_header_icon">
+                        <i class="fa fa-medkit"/>
+                    </div>
+                    <h2>
+                        Pharmacy
+                        <small>Dispensing queue</small>
+                    </h2>
+                </div>
                 <div class="o_hospital_pharmacy_header_meta" t-if="!state.loading">
-                    <span class="badge text-bg-primary">
-                        <t t-esc="state.queue.length"/> pending prescriptions
+                    <span class="o-hms-badge green">
+                        <i class="fa fa-list"/> <t t-esc="state.queue.length"/> pending
                     </span>
-                    <small class="text-muted ms-2">
-                        Shortcuts: <kbd>D</kbd> Dispense &#160; <kbd>A</kbd> Dispense All
+                    <small style="color:#AEAEB2">
+                        <kbd>D</kbd> Dispense&#160;&#160;<kbd>A</kbd> All
                     </small>
                 </div>
             </div>
 
+            <!-- Error -->
             <div class="o_hospital_dashboard_error alert alert-danger"
-                 t-if="state.error" role="alert">
-                Couldn't load the pharmacy dashboard.
-                <button class="btn btn-link" t-on-click="onRetry">Retry</button>
+                 t-if="state.error" role="alert"
+                 style="display:flex;align-items:center;gap:8px;border-radius:10px;margin-bottom:16px">
+                <i class="fa fa-exclamation-triangle"/>
+                Couldn&#39;t load the pharmacy dashboard.
+                <button class="btn btn-link p-0 ms-2" t-on-click="onRetry">Retry</button>
             </div>
 
             <div class="o_hospital_pharmacy_split_view">
 
-                <!-- LEFT PANE: Dispensing queue -->
+                <!-- LEFT: Dispensing queue -->
                 <div class="o_hospital_pharmacy_pane_queue">
-                    <div class="o_hospital_doctor_pane_header">
-                        <h3>Dispensing Queue</h3>
+                    <div class="o_hospital_pharmacy_pane_header">
+                        <div class="o_hospital_section_title">
+                            <i class="fa fa-list-ul"/> Dispensing Queue
+                        </div>
                     </div>
+
                     <div class="o_hospital_skeleton" t-if="state.loading"/>
-                    <div class="o_hospital_pharmacy_queue_empty"
+
+                    <div class="o_hospital_pharmacy_detail_empty"
                          t-if="!state.loading and !state.queue.length">
-                        No pending prescriptions.
+                        <i class="fa fa-check-circle"/>
+                        No pending prescriptions
                     </div>
-                    <div class="o_hospital_pharmacy_queue_list" t-if="!state.loading">
+
+                    <div class="o_hospital_pharmacy_queue_list" t-if="!state.loading and state.queue.length">
                         <div t-foreach="state.queue" t-as="prescription" t-key="prescription.id"
                              t-attf-class="o_hospital_pharmacy_queue_row {{ state.selectedPrescriptionId === prescription.id ? 'o_hospital_pharmacy_queue_row_selected' : '' }}"
                              t-on-click="() => this.selectPrescription(prescription.id)">
                             <div class="o_hospital_pharmacy_queue_row_main">
+                                <div class="o_hospital_queue_avatar">
+                                    <i class="fa fa-user"/>
+                                </div>
                                 <span class="o_hospital_pharmacy_queue_patient"
                                       t-esc="prescription.patient_id[1]"/>
                             </div>
                             <div class="o_hospital_pharmacy_queue_row_meta">
-                                <span class="text-muted" t-esc="prescription.doctor_id[1]"/>
-                                <span t-if="prescription.state === 'partially_dispensed'"
-                                      class="badge text-bg-warning ms-2">Partial</span>
-                                <span t-if="prescription.state === 'draft'"
-                                      class="badge text-bg-secondary ms-2">Pending</span>
+                                <i class="fa fa-user-md" style="font-size:10px"/>
+                                <span t-esc="prescription.doctor_id[1]"/>
+                                <span class="o-hms-badge orange"
+                                      t-if="prescription.state === 'partially_dispensed'">
+                                    Partial
+                                </span>
+                                <span class="o-hms-badge grey"
+                                      t-if="prescription.state === 'draft'">
+                                    Pending
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- RIGHT PANE: Dispense detail for selected prescription -->
+                <!-- RIGHT: Dispense detail -->
                 <div class="o_hospital_pharmacy_pane_detail">
-                    <div class="o_hospital_doctor_pane_header">
-                        <h3>Dispense Detail</h3>
+                    <div class="o_hospital_pharmacy_pane_header">
+                        <div class="o_hospital_section_title">
+                            <i class="fa fa-file-text-o"/> Dispense Detail
+                        </div>
                         <div class="o_hospital_pharmacy_detail_actions"
                              t-if="state.selectedPrescriptionId">
-                            <button class="btn btn-primary btn-sm"
+                            <button class="btn-primary"
                                     t-on-click="() => this.openDispenseWizard(state.selectedPrescriptionId)">
-                                Dispense (<kbd>D</kbd>)
+                                <i class="fa fa-check"/> Dispense <kbd style="opacity:0.7;font-size:10px">D</kbd>
                             </button>
-                            <button class="btn btn-outline-primary btn-sm ms-1"
+                            <button class="btn-outline-primary"
                                     t-on-click="() => this.openDispenseAllWizard(state.selectedPrescriptionId)">
-                                Dispense All (<kbd>A</kbd>)
+                                <i class="fa fa-check-square-o"/> All <kbd style="opacity:0.7;font-size:10px">A</kbd>
                             </button>
                         </div>
                     </div>
 
                     <div class="o_hospital_pharmacy_detail_empty"
                          t-if="!state.selectedPrescriptionId">
-                        Select a prescription from the queue to see its lines here.
+                        <i class="fa fa-hand-o-left"/>
+                        Select a prescription from the queue
                     </div>
 
                     <div class="o_hospital_pharmacy_lines" t-if="state.selectedPrescriptionId">
                         <div class="o_hospital_skeleton" t-if="state.loading"/>
                         <div t-if="!state.loading and !state.selectedLines.length"
-                             class="text-muted p-3">
-                            No pending lines for this prescription.
+                             style="color:#AEAEB2;padding:24px;text-align:center;font-size:13px">
+                            No pending lines.
                         </div>
-                        <table class="table table-sm table-hover o_hospital_pharmacy_lines_table"
+                        <table class="o_hospital_pharmacy_lines_table"
                                t-if="!state.loading and state.selectedLines.length">
                             <thead>
                                 <tr>
@@ -96,9 +125,11 @@
                                 <tr t-foreach="state.selectedLines" t-as="line" t-key="line.id">
                                     <td>
                                         <span t-esc="line.medicine_id[1]"/>
-                                        <span t-if="line.has_allergy_conflict"
-                                              class="badge text-bg-danger ms-1"
-                                              title="Allergy conflict detected">&#x26A0; Allergy</span>
+                                        <span class="o-hms-badge red ms-1"
+                                              t-if="line.has_allergy_conflict"
+                                              title="Allergy conflict">
+                                            <i class="fa fa-warning"/> Allergy
+                                        </span>
                                     </td>
                                     <td><t t-esc="line.qty_prescribed"/></td>
                                     <td><t t-esc="line.qty_dispensed"/></td>
@@ -108,7 +139,7 @@
                                     </td>
                                     <td>
                                         <span class="badge"
-                                              t-att-class="line.state === 'pending' ? 'text-bg-secondary' : line.state === 'partial' ? 'text-bg-warning' : line.state === 'backordered' ? 'text-bg-danger' : 'text-bg-success'"
+                                              t-att-class="line.state === 'pending' ? 'o-hms-badge grey' : line.state === 'partial' ? 'o-hms-badge orange' : line.state === 'backordered' ? 'o-hms-badge red' : 'o-hms-badge green'"
                                               t-esc="line.state"/>
                                     </td>
                                 </tr>

@@ -1,7 +1,7 @@
 @import "/hospital_base/static/src/scss/_variables";
 
 // ============================================================
-// Nurse Station Dashboard — macOS design
+// Nurse Dashboard — macOS 10/10 design
 // ============================================================
 
 .o_hospital_nurse_dashboard {
@@ -9,193 +9,295 @@
     background: $o-hospital-bg;
     min-height: 100%;
     padding: $o-hospital-spacing-xl;
-    max-width: 780px;
-    margin: 0 auto;
 
+    // ── Header ──────────────────────────────────────────────
     .o_hospital_dashboard_header {
         display: flex;
         align-items: center;
         justify-content: space-between;
         margin-bottom: $o-hospital-spacing-xl;
+        @include o-hospital-fade-up(0s);
+
+        .o_hospital_header_left {
+            display: flex;
+            align-items: center;
+            gap: $o-hospital-spacing-md;
+        }
+
+        .o_hospital_header_icon {
+            width: 46px;
+            height: 46px;
+            border-radius: $o-hospital-radius-md;
+            background: linear-gradient(145deg, $o-hospital-purple, $o-hospital-indigo);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(191,90,242,0.28);
+            .fa { color: #fff; font-size: 19px; }
+        }
 
         h2 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             color: $o-hospital-text-primary;
             letter-spacing: -0.5px;
             margin: 0;
+            line-height: 1.1;
+            small {
+                display: block;
+                font-size: 12px;
+                font-weight: 500;
+                color: $o-hospital-text-tertiary;
+                letter-spacing: 0;
+            }
         }
     }
 
     // ── Abnormal alert banner ────────────────────────────────
-    .o_hospital_abnormal_alert {
-        background: rgba(255, 69, 58, 0.07);
-        border: 1px solid rgba(255, 69, 58, 0.22);
+    .o_hospital_nurse_alert_banner {
+        background: linear-gradient(135deg,
+            rgba(255,69,58,0.09) 0%,
+            rgba(255,159,10,0.06) 100%);
+        border: 1px solid rgba(255,69,58,0.22);
+        border-left: 4px solid $o-hospital-red;
         border-radius: $o-hospital-radius-md;
         padding: $o-hospital-spacing-md $o-hospital-spacing-lg;
         margin-bottom: $o-hospital-spacing-lg;
         display: flex;
         align-items: center;
         gap: $o-hospital-spacing-md;
+        @include o-hospital-fade-up(0.06s);
 
-        &-icon { font-size: 20px; }
-        &-text {
+        .o_hospital_alert_icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,69,58,0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            .fa { color: $o-hospital-red; font-size: 15px; }
+        }
+
+        .o_hospital_alert_text {
             flex: 1;
             font-size: 14px;
-            font-weight: 500;
-            color: $o-hospital-red;
+            font-weight: 600;
+            color: #CC2218;
+        }
+
+        .o_hospital_alert_sub {
+            font-size: 12px;
+            font-weight: 400;
+            color: $o-hospital-text-secondary;
+            margin-top: 2px;
         }
     }
 
-    h3 {
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        color: $o-hospital-text-secondary;
-        margin: 0 0 $o-hospital-spacing-md 0;
-    }
-
     // ── Next patient hero card ───────────────────────────────
-    .o_hospital_next_patient_card {
-        background: linear-gradient(135deg, $o-hospital-primary 0%, #0055CC 100%);
+    .o_hospital_nurse_next_card {
+        background: linear-gradient(145deg, #0A84FF 0%, #5E5CE6 100%);
         border-radius: $o-hospital-radius-xl;
         padding: $o-hospital-spacing-xl;
-        margin-bottom: $o-hospital-spacing-lg;
-        box-shadow: $o-hospital-shadow-lg;
+        margin-bottom: $o-hospital-spacing-xl;
+        box-shadow: $o-hospital-glow-blue, $o-hospital-shadow-lg;
         color: #fff;
-        text-align: center;
         position: relative;
         overflow: hidden;
+        @include o-hospital-fade-up(0.09s);
 
         &::before {
             content: "";
             position: absolute;
             top: -40px; right: -40px;
             width: 160px; height: 160px;
-            background: rgba(255,255,255,0.08);
             border-radius: 50%;
+            background: rgba(255,255,255,0.10);
+            pointer-events: none;
+        }
+        &::after {
+            content: "";
+            position: absolute;
+            bottom: -60px; right: 80px;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            pointer-events: none;
         }
 
-        .o_hospital_next_patient_label {
+        .o_hospital_nurse_next_eyebrow {
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            opacity: 0.75;
+            opacity: 0.7;
             margin-bottom: $o-hospital-spacing-sm;
-        }
-
-        .o_hospital_next_patient_name {
-            font-size: 34px;
-            font-weight: 700;
-            letter-spacing: -1px;
-            margin-bottom: $o-hospital-spacing-sm;
-        }
-
-        .o_hospital_next_patient_meta {
             display: flex;
-            gap: $o-hospital-spacing-md;
-            justify-content: center;
-            opacity: 0.80;
-            font-size: 14px;
-            margin-bottom: $o-hospital-spacing-lg;
+            align-items: center;
+            gap: 6px;
         }
 
-        .o_hospital_record_vitals_btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.22);
-            backdrop-filter: blur(8px);
-            border: 1.5px solid rgba(255,255,255,0.40);
-            border-radius: $o-hospital-radius-md;
-            color: #fff;
-            font-size: 16px;
-            font-weight: 600;
-            padding: 12px 32px;
-            min-height: 48px;
-            width: 100%;
-            cursor: pointer;
-            transition: $o-hospital-transition-fast;
+        .o_hospital_nurse_next_name {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
 
-            &:hover {
-                background: rgba(255,255,255,0.32);
-                transform: translateY(-1px);
+        .o_hospital_nurse_next_meta {
+            font-size: 14px;
+            opacity: 0.78;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            span { display: flex; align-items: center; gap: 5px; }
+        }
+
+        .o_hospital_nurse_next_actions {
+            margin-top: $o-hospital-spacing-lg;
+            display: flex;
+            gap: $o-hospital-spacing-sm;
+
+            button {
+                font-family: $o-hospital-font;
+                font-size: 13px;
+                font-weight: 600;
+                border-radius: $o-hospital-radius-sm;
+                padding: 9px 18px;
+                cursor: pointer;
+                transition: $o-hospital-transition-fast;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                border: none;
+
+                &.btn-white {
+                    background: rgba(255,255,255,0.92);
+                    color: $o-hospital-primary;
+                    &:hover { background: #fff; box-shadow: $o-hospital-shadow-md; }
+                }
+                &.btn-ghost {
+                    background: rgba(255,255,255,0.15);
+                    color: #fff;
+                    border: 1.5px solid rgba(255,255,255,0.35);
+                    &:hover { background: rgba(255,255,255,0.25); }
+                }
             }
         }
     }
 
-    .o_hospital_next_patient_empty {
-        background: $o-hospital-surface;
-        border: 1px solid $o-hospital-border;
-        border-radius: $o-hospital-radius-lg;
-        padding: $o-hospital-spacing-xl;
-        text-align: center;
-        color: $o-hospital-text-tertiary;
-        font-size: 14px;
-        margin-bottom: $o-hospital-spacing-lg;
-    }
-
-    // ── Task rows ────────────────────────────────────────────
-    .o_hospital_nurse_task_section {
+    // ── Tasks section ────────────────────────────────────────
+    .o_hospital_nurse_tasks_section {
         background: $o-hospital-surface;
         backdrop-filter: $o-hospital-blur;
         border: 1px solid $o-hospital-border;
-        border-radius: $o-hospital-radius-lg;
+        border-radius: $o-hospital-radius-xl;
         overflow: hidden;
-        box-shadow: $o-hospital-shadow-xs;
+        box-shadow: $o-hospital-shadow-sm;
+        @include o-hospital-fade-up(0.15s);
     }
 
-    .o_hospital_nurse_task_row {
+    .o_hospital_tasks_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: $o-hospital-spacing-md $o-hospital-spacing-lg;
+        border-bottom: 1px solid $o-hospital-border;
+        background: rgba(0,0,0,0.018);
+    }
+
+    .o_hospital_section_title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+        font-weight: 700;
+        color: $o-hospital-text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        .fa { opacity: 0.65; }
+    }
+
+    .o_hospital_task_row {
         display: flex;
         align-items: center;
         gap: $o-hospital-spacing-md;
         padding: 13px $o-hospital-spacing-lg;
         border-bottom: 1px solid $o-hospital-border;
         transition: $o-hospital-transition-fast;
-        min-height: 52px;
+        cursor: pointer;
 
         &:last-child { border-bottom: none; }
-        &:hover { background: rgba(10,132,255,0.03); }
+        &:hover { background: $o-hospital-primary-light; }
 
-        .o_hospital_nurse_task_name {
-            flex: 1;
+        &.o_hospital_task_overdue {
+            border-left: 3px solid $o-hospital-red;
+            background: rgba(255,69,58,0.03);
+        }
+
+        .o_hospital_task_icon {
+            width: 32px;
+            height: 32px;
+            border-radius: $o-hospital-radius-xs;
+            background: $o-hospital-primary-light;
+            color: $o-hospital-primary;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            .fa { font-size: 13px; }
+        }
+
+        .o_hospital_task_body { flex: 1; }
+
+        .o_hospital_task_name {
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             color: $o-hospital-text-primary;
         }
 
-        .o_hospital_nurse_task_visit {
-            font-family: $o-hospital-font-mono;
+        .o_hospital_task_meta {
             font-size: 12px;
-            color: $o-hospital-primary;
-        }
-
-        button {
-            min-height: 34px;
-            min-width: 34px;
-            border-radius: $o-hospital-radius-xs;
-            font-size: 13px;
-            font-weight: 600;
+            color: $o-hospital-text-secondary;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
     }
 
-    .o_hospital_nurse_task_empty {
+    // ── Empty / error states ─────────────────────────────────
+    .o_hospital_nurse_empty {
         padding: $o-hospital-spacing-xl;
         text-align: center;
         color: $o-hospital-text-tertiary;
         font-size: 14px;
+        .fa { font-size: 28px; margin-bottom: 10px; display: block; opacity: 0.3; }
     }
 
+    .alert-danger {
+        background: rgba(255,69,58,0.08);
+        border: 1px solid rgba(255,69,58,0.22);
+        border-radius: $o-hospital-radius-sm;
+        color: $o-hospital-red;
+        padding: $o-hospital-spacing-md;
+        margin-bottom: $o-hospital-spacing-md;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    // ── Skeleton ─────────────────────────────────────────────
     .o_hospital_skeleton {
         background: linear-gradient(90deg, rgba(0,0,0,0.04) 25%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.04) 75%);
         background-size: 200% 100%;
         animation: o-nurse-shimmer 1.4s ease-in-out infinite;
-        border-radius: $o-hospital-radius-md;
-        min-height: 140px;
-        margin-bottom: $o-hospital-spacing-lg;
+        border-radius: $o-hospital-radius-lg;
+        min-height: 120px;
+        margin-bottom: $o-hospital-spacing-md;
     }
 
     @keyframes o-nurse-shimmer {
@@ -205,8 +307,5 @@
 }
 
 @media (max-width: 768px) {
-    .o_hospital_nurse_dashboard {
-        padding: $o-hospital-spacing-md;
-        .o_hospital_next_patient_card .o_hospital_next_patient_name { font-size: 26px; }
-    }
+    .o_hospital_nurse_dashboard { padding: $o-hospital-spacing-md; }
 }

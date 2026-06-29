@@ -1,7 +1,7 @@
 @import "/hospital_base/static/src/scss/_variables";
 
 // ============================================================
-// Reception Dashboard — macOS design
+// Reception Dashboard — macOS 10/10 design
 // ============================================================
 
 .o_hospital_reception_dashboard {
@@ -16,42 +16,72 @@
         align-items: center;
         justify-content: space-between;
         margin-bottom: $o-hospital-spacing-xl;
+        @include o-hospital-fade-up(0s);
+
+        .o_hospital_header_left {
+            display: flex;
+            align-items: center;
+            gap: $o-hospital-spacing-md;
+        }
+
+        .o_hospital_header_icon {
+            width: 44px;
+            height: 44px;
+            border-radius: $o-hospital-radius-md;
+            background: linear-gradient(145deg, #0A84FF, #5AC8FA);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: $o-hospital-glow-blue;
+
+            .fa { color: #fff; font-size: 18px; }
+        }
 
         h2 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             color: $o-hospital-text-primary;
             letter-spacing: -0.5px;
             margin: 0;
-        }
+            line-height: 1.1;
 
-        .o_hospital_dashboard_actions {
-            display: flex;
-            gap: $o-hospital-spacing-sm;
+            small {
+                display: block;
+                font-size: 12px;
+                font-weight: 500;
+                color: $o-hospital-text-tertiary;
+                letter-spacing: 0;
+            }
         }
     }
 
-    // ── macOS-style buttons ──────────────────────────────────
+    // ── macOS pill buttons ───────────────────────────────────
     .btn {
         font-family: $o-hospital-font;
+        font-size: 13px;
         font-weight: 500;
         border-radius: $o-hospital-radius-sm;
         transition: $o-hospital-transition-fast;
         letter-spacing: -0.1px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        min-height: 36px;
     }
 
     .btn-primary {
         background: $o-hospital-primary;
         border: none;
         color: #fff;
-        box-shadow: $o-hospital-shadow-sm;
+        box-shadow: $o-hospital-shadow-sm, $o-hospital-glow-blue;
 
         &:hover {
             background: $o-hospital-primary-dark;
-            box-shadow: $o-hospital-shadow-md;
+            box-shadow: $o-hospital-shadow-md, $o-hospital-glow-blue;
             transform: translateY(-1px);
         }
-        &:active { transform: translateY(0); }
+        &:active { transform: scale(0.97); }
     }
 
     .btn-secondary {
@@ -59,6 +89,7 @@
         border: 1px solid $o-hospital-border;
         color: $o-hospital-text-primary;
         backdrop-filter: $o-hospital-blur;
+        box-shadow: $o-hospital-shadow-xs;
 
         &:hover {
             background: $o-hospital-surface-hover;
@@ -66,7 +97,7 @@
         }
     }
 
-    // ── KPI Strip ───────────────────────────────────────────
+    // ── KPI Strip ────────────────────────────────────────────
     .o_hospital_kpi_strip {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -77,69 +108,123 @@
             background: $o-hospital-surface;
             backdrop-filter: $o-hospital-blur;
             border: 1px solid $o-hospital-border;
-            border-radius: $o-hospital-radius-lg;
-            padding: $o-hospital-spacing-lg $o-hospital-spacing-lg;
+            border-radius: $o-hospital-radius-xl;
+            padding: $o-hospital-spacing-lg;
             box-shadow: $o-hospital-shadow-sm;
             transition: $o-hospital-transition;
             position: relative;
             overflow: hidden;
+            @include o-hospital-fade-up();
+            @include o-hospital-stagger(3, 0.08s, 0.07s);
 
+            // Gradient accent bar
             &::before {
                 content: "";
                 position: absolute;
-                top: 0; left: 0;
-                right: 0; height: 3px;
-                background: linear-gradient(90deg, $o-hospital-primary, $o-hospital-teal);
-                border-radius: $o-hospital-radius-lg $o-hospital-radius-lg 0 0;
+                top: 0; left: 0; right: 0; height: 3px;
+                border-radius: $o-hospital-radius-xl $o-hospital-radius-xl 0 0;
+            }
+
+            // Decorative orb — visible at 12% opacity
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: -20px; right: -20px;
+                width: 90px; height: 90px;
+                border-radius: 50%;
+                opacity: 0.12;
+                pointer-events: none;
             }
 
             &:hover {
                 box-shadow: $o-hospital-shadow-md;
-                transform: translateY(-2px);
+                transform: translateY(-3px);
+            }
+
+            // Per-card colour theming
+            &:nth-child(1) {
+                &::before { background: linear-gradient(90deg, $o-hospital-primary, $o-hospital-teal); }
+                &::after  { background: $o-hospital-primary; }
+                .o_hospital_kpi_value  { color: $o-hospital-primary; }
+                .o_hospital_kpi_icon   { background: $o-hospital-primary-light; color: $o-hospital-primary; }
+            }
+            &:nth-child(2) {
+                &::before { background: linear-gradient(90deg, $o-hospital-orange, $o-hospital-yellow); }
+                &::after  { background: $o-hospital-orange; }
+                .o_hospital_kpi_value  { color: $o-hospital-orange; }
+                .o_hospital_kpi_icon   { background: $o-hospital-orange-light; color: $o-hospital-orange; }
+            }
+            &:nth-child(3) {
+                &::before { background: linear-gradient(90deg, $o-hospital-green, $o-hospital-teal); }
+                &::after  { background: $o-hospital-green; }
+                .o_hospital_kpi_value  { color: $o-hospital-green; }
+                .o_hospital_kpi_icon   { background: $o-hospital-green-light; color: $o-hospital-green; }
+            }
+
+            .o_hospital_kpi_row {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: $o-hospital-spacing-md;
+            }
+
+            .o_hospital_kpi_icon {
+                width: 40px;
+                height: 40px;
+                border-radius: $o-hospital-radius-sm;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                .fa { font-size: 16px; }
             }
 
             .o_hospital_kpi_value {
-                font-size: 40px;
+                font-size: 44px;
                 font-weight: 700;
-                color: $o-hospital-text-primary;
-                letter-spacing: -1.5px;
+                letter-spacing: -2px;
                 line-height: 1;
-                margin-bottom: 6px;
+                margin-bottom: 4px;
+                font-variant-numeric: tabular-nums;
             }
 
             .o_hospital_kpi_label {
-                font-size: 12px;
-                font-weight: 600;
+                font-size: 11px;
+                font-weight: 700;
                 text-transform: uppercase;
-                letter-spacing: 0.6px;
+                letter-spacing: 0.7px;
                 color: $o-hospital-text-secondary;
             }
-
-            &:nth-child(1) .o_hospital_kpi_value { color: $o-hospital-primary; }
-            &:nth-child(2) .o_hospital_kpi_value { color: $o-hospital-orange; }
-            &:nth-child(3) .o_hospital_kpi_value { color: $o-hospital-green; }
         }
     }
 
-    // ── Two-column layout ────────────────────────────────────
+    // ── Two-column body ──────────────────────────────────────
     .o_hospital_dashboard_columns {
         display: grid;
-        grid-template-columns: 1fr 380px;
+        grid-template-columns: 1fr 360px;
         gap: $o-hospital-spacing-lg;
         align-items: start;
     }
 
-    // ── Section headers ──────────────────────────────────────
-    h3 {
-        font-size: 15px;
-        font-weight: 600;
+    // ── Section titles ───────────────────────────────────────
+    .o_hospital_section_title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+        font-weight: 700;
         color: $o-hospital-text-secondary;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin: 0 0 $o-hospital-spacing-md 0;
+        letter-spacing: 0.8px;
+        margin-bottom: $o-hospital-spacing-md;
+
+        .fa {
+            font-size: 12px;
+            opacity: 0.7;
+        }
     }
 
-    // ── Queue cards ──────────────────────────────────────────
+    // ── Doctor queue cards ───────────────────────────────────
     .o_hospital_queue_kanban {
         display: flex;
         flex-direction: column;
@@ -150,34 +235,54 @@
         background: $o-hospital-surface;
         backdrop-filter: $o-hospital-blur;
         border: 1px solid $o-hospital-border;
-        border-radius: $o-hospital-radius-md;
-        padding: $o-hospital-spacing-md;
+        border-radius: $o-hospital-radius-lg;
+        overflow: hidden;
         box-shadow: $o-hospital-shadow-xs;
         transition: $o-hospital-transition;
+        @include o-hospital-fade-up();
+        @include o-hospital-stagger(6, 0.18s, 0.07s);
 
         &:hover { box-shadow: $o-hospital-shadow-sm; }
 
         .o_hospital_queue_doctor_header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding-bottom: $o-hospital-spacing-sm;
-            margin-bottom: $o-hospital-spacing-sm;
+            justify-content: space-between;
+            padding: 11px $o-hospital-spacing-md;
+            background: rgba(0,0,0,0.018);
             border-bottom: 1px solid $o-hospital-border;
 
-            strong {
-                font-size: 14px;
-                font-weight: 600;
-                color: $o-hospital-text-primary;
+            .o_hospital_doctor_name_row {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                .o_hospital_doctor_avatar {
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, $o-hospital-primary, $o-hospital-indigo);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    .fa { color: #fff; font-size: 11px; }
+                }
+
+                strong {
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: $o-hospital-text-primary;
+                }
             }
 
             .badge {
                 background: $o-hospital-primary-light;
                 color: $o-hospital-primary;
-                font-weight: 600;
+                font-weight: 700;
                 border-radius: 20px;
                 padding: 2px 10px;
-                font-size: 12px;
+                font-size: 11px;
+                font-variant-numeric: tabular-nums;
             }
         }
 
@@ -185,33 +290,53 @@
             display: flex;
             align-items: center;
             gap: $o-hospital-spacing-sm;
-            padding: 7px $o-hospital-spacing-sm;
-            border-radius: $o-hospital-radius-xs;
+            padding: 9px $o-hospital-spacing-md;
+            border-bottom: 1px solid $o-hospital-border;
             cursor: pointer;
             transition: $o-hospital-transition-fast;
 
+            &:last-child { border-bottom: none; }
+
             &:hover {
                 background: $o-hospital-primary-light;
+                padding-left: 20px;
             }
 
             .o_hospital_queue_visit_code {
-                font-weight: 600;
-                font-size: 13px;
+                font-weight: 700;
+                font-size: 12px;
                 color: $o-hospital-primary;
                 font-family: $o-hospital-font-mono;
-                min-width: 80px;
+                min-width: 72px;
+            }
+
+            .o_hospital_visit_patient {
+                flex: 1;
+                font-size: 13px;
+                font-weight: 500;
+                color: $o-hospital-text-primary;
             }
         }
     }
 
-    // ── Appointments table ───────────────────────────────────
+    // ── Appointments pane ────────────────────────────────────
     .o_hospital_appointments_column {
         background: $o-hospital-surface;
         backdrop-filter: $o-hospital-blur;
         border: 1px solid $o-hospital-border;
-        border-radius: $o-hospital-radius-md;
-        padding: $o-hospital-spacing-md;
-        box-shadow: $o-hospital-shadow-xs;
+        border-radius: $o-hospital-radius-xl;
+        overflow: hidden;
+        box-shadow: $o-hospital-shadow-sm;
+        @include o-hospital-fade-up(0.22s);
+    }
+
+    .o_hospital_appt_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: $o-hospital-spacing-md $o-hospital-spacing-md 10px;
+        border-bottom: 1px solid $o-hospital-border;
+        background: rgba(0,0,0,0.018);
     }
 
     .o_hospital_appointments_list {
@@ -219,7 +344,7 @@
         border-collapse: collapse;
 
         td {
-            padding: 9px $o-hospital-spacing-sm;
+            padding: 10px $o-hospital-spacing-md;
             font-size: 13px;
             color: $o-hospital-text-primary;
             border-bottom: 1px solid $o-hospital-border;
@@ -232,10 +357,18 @@
 
         .btn-outline-primary {
             border-radius: $o-hospital-radius-xs;
-            font-size: 12px;
-            padding: 2px 10px;
-            border-color: $o-hospital-primary;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border: 1.5px solid $o-hospital-primary;
             color: $o-hospital-primary;
+            background: transparent;
+            cursor: pointer;
+            transition: $o-hospital-transition-fast;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
 
             &:hover {
                 background: $o-hospital-primary;
@@ -250,14 +383,28 @@
         color: $o-hospital-text-tertiary;
         padding: $o-hospital-spacing-xl;
         text-align: center;
-        font-size: 14px;
+        font-size: 13px;
+
+        .fa {
+            display: block;
+            font-size: 28px;
+            margin-bottom: 10px;
+            opacity: 0.35;
+        }
     }
 
     .alert-danger {
-        background: rgba(255, 69, 58, 0.08);
-        border: 1px solid rgba(255, 69, 58, 0.25);
+        background: rgba(255,69,58,0.08);
+        border: 1px solid rgba(255,69,58,0.22);
         border-radius: $o-hospital-radius-sm;
         color: $o-hospital-red;
+        padding: $o-hospital-spacing-md;
+        margin-bottom: $o-hospital-spacing-md;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        @include o-hospital-fade-up(0s);
     }
 
     // ── Skeleton shimmer ─────────────────────────────────────
@@ -265,17 +412,25 @@
         background: linear-gradient(
             90deg,
             rgba(0,0,0,0.04) 25%,
-            rgba(0,0,0,0.08) 50%,
+            rgba(0,0,0,0.09) 50%,
             rgba(0,0,0,0.04) 75%
         );
         background-size: 200% 100%;
-        animation: o-hospital-skeleton 1.4s ease-in-out infinite;
-        border-radius: $o-hospital-radius-md;
+        animation: o-reception-shimmer 1.4s ease-in-out infinite;
+        border-radius: $o-hospital-radius-lg;
         min-height: 80px;
     }
 
-    @keyframes o-hospital-skeleton {
+    @keyframes o-reception-shimmer {
         0%   { background-position: 200% 0; }
         100% { background-position: -200% 0; }
+    }
+}
+
+@media (max-width: 900px) {
+    .o_hospital_reception_dashboard {
+        padding: $o-hospital-spacing-md;
+        .o_hospital_kpi_strip        { grid-template-columns: 1fr; }
+        .o_hospital_dashboard_columns { grid-template-columns: 1fr; }
     }
 }

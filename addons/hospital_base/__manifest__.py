@@ -52,6 +52,11 @@ module builds on:
         "demo/hospital_doctor_demo.xml",
         "demo/hospital_patient_demo.xml",
     ],
+    "assets": {
+        "web.assets_backend": [
+            "hospital_base/static/src/scss/hospital_shell.scss",
+        ],
+    },
     "images": ["static/description/icon.png"],
     "application": True,
     "installable": True,

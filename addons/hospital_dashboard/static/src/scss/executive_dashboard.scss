@@ -1,7 +1,7 @@
 @import "/hospital_base/static/src/scss/_variables";
 
 // ============================================================
-// Executive Dashboard — macOS design
+// Executive Dashboard — macOS 10/10 design
 // ============================================================
 
 .o_hospital_executive_dashboard {
@@ -17,13 +17,40 @@
         align-items: center;
         justify-content: space-between;
         margin-bottom: $o-hospital-spacing-xl;
+        @include o-hospital-fade-up(0s);
+
+        .o_hospital_header_left {
+            display: flex;
+            align-items: center;
+            gap: $o-hospital-spacing-md;
+        }
+
+        .o_hospital_header_icon {
+            width: 48px;
+            height: 48px;
+            border-radius: $o-hospital-radius-lg;
+            background: linear-gradient(145deg, $o-hospital-green, $o-hospital-teal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: $o-hospital-glow-green;
+            .fa { color: #fff; font-size: 20px; }
+        }
 
         h2 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             color: $o-hospital-text-primary;
             letter-spacing: -0.5px;
             margin: 0;
+            line-height: 1.1;
+            small {
+                display: block;
+                font-size: 12px;
+                font-weight: 500;
+                color: $o-hospital-text-tertiary;
+                letter-spacing: 0;
+            }
         }
 
         button {
@@ -34,10 +61,14 @@
             border: 1px solid $o-hospital-border;
             border-radius: $o-hospital-radius-sm;
             color: $o-hospital-text-secondary;
-            padding: 6px 16px;
+            padding: 8px 16px;
             cursor: pointer;
             transition: $o-hospital-transition-fast;
             backdrop-filter: $o-hospital-blur;
+            box-shadow: $o-hospital-shadow-xs;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
 
             &:hover {
                 background: $o-hospital-surface-hover;
@@ -46,11 +77,12 @@
         }
     }
 
-    // ── KPI grid ────────────────────────────────────────────
+    // ── KPI grid ─────────────────────────────────────────────
     .o_hospital_kpi_grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: $o-hospital-spacing-md;
+        margin-bottom: $o-hospital-spacing-xl;
 
         @media (max-width: 1024px) { grid-template-columns: repeat(2, 1fr); }
         @media (max-width: 600px)  { grid-template-columns: 1fr; }
@@ -62,75 +94,109 @@
         backdrop-filter: $o-hospital-blur;
         border: 1px solid $o-hospital-border;
         border-radius: $o-hospital-radius-xl;
-        padding: $o-hospital-spacing-xl $o-hospital-spacing-lg;
+        padding: $o-hospital-spacing-xl $o-hospital-spacing-lg $o-hospital-spacing-lg;
         box-shadow: $o-hospital-shadow-sm;
         transition: $o-hospital-transition;
         position: relative;
         overflow: hidden;
+        @include o-hospital-fade-up();
+        @include o-hospital-stagger(4, 0.10s, 0.07s);
 
-        // Subtle gradient orb in top-right
+        // Gradient accent line
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            border-radius: $o-hospital-radius-xl $o-hospital-radius-xl 0 0;
+        }
+
+        // Visible orb (15% opacity — actually shows)
         &::after {
             content: "";
             position: absolute;
-            top: -30px;
-            right: -30px;
-            width: 100px;
-            height: 100px;
+            bottom: -24px; right: -24px;
+            width: 100px; height: 100px;
             border-radius: 50%;
-            opacity: 0.07;
-            background: $o-hospital-primary;
+            opacity: 0.15;
             pointer-events: none;
         }
 
         &:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
             box-shadow: $o-hospital-shadow-lg;
         }
 
-        // Top accent line per-card (macOS colour system)
+        // Per-card colour
         &:nth-child(1) {
-            &::after { background: $o-hospital-primary; }
-            .o_hospital_kpi_value { color: $o-hospital-primary; }
             border-top: 3px solid $o-hospital-primary;
+            &::before { background: linear-gradient(90deg, $o-hospital-primary, $o-hospital-teal); }
+            &::after  { background: $o-hospital-primary; }
+            .o_hospital_kpi_value { color: $o-hospital-primary; }
+            .o_hospital_kpi_icon  { background: $o-hospital-primary-light; color: $o-hospital-primary; }
         }
         &:nth-child(2) {
-            &::after { background: $o-hospital-indigo; }
-            .o_hospital_kpi_value { color: $o-hospital-indigo; }
             border-top: 3px solid $o-hospital-indigo;
+            &::before { background: linear-gradient(90deg, $o-hospital-indigo, $o-hospital-purple); }
+            &::after  { background: $o-hospital-indigo; }
+            .o_hospital_kpi_value { color: $o-hospital-indigo; }
+            .o_hospital_kpi_icon  { background: $o-hospital-indigo-light; color: $o-hospital-indigo; }
         }
         &:nth-child(3) {
-            &::after { background: $o-hospital-orange; }
-            .o_hospital_kpi_value { color: $o-hospital-orange; }
             border-top: 3px solid $o-hospital-orange;
+            &::before { background: linear-gradient(90deg, $o-hospital-orange, $o-hospital-yellow); }
+            &::after  { background: $o-hospital-orange; }
+            .o_hospital_kpi_value { color: $o-hospital-orange; }
+            .o_hospital_kpi_icon  { background: $o-hospital-orange-light; color: $o-hospital-orange; }
         }
         &:nth-child(4) {
-            &::after { background: $o-hospital-teal; }
-            .o_hospital_kpi_value { color: $o-hospital-teal; }
             border-top: 3px solid $o-hospital-teal;
+            &::before { background: linear-gradient(90deg, $o-hospital-teal, $o-hospital-primary); }
+            &::after  { background: $o-hospital-teal; }
+            .o_hospital_kpi_value { color: $o-hospital-teal; }
+            .o_hospital_kpi_icon  { background: $o-hospital-teal-light; color: $o-hospital-teal; }
         }
 
-        // Wide revenue card spans full row
+        // Wide revenue card
         &.o_hospital_kpi_card_wide {
             grid-column: 1 / -1;
             display: flex;
             align-items: center;
             gap: $o-hospital-spacing-xl;
             padding: $o-hospital-spacing-lg $o-hospital-spacing-xl;
-            background: linear-gradient(135deg, rgba(48,209,88,0.08) 0%, rgba(90,200,250,0.06) 100%);
             border-top: 3px solid $o-hospital-green;
-
-            &::after { background: $o-hospital-green; right: -40px; top: -40px; width: 140px; height: 140px; }
-
+            background: linear-gradient(135deg,
+                rgba(48,209,88,0.06) 0%,
+                rgba(90,200,250,0.04) 100%),
+                $o-hospital-surface;
+            &::before { background: linear-gradient(90deg, $o-hospital-green, $o-hospital-teal); }
+            &::after  {
+                background: $o-hospital-green;
+                width: 160px; height: 160px;
+                bottom: -40px; right: -40px;
+                opacity: 0.12;
+            }
             .o_hospital_kpi_value {
-                font-size: 44px;
+                font-size: 48px;
                 color: $o-hospital-green;
             }
-
-            .o_hospital_kpi_label {
-                font-size: 13px;
-                margin-bottom: 0;
+            .o_hospital_kpi_icon {
+                width: 52px; height: 52px;
+                background: $o-hospital-green-light;
+                color: $o-hospital-green;
+                .fa { font-size: 22px; }
             }
         }
+    }
+
+    .o_hospital_kpi_icon {
+        width: 42px;
+        height: 42px;
+        border-radius: $o-hospital-radius-md;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: $o-hospital-spacing-md;
+        .fa { font-size: 17px; }
     }
 
     .o_hospital_kpi_label {
@@ -139,7 +205,7 @@
         text-transform: uppercase;
         letter-spacing: 0.7px;
         color: $o-hospital-text-secondary;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
 
     .o_hospital_kpi_value {
@@ -147,18 +213,19 @@
         font-weight: 700;
         letter-spacing: -2px;
         line-height: 1;
-        color: $o-hospital-text-primary;
+        font-variant-numeric: tabular-nums;
     }
 
-    // ── Empty & error states ─────────────────────────────────
+    // ── Error / empty states ─────────────────────────────────
     .o_hospital_kpi_empty {
         background: $o-hospital-surface;
         border: 1px solid $o-hospital-border;
-        border-radius: $o-hospital-radius-lg;
-        padding: $o-hospital-spacing-xl;
+        border-radius: $o-hospital-radius-xl;
+        padding: $o-hospital-spacing-2xl;
         text-align: center;
         color: $o-hospital-text-tertiary;
         font-size: 15px;
+        .fa { font-size: 32px; margin-bottom: 12px; display: block; opacity: 0.3; }
     }
 
     .o_hospital_dashboard_error {
@@ -169,26 +236,22 @@
         padding: $o-hospital-spacing-md $o-hospital-spacing-lg;
         margin-bottom: $o-hospital-spacing-lg;
         font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        @include o-hospital-fade-up(0s);
 
         .btn-link {
             color: $o-hospital-red;
             font-weight: 600;
             text-decoration: underline;
-            padding: 0;
-            border: none;
-            background: none;
-            cursor: pointer;
+            padding: 0; border: none; background: none; cursor: pointer;
         }
     }
 
-    // ── Skeleton shimmer ─────────────────────────────────────
+    // ── Skeleton ─────────────────────────────────────────────
     .o_hospital_skeleton {
-        background: linear-gradient(
-            90deg,
-            rgba(0,0,0,0.04) 25%,
-            rgba(0,0,0,0.09) 50%,
-            rgba(0,0,0,0.04) 75%
-        );
+        background: linear-gradient(90deg, rgba(0,0,0,0.04) 25%, rgba(0,0,0,0.09) 50%, rgba(0,0,0,0.04) 75%);
         background-size: 200% 100%;
         animation: o-exec-shimmer 1.4s ease-in-out infinite;
         border-radius: $o-hospital-radius-xl;

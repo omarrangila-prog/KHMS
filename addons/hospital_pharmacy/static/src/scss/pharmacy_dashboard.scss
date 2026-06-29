@@ -1,7 +1,7 @@
 @import "/hospital_base/static/src/scss/_variables";
 
 // ============================================================
-// Pharmacy Dashboard — macOS design (split pane)
+// Pharmacy Dashboard — macOS 10/10 design (split pane)
 // ============================================================
 
 .o_hospital_pharmacy_dashboard {
@@ -12,19 +12,47 @@
     flex-direction: column;
     padding: $o-hospital-spacing-xl;
 
+    // ── Header ──────────────────────────────────────────────
     .o_hospital_dashboard_header {
         display: flex;
         align-items: center;
         justify-content: space-between;
         margin-bottom: $o-hospital-spacing-xl;
         flex-shrink: 0;
+        @include o-hospital-fade-up(0s);
+
+        .o_hospital_header_left {
+            display: flex;
+            align-items: center;
+            gap: $o-hospital-spacing-md;
+        }
+
+        .o_hospital_header_icon {
+            width: 46px;
+            height: 46px;
+            border-radius: $o-hospital-radius-md;
+            background: linear-gradient(145deg, $o-hospital-green, $o-hospital-teal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: $o-hospital-glow-green;
+            .fa { color: #fff; font-size: 19px; }
+        }
 
         h2 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             color: $o-hospital-text-primary;
             letter-spacing: -0.5px;
             margin: 0;
+            line-height: 1.1;
+            small {
+                display: block;
+                font-size: 12px;
+                font-weight: 500;
+                color: $o-hospital-text-tertiary;
+                letter-spacing: 0;
+            }
         }
 
         .o_hospital_pharmacy_header_meta {
@@ -32,25 +60,13 @@
             align-items: center;
             gap: $o-hospital-spacing-md;
 
-            .badge {
-                background: $o-hospital-primary-light;
-                color: $o-hospital-primary;
-                border-radius: 20px;
-                padding: 4px 12px;
-                font-size: 12px;
-                font-weight: 600;
-            }
-
-            small {
-                color: $o-hospital-text-tertiary;
-                font-size: 12px;
-            }
+            .o-hms-badge { font-size: 12px; padding: 4px 12px; }
 
             kbd {
                 background: rgba(0,0,0,0.06);
                 border: 1px solid $o-hospital-border;
                 border-radius: 4px;
-                padding: 1px 5px;
+                padding: 1px 6px;
                 font-family: $o-hospital-font-mono;
                 font-size: 11px;
                 color: $o-hospital-text-secondary;
@@ -73,32 +89,41 @@
         background: $o-hospital-surface;
         backdrop-filter: $o-hospital-blur;
         border: 1px solid $o-hospital-border;
-        border-radius: $o-hospital-radius-lg;
+        border-radius: $o-hospital-radius-xl;
         overflow-y: auto;
-        box-shadow: $o-hospital-shadow-xs;
+        box-shadow: $o-hospital-shadow-sm;
+        display: flex;
+        flex-direction: column;
+        @include o-hospital-fade-up(0.07s);
+    }
 
-        .o_hospital_doctor_pane_header {
-            padding: $o-hospital-spacing-md $o-hospital-spacing-md $o-hospital-spacing-sm;
-            border-bottom: 1px solid $o-hospital-border;
-            position: sticky;
-            top: 0;
-            background: $o-hospital-surface;
-            backdrop-filter: $o-hospital-blur;
-            z-index: 1;
+    .o_hospital_pharmacy_pane_header {
+        padding: $o-hospital-spacing-md;
+        border-bottom: 1px solid $o-hospital-border;
+        position: sticky;
+        top: 0;
+        background: $o-hospital-surface;
+        backdrop-filter: $o-hospital-blur;
+        z-index: 1;
+        flex-shrink: 0;
 
-            h3 {
-                font-size: 11px;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.7px;
-                color: $o-hospital-text-secondary;
-                margin: 0;
-            }
+        .o_hospital_section_title {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: $o-hospital-text-secondary;
+            .fa { opacity: 0.65; }
         }
     }
 
     .o_hospital_pharmacy_queue_list {
         padding: $o-hospital-spacing-xs;
+        flex: 1;
+        overflow-y: auto;
     }
 
     .o_hospital_pharmacy_queue_row {
@@ -107,39 +132,56 @@
         border-radius: $o-hospital-radius-sm;
         transition: $o-hospital-transition-fast;
         margin-bottom: 2px;
+        border-left: 3px solid transparent;
 
-        &:hover { background: rgba(10,132,255,0.05); }
+        &:hover {
+            background: rgba(10,132,255,0.05);
+            border-left-color: rgba(10,132,255,0.25);
+        }
 
         &.o_hospital_pharmacy_queue_row_selected {
             background: $o-hospital-primary-light;
+            border-left-color: $o-hospital-primary;
 
-            .o_hospital_pharmacy_queue_patient {
-                color: $o-hospital-primary;
-            }
+            .o_hospital_pharmacy_queue_patient { color: $o-hospital-primary; }
         }
     }
 
     .o_hospital_pharmacy_queue_row_main {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .o_hospital_queue_avatar {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, $o-hospital-green, $o-hospital-teal);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            .fa { color: #fff; font-size: 10px; }
+        }
+
         .o_hospital_pharmacy_queue_patient {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: $o-hospital-text-primary;
         }
     }
 
     .o_hospital_pharmacy_queue_row_meta {
-        font-size: 12px;
+        font-size: 11px;
         color: $o-hospital-text-secondary;
         display: flex;
         align-items: center;
         gap: 6px;
-        margin-top: 2px;
+        margin-top: 3px;
+        padding-left: 34px;
 
         .badge {
             border-radius: 20px;
             font-size: 10px;
             font-weight: 600;
-            padding: 2px 8px;
+            padding: 2px 7px;
         }
     }
 
@@ -148,48 +190,42 @@
         background: $o-hospital-surface;
         backdrop-filter: $o-hospital-blur;
         border: 1px solid $o-hospital-border;
-        border-radius: $o-hospital-radius-lg;
+        border-radius: $o-hospital-radius-xl;
         overflow-y: auto;
-        box-shadow: $o-hospital-shadow-xs;
+        box-shadow: $o-hospital-shadow-sm;
+        display: flex;
+        flex-direction: column;
+        @include o-hospital-fade-up(0.12s);
 
-        .o_hospital_doctor_pane_header {
+        .o_hospital_pharmacy_pane_header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: $o-hospital-spacing-md $o-hospital-spacing-lg;
-            border-bottom: 1px solid $o-hospital-border;
-            position: sticky;
-            top: 0;
-            background: $o-hospital-surface;
-            backdrop-filter: $o-hospital-blur;
-            z-index: 1;
-
-            h3 {
-                font-size: 11px;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.7px;
-                color: $o-hospital-text-secondary;
-                margin: 0;
-            }
         }
 
         .o_hospital_pharmacy_detail_actions {
             display: flex;
             gap: 6px;
 
-            .btn {
+            button {
+                font-family: $o-hospital-font;
                 border-radius: $o-hospital-radius-xs;
                 font-size: 12px;
                 font-weight: 600;
-                padding: 5px 14px;
+                padding: 6px 14px;
+                cursor: pointer;
+                transition: $o-hospital-transition-fast;
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
             }
 
             .btn-primary {
                 background: $o-hospital-primary;
                 border: none;
                 color: #fff;
-                &:hover { background: $o-hospital-primary-dark; }
+                box-shadow: $o-hospital-shadow-xs;
+                &:hover { background: $o-hospital-primary-dark; box-shadow: $o-hospital-shadow-sm; }
             }
 
             .btn-outline-primary {
@@ -202,15 +238,24 @@
     }
 
     .o_hospital_pharmacy_detail_empty {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         padding: $o-hospital-spacing-xl;
         text-align: center;
         color: $o-hospital-text-tertiary;
         font-size: 14px;
+        gap: $o-hospital-spacing-sm;
+        .fa { font-size: 32px; opacity: 0.25; }
     }
 
     // ── Lines table ──────────────────────────────────────────
     .o_hospital_pharmacy_lines {
         padding: $o-hospital-spacing-md;
+        flex: 1;
+        overflow-y: auto;
     }
 
     .o_hospital_pharmacy_lines_table {
@@ -222,7 +267,7 @@
 
             th {
                 font-size: 11px;
-                font-weight: 600;
+                font-weight: 700;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
                 color: $o-hospital-text-secondary;
@@ -238,7 +283,7 @@
             &:hover { background: rgba(0,0,0,0.02); }
 
             td {
-                padding: 11px $o-hospital-spacing-sm;
+                padding: 12px $o-hospital-spacing-sm;
                 font-size: 13px;
                 color: $o-hospital-text-primary;
                 vertical-align: middle;
@@ -261,6 +306,7 @@
         border-radius: $o-hospital-radius-md;
         min-height: 80px;
         margin: $o-hospital-spacing-md;
+        flex-shrink: 0;
     }
 
     @keyframes o-pharmacy-shimmer {

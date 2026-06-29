@@ -1,7 +1,7 @@
 @import "/hospital_base/static/src/scss/_variables";
 
 // ============================================================
-// IPD Ward Dashboard — macOS design (bed grid)
+// IPD Ward Dashboard — macOS 10/10 design
 // ============================================================
 
 .o_hospital_ward_dashboard {
@@ -11,30 +11,55 @@
     overflow-y: auto;
     padding: $o-hospital-spacing-xl;
 
+    // ── Header ──────────────────────────────────────────────
     .o_hospital_dashboard_header {
         display: flex;
-        align-items: baseline;
+        align-items: center;
         justify-content: space-between;
         gap: $o-hospital-spacing-md;
         margin-bottom: $o-hospital-spacing-xl;
+        @include o-hospital-fade-up(0s);
+
+        .o_hospital_header_left {
+            display: flex;
+            align-items: center;
+            gap: $o-hospital-spacing-md;
+        }
+
+        .o_hospital_header_icon {
+            width: 46px;
+            height: 46px;
+            border-radius: $o-hospital-radius-md;
+            background: linear-gradient(145deg, $o-hospital-teal, $o-hospital-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(90,200,250,0.30);
+            .fa { color: #fff; font-size: 19px; }
+        }
 
         h2 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             color: $o-hospital-text-primary;
             letter-spacing: -0.5px;
             margin: 0;
-        }
-
-        small {
-            font-size: 13px;
-            color: $o-hospital-text-tertiary;
+            line-height: 1.1;
+            small {
+                display: block;
+                font-size: 12px;
+                font-weight: 500;
+                color: $o-hospital-text-tertiary;
+                letter-spacing: 0;
+            }
         }
     }
 
     // ── Ward section ─────────────────────────────────────────
     .o_hospital_ward_section {
         margin-bottom: $o-hospital-spacing-xl;
+        @include o-hospital-fade-up();
+        @include o-hospital-stagger(6, 0.10s, 0.07s);
     }
 
     .o_hospital_ward_section_header {
@@ -42,6 +67,12 @@
         align-items: center;
         justify-content: space-between;
         margin-bottom: $o-hospital-spacing-md;
+
+        .o_hospital_ward_title_row {
+            display: flex;
+            align-items: center;
+            gap: $o-hospital-spacing-sm;
+        }
 
         h3 {
             font-size: 17px;
@@ -58,13 +89,30 @@
             font-size: 11px;
             font-weight: 600;
             padding: 3px 10px;
-            margin-left: 8px;
         }
 
-        .o_hospital_ward_occupancy {
+        .o_hospital_ward_occupancy_bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             font-size: 13px;
             color: $o-hospital-text-secondary;
             font-variant-numeric: tabular-nums;
+
+            .o_hospital_bar_track {
+                width: 80px;
+                height: 5px;
+                background: rgba(0,0,0,0.08);
+                border-radius: 10px;
+                overflow: hidden;
+
+                .o_hospital_bar_fill {
+                    height: 100%;
+                    border-radius: 10px;
+                    background: linear-gradient(90deg, $o-hospital-green, $o-hospital-teal);
+                    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+                }
+            }
         }
     }
 
@@ -82,33 +130,36 @@
         text-align: center;
         border: 1.5px solid transparent;
         box-shadow: $o-hospital-shadow-xs;
-        transition: $o-hospital-transition;
+        transition: $o-hospital-spring;
         position: relative;
         overflow: hidden;
 
         &:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px) scale(1.02);
             box-shadow: $o-hospital-shadow-md;
         }
+        &:active { transform: scale(0.96); }
 
-        &:active {
-            transform: translateY(0) scale(0.97);
+        .o_hospital_bed_icon {
+            font-size: 20px;
+            margin-bottom: 6px;
+            display: block;
         }
     }
 
     .o_hospital_bed_number {
-        font-size: 18px;
+        font-size: 17px;
         font-weight: 700;
         letter-spacing: -0.5px;
-        margin-bottom: 4px;
+        margin-bottom: 3px;
     }
 
     .o_hospital_bed_state {
-        font-size: 10px;
+        font-size: 9px;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.8px;
-        opacity: 0.75;
+        letter-spacing: 0.9px;
+        opacity: 0.65;
         margin-bottom: 4px;
     }
 
@@ -118,44 +169,44 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        opacity: 0.85;
+        opacity: 0.82;
     }
 
-    // ── Bed states (macOS-palette colours) ───────────────────
+    // ── Bed state colours ─────────────────────────────────────
     .o_hospital_bed_vacant {
-        background: rgba(48, 209, 88, 0.10);
-        border-color: rgba(48, 209, 88, 0.35);
+        background: rgba(48,209,88,0.10);
+        border-color: rgba(48,209,88,0.32);
         color: #1a7a38;
-
         .o_hospital_bed_number { color: #1a7a38; }
-        &:hover { background: rgba(48, 209, 88, 0.16); }
+        .o_hospital_bed_icon   { color: $o-hospital-green; }
+        &:hover { background: rgba(48,209,88,0.17); }
     }
 
     .o_hospital_bed_occupied {
-        background: rgba(255, 69, 58, 0.09);
-        border-color: rgba(255, 69, 58, 0.30);
+        background: rgba(255,69,58,0.09);
+        border-color: rgba(255,69,58,0.28);
         color: #b8291f;
-
         .o_hospital_bed_number { color: #b8291f; }
-        &:hover { background: rgba(255, 69, 58, 0.15); }
+        .o_hospital_bed_icon   { color: $o-hospital-red; }
+        &:hover { background: rgba(255,69,58,0.15); }
     }
 
     .o_hospital_bed_reserved {
-        background: rgba(255, 159, 10, 0.10);
-        border-color: rgba(255, 159, 10, 0.35);
+        background: rgba(255,159,10,0.10);
+        border-color: rgba(255,159,10,0.32);
         color: #9a6200;
-
         .o_hospital_bed_number { color: #9a6200; }
-        &:hover { background: rgba(255, 159, 10, 0.16); }
+        .o_hospital_bed_icon   { color: $o-hospital-orange; }
+        &:hover { background: rgba(255,159,10,0.17); }
     }
 
     .o_hospital_bed_cleaning {
-        background: rgba(142, 142, 147, 0.10);
-        border-color: rgba(142, 142, 147, 0.30);
+        background: rgba(142,142,147,0.09);
+        border-color: rgba(142,142,147,0.28);
         color: #636366;
-
         .o_hospital_bed_number { color: #636366; }
-        &:hover { background: rgba(142, 142, 147, 0.16); }
+        .o_hospital_bed_icon   { color: #8E8E93; }
+        &:hover { background: rgba(142,142,147,0.16); }
     }
 
     // ── Legend ───────────────────────────────────────────────
@@ -163,12 +214,14 @@
         display: flex;
         gap: $o-hospital-spacing-lg;
         align-items: center;
-        padding: $o-hospital-spacing-md $o-hospital-spacing-lg;
+        padding: 12px $o-hospital-spacing-lg;
         background: $o-hospital-surface;
         border: 1px solid $o-hospital-border;
         border-radius: $o-hospital-radius-md;
         box-shadow: $o-hospital-shadow-xs;
         margin-top: $o-hospital-spacing-lg;
+        flex-wrap: wrap;
+        @include o-hospital-fade-up(0.28s);
 
         .o_hospital_legend_item {
             display: flex;
@@ -176,29 +229,29 @@
             gap: 6px;
             font-size: 12px;
             color: $o-hospital-text-secondary;
+            font-weight: 500;
         }
 
         .o_hospital_legend_dot {
-            width: 10px;
-            height: 10px;
+            width: 10px; height: 10px;
             border-radius: 50%;
-
-            &.vacant   { background: #30D158; }
-            &.occupied { background: #FF453A; }
-            &.reserved { background: #FF9F0A; }
+            &.vacant   { background: $o-hospital-green; }
+            &.occupied { background: $o-hospital-red; }
+            &.reserved { background: $o-hospital-orange; }
             &.cleaning { background: #8E8E93; }
         }
     }
 
-    // ── Empty state ──────────────────────────────────────────
+    // ── Empty / error ─────────────────────────────────────────
     .o_hospital_ward_empty {
         background: $o-hospital-surface;
         border: 1px solid $o-hospital-border;
-        border-radius: $o-hospital-radius-lg;
-        padding: $o-hospital-spacing-xl;
+        border-radius: $o-hospital-radius-xl;
+        padding: $o-hospital-spacing-2xl;
         text-align: center;
         color: $o-hospital-text-tertiary;
         font-size: 15px;
+        .fa { font-size: 32px; margin-bottom: 12px; display: block; opacity: 0.3; }
     }
 
     .alert-danger {
@@ -208,13 +261,16 @@
         color: $o-hospital-red;
         padding: $o-hospital-spacing-md;
         margin-bottom: $o-hospital-spacing-md;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .o_hospital_skeleton {
         background: linear-gradient(90deg, rgba(0,0,0,0.04) 25%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.04) 75%);
         background-size: 200% 100%;
         animation: o-ward-shimmer 1.4s ease-in-out infinite;
-        border-radius: $o-hospital-radius-lg;
+        border-radius: $o-hospital-radius-xl;
         min-height: 200px;
     }
 

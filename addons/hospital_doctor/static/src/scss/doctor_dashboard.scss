@@ -1,7 +1,7 @@
 @import "/hospital_base/static/src/scss/_variables";
 
 // ============================================================
-// Doctor Workspace Dashboard — macOS design (3-pane)
+// Doctor Workspace — macOS 10/10 design (3-pane)
 // ============================================================
 
 .o_hospital_doctor_dashboard {
@@ -19,17 +19,44 @@
         justify-content: space-between;
         margin-bottom: $o-hospital-spacing-xl;
         flex-shrink: 0;
+        @include o-hospital-fade-up(0s);
+
+        .o_hospital_header_left {
+            display: flex;
+            align-items: center;
+            gap: $o-hospital-spacing-md;
+        }
+
+        .o_hospital_header_icon {
+            width: 46px;
+            height: 46px;
+            border-radius: $o-hospital-radius-md;
+            background: linear-gradient(145deg, $o-hospital-indigo, $o-hospital-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(94,92,230,0.28);
+            .fa { color: #fff; font-size: 19px; }
+        }
 
         h2 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             color: $o-hospital-text-primary;
             letter-spacing: -0.5px;
             margin: 0;
+            line-height: 1.1;
+            small {
+                display: block;
+                font-size: 12px;
+                font-weight: 500;
+                color: $o-hospital-text-tertiary;
+                letter-spacing: 0;
+            }
         }
     }
 
-    // ── Mobile tab strip (tablet only) ──────────────────────
+    // ── Mobile tabs ──────────────────────────────────────────
     .o_hospital_doctor_mobile_tabs {
         display: none;
         gap: 6px;
@@ -39,7 +66,7 @@
         button {
             flex: 1;
             font-family: $o-hospital-font;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             background: $o-hospital-surface;
             border: 1px solid $o-hospital-border;
@@ -48,11 +75,16 @@
             padding: 8px;
             cursor: pointer;
             transition: $o-hospital-transition-fast;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
 
             &.active, &:hover {
                 background: $o-hospital-primary;
                 color: #fff;
                 border-color: $o-hospital-primary;
+                box-shadow: $o-hospital-glow-blue;
             }
         }
     }
@@ -72,18 +104,19 @@
         background: $o-hospital-surface;
         backdrop-filter: $o-hospital-blur;
         border: 1px solid $o-hospital-border;
-        border-radius: $o-hospital-radius-lg;
+        border-radius: $o-hospital-radius-xl;
         overflow-y: auto;
-        box-shadow: $o-hospital-shadow-xs;
+        box-shadow: $o-hospital-shadow-sm;
         display: flex;
         flex-direction: column;
+        @include o-hospital-fade-up(0.08s);
     }
 
     .o_hospital_doctor_pane_header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: $o-hospital-spacing-md $o-hospital-spacing-md $o-hospital-spacing-sm;
+        padding: $o-hospital-spacing-md $o-hospital-spacing-md 11px;
         border-bottom: 1px solid $o-hospital-border;
         flex-shrink: 0;
         position: sticky;
@@ -92,13 +125,16 @@
         backdrop-filter: $o-hospital-blur;
         z-index: 1;
 
-        h3 {
+        .o_hospital_section_title {
+            display: flex;
+            align-items: center;
+            gap: 7px;
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.7px;
             color: $o-hospital-text-secondary;
-            margin: 0;
+            .fa { opacity: 0.65; }
         }
 
         .o_hospital_call_next_btn {
@@ -114,10 +150,14 @@
             cursor: pointer;
             transition: $o-hospital-transition-fast;
             box-shadow: $o-hospital-shadow-xs;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
 
             &:hover {
                 background: $o-hospital-primary-dark;
-                box-shadow: $o-hospital-shadow-sm;
+                box-shadow: $o-hospital-shadow-sm, $o-hospital-glow-blue;
+                transform: translateY(-1px);
             }
         }
     }
@@ -138,8 +178,8 @@
         border-left: 3px solid transparent;
 
         &:hover {
-            background: rgba(10, 132, 255, 0.05);
-            border-left-color: $o-hospital-primary;
+            background: rgba(10,132,255,0.05);
+            border-left-color: rgba(10,132,255,0.3);
         }
 
         &.o_hospital_queue_row_active {
@@ -150,51 +190,80 @@
         .o_hospital_doctor_queue_row_main {
             display: flex;
             align-items: center;
-            gap: $o-hospital-spacing-sm;
-            font-size: 14px;
+            gap: 8px;
+            font-size: 13px;
             font-weight: 600;
             color: $o-hospital-text-primary;
+
+            .o_hospital_queue_num {
+                width: 22px; height: 22px;
+                border-radius: 50%;
+                background: $o-hospital-primary-light;
+                color: $o-hospital-primary;
+                font-size: 11px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
         }
 
         .o_hospital_doctor_queue_row_meta {
             display: flex;
             gap: $o-hospital-spacing-sm;
             color: $o-hospital-text-secondary;
-            font-size: 12px;
+            font-size: 11px;
             margin-top: 3px;
+            padding-left: 30px;
             font-family: $o-hospital-font-mono;
         }
     }
 
-    // ── Center pane (blank state / prompt) ───────────────────
+    // ── Center pane ──────────────────────────────────────────
     .o_hospital_doctor_pane_center {
         background: $o-hospital-surface;
         backdrop-filter: $o-hospital-blur;
         border: 1px solid $o-hospital-border;
-        border-radius: $o-hospital-radius-lg;
-        box-shadow: $o-hospital-shadow-xs;
+        border-radius: $o-hospital-radius-xl;
+        box-shadow: $o-hospital-shadow-sm;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
         text-align: center;
-        gap: $o-hospital-spacing-md;
+        gap: $o-hospital-spacing-sm;
+        @include o-hospital-fade-up(0.14s);
     }
 
     .o_hospital_doctor_center_empty,
     .o_hospital_doctor_center_prompt {
         color: $o-hospital-text-tertiary;
-        font-size: 15px;
+        font-size: 14px;
         padding: $o-hospital-spacing-xl;
+
+        .fa {
+            font-size: 36px;
+            display: block;
+            margin-bottom: $o-hospital-spacing-md;
+            opacity: 0.22;
+        }
     }
 
     // ── Empty states ─────────────────────────────────────────
     .o_hospital_doctor_queue_empty,
     .o_hospital_doctor_context_empty {
         color: $o-hospital-text-tertiary;
-        font-size: 14px;
+        font-size: 13px;
         padding: $o-hospital-spacing-xl;
         text-align: center;
+
+        .fa {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 10px;
+            opacity: 0.25;
+        }
     }
 
     // ── Skeleton ─────────────────────────────────────────────
@@ -213,20 +282,18 @@
     }
 }
 
-// ── Tablet breakpoint ────────────────────────────────────────
+// ── Tablet ───────────────────────────────────────────────────
 @media (max-width: 992px) {
     .o_hospital_doctor_dashboard {
         padding: $o-hospital-spacing-md;
 
         .o_hospital_doctor_mobile_tabs { display: flex; }
-
-        .o_hospital_doctor_3pane { grid-template-columns: 1fr; }
+        .o_hospital_doctor_3pane       { grid-template-columns: 1fr; }
 
         .o_hospital_doctor_pane_queue,
         .o_hospital_doctor_pane_context,
         .o_hospital_doctor_pane_center {
             display: none;
-
             &.o_hospital_pane_active_mobile { display: flex; }
         }
     }

@@ -4,111 +4,160 @@
     <t t-name="hospital_reception.ReceptionDashboard">
         <div class="o_hospital_reception_dashboard">
 
+            <!-- Header -->
             <div class="o_hospital_dashboard_header">
-                <div>
-                    <h2>Reception</h2>
+                <div class="o_hospital_header_left">
+                    <div class="o_hospital_header_icon">
+                        <i class="fa fa-hospital-o"/>
+                    </div>
+                    <h2>
+                        Reception
+                        <small>Front-desk operations</small>
+                    </h2>
                 </div>
                 <div class="o_hospital_dashboard_actions">
                     <button class="btn btn-secondary" t-on-click="openSearchPatients">
-                        <i class="fa fa-search me-1"/>Search Patient
+                        <i class="fa fa-search"/> Search Patient
                     </button>
                     <button class="btn btn-primary" t-on-click="openNewRegistration">
-                        <i class="fa fa-plus me-1"/>New Registration
+                        <i class="fa fa-plus"/> New Registration
                     </button>
                 </div>
             </div>
 
-            <div class="alert-danger p-3 mb-3" style="border-radius:10px" t-if="state.error">
-                Could not load dashboard. <button class="btn btn-link p-0" t-on-click="onRetry">Retry</button>
+            <!-- Error -->
+            <div class="alert-danger" t-if="state.error">
+                <i class="fa fa-exclamation-triangle"/>
+                Could not load dashboard.
+                <button class="btn btn-link p-0 ms-2" t-on-click="onRetry">Retry</button>
             </div>
 
-            <!-- KPI strip -->
+            <!-- KPI Strip -->
             <div class="o_hospital_kpi_strip">
                 <t t-if="state.loading">
-                    <div class="o_hospital_kpi_card o_hospital_skeleton" t-foreach="[1,2,3]" t-as="i" t-key="i" style="min-height:100px"/>
+                    <div class="o_hospital_kpi_card o_hospital_skeleton"
+                         t-foreach="[1,2,3]" t-as="i" t-key="i"
+                         style="min-height:110px"/>
                 </t>
                 <t t-else="">
                     <div class="o_hospital_kpi_card">
-                        <div class="o_hospital_kpi_value" t-esc="state.kpi.waiting"/>
-                        <div class="o_hospital_kpi_label">Waiting</div>
+                        <div class="o_hospital_kpi_row">
+                            <div>
+                                <div class="o_hospital_kpi_value" t-esc="state.kpi.waiting"/>
+                                <div class="o_hospital_kpi_label">Waiting</div>
+                            </div>
+                            <div class="o_hospital_kpi_icon">
+                                <i class="fa fa-clock-o"/>
+                            </div>
+                        </div>
                     </div>
                     <div class="o_hospital_kpi_card">
-                        <div class="o_hospital_kpi_value" t-esc="state.kpi.in_consult"/>
-                        <div class="o_hospital_kpi_label">In Consult</div>
+                        <div class="o_hospital_kpi_row">
+                            <div>
+                                <div class="o_hospital_kpi_value" t-esc="state.kpi.in_consult"/>
+                                <div class="o_hospital_kpi_label">In Consult</div>
+                            </div>
+                            <div class="o_hospital_kpi_icon">
+                                <i class="fa fa-stethoscope"/>
+                            </div>
+                        </div>
                     </div>
                     <div class="o_hospital_kpi_card">
-                        <div class="o_hospital_kpi_value" t-esc="state.kpi.completed_today"/>
-                        <div class="o_hospital_kpi_label">Completed Today</div>
+                        <div class="o_hospital_kpi_row">
+                            <div>
+                                <div class="o_hospital_kpi_value" t-esc="state.kpi.completed_today"/>
+                                <div class="o_hospital_kpi_label">Completed Today</div>
+                            </div>
+                            <div class="o_hospital_kpi_icon">
+                                <i class="fa fa-check-circle"/>
+                            </div>
+                        </div>
                     </div>
                 </t>
             </div>
 
-            <!-- Body columns -->
+            <!-- Body -->
             <div class="o_hospital_dashboard_columns">
 
                 <!-- Live Queue -->
                 <div class="o_hospital_queue_column">
-                    <h3>Live Queue</h3>
-                    <t t-if="state.loading">
-                        <div class="o_hospital_skeleton" style="height:200px"/>
-                    </t>
+                    <div class="o_hospital_section_title">
+                        <i class="fa fa-list-ul"/> Live Queue
+                    </div>
+                    <div class="o_hospital_skeleton" style="height:180px" t-if="state.loading"/>
                     <div class="o_hospital_queue_empty" t-elif="state.queueByDoctor.length === 0">
-                        Queue is clear — no patients waiting.
+                        <i class="fa fa-check-circle"/>
+                        Queue is clear
                     </div>
                     <div class="o_hospital_queue_kanban" t-else="">
                         <div class="o_hospital_queue_doctor_card"
-                             t-foreach="state.queueByDoctor" t-as="group" t-key="group.doctorId or 'none'">
+                             t-foreach="state.queueByDoctor" t-as="group"
+                             t-key="group.doctorId or 'none'">
                             <div class="o_hospital_queue_doctor_header">
-                                <strong t-esc="group.doctorName"/>
+                                <div class="o_hospital_doctor_name_row">
+                                    <div class="o_hospital_doctor_avatar">
+                                        <i class="fa fa-user-md"/>
+                                    </div>
+                                    <strong t-esc="group.doctorName"/>
+                                </div>
                                 <span class="badge" t-esc="group.count"/>
                             </div>
-                            <div class="o_hospital_queue_visit_row"
-                                 t-foreach="group.visits" t-as="visit" t-key="visit.id"
+                            <div t-foreach="group.visits" t-as="visit" t-key="visit.id"
+                                 class="o_hospital_queue_visit_row"
                                  t-on-click="() => this.openVisit(visit.id)">
                                 <span class="o_hospital_queue_visit_code" t-esc="visit.visit_code"/>
-                                <span style="flex:1;font-size:13px" t-esc="visit.patient_id[1]"/>
-                                <span class="badge"
-                                      style="background:rgba(255,69,58,0.12);color:#FF453A;border-radius:20px;font-size:11px"
-                                      t-if="visit.priority === 'emergency'">Emergency</span>
-                                <span class="badge"
-                                      style="background:rgba(255,159,10,0.12);color:#FF9F0A;border-radius:20px;font-size:11px"
-                                      t-if="visit.priority === 'urgent'">Urgent</span>
+                                <span class="o_hospital_visit_patient" t-esc="visit.patient_id[1]"/>
+                                <span class="o-hms-badge red"
+                                      t-if="visit.priority === 'emergency'">
+                                    <i class="fa fa-bolt"/> Emergency
+                                </span>
+                                <span class="o-hms-badge orange"
+                                      t-if="visit.priority === 'urgent'">
+                                    <i class="fa fa-arrow-up"/> Urgent
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Today's Appointments -->
+                <!-- Appointments -->
                 <div class="o_hospital_appointments_column">
-                    <h3>Today's Appointments</h3>
+                    <div class="o_hospital_appt_header">
+                        <div class="o_hospital_section_title" style="margin:0">
+                            <i class="fa fa-calendar"/> Today&#39;s Appointments
+                        </div>
+                    </div>
                     <div class="o_hospital_appointments_empty"
                          t-if="!state.loading and state.appointments.length === 0">
-                        No appointments scheduled today.
+                        <i class="fa fa-calendar-o"/>
+                        No appointments today
                     </div>
                     <table class="o_hospital_appointments_list"
                            t-if="!state.loading and state.appointments.length">
                         <tbody>
                             <tr t-foreach="state.appointments" t-as="appt" t-key="appt.id">
-                                <td style="font-family:-apple-system,monospace;font-size:12px;color:#636366"
+                                <td style="font-family:var(--o-hospital-font-mono,'SF Mono',monospace);font-size:11px;color:#636366;white-space:nowrap"
                                     t-esc="appt.scheduled_datetime"/>
-                                <td style="font-weight:500" t-esc="appt.patient_id[1]"
+                                <td style="font-weight:600;cursor:pointer"
+                                    t-esc="appt.patient_id[1]"
                                     t-on-click="() => this.openAppointment(appt.id)"/>
-                                <td style="color:#636366" t-esc="appt.doctor_id ? appt.doctor_id[1] : '-'"/>
+                                <td style="color:#636366;font-size:12px"
+                                    t-esc="appt.doctor_id ? appt.doctor_id[1] : '&#8212;'"/>
                                 <td>
-                                    <span style="border-radius:20px;font-size:11px;padding:2px 8px;font-weight:600;background:rgba(10,132,255,0.10);color:#0A84FF"
-                                          t-esc="appt.state"/>
+                                    <span class="o-hms-badge blue" t-esc="appt.state"/>
                                 </td>
                                 <td>
-                                    <button class="btn-outline-primary btn btn-sm"
+                                    <button class="btn-outline-primary"
                                             t-if="appt.state === 'draft' or appt.state === 'confirmed'"
                                             t-on-click="() => this.checkInAppointment(appt.id)">
-                                        Check In
+                                        <i class="fa fa-sign-in"/> Check In
                                     </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <div t-if="state.loading" class="o_hospital_skeleton" style="height:150px;margin-top:8px"/>
+                    <div t-if="state.loading" class="o_hospital_skeleton"
+                         style="height:160px;margin:12px"/>
                 </div>
 
             </div>

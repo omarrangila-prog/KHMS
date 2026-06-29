@@ -1,0 +1,73 @@
+@import "variables";
+
+// ============================================================
+// Hospital Shell — forces macOS bg so frosted glass renders
+// ============================================================
+
+// Force Odoo's content pane background to macOS #F2F2F7 whenever
+// we are inside the hospital app. Without this, all surfaces look
+// white-on-white and backdrop-filter has nothing to blur through.
+.o_action_manager,
+.o_main_navbar + .o_content,
+.o_content {
+    background: $o-hospital-bg !important;
+}
+
+// ── Global scrollbar (macOS thin style) ─────────────────────
+::-webkit-scrollbar               { width: 7px; height: 7px; }
+::-webkit-scrollbar-track         { background: transparent; }
+::-webkit-scrollbar-thumb         {
+    background: rgba(60,60,67,0.20);
+    border-radius: 10px;
+    &:hover { background: rgba(60,60,67,0.35); }
+}
+
+// ── Global focus ring (macOS blue, no ugly browser default) ─
+*:focus-visible {
+    outline: 2px solid #0A84FF;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+// ── Global selection colour ──────────────────────────────────
+::selection {
+    background: rgba(10, 132, 255, 0.20);
+    color: inherit;
+}
+
+// ── Hospital badge utilities ─────────────────────────────────
+.o-hms-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    letter-spacing: 0.1px;
+
+    &.blue   { background: rgba(10,132,255,0.12);  color: #0A84FF;  }
+    &.green  { background: rgba(48,209,88,0.12);   color: #1a7a38;  }
+    &.red    { background: rgba(255,69,58,0.12);   color: #CC2218;  }
+    &.orange { background: rgba(255,159,10,0.12);  color: #9a6200;  }
+    &.purple { background: rgba(191,90,242,0.12);  color: #8B3FC7;  }
+    &.teal   { background: rgba(90,200,250,0.12);  color: #007AAA;  }
+    &.grey   { background: rgba(142,142,147,0.12); color: #636366;  }
+}
+
+// ── Hospital icon chip (icon + label row) ────────────────────
+.o-hms-icon-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: $o-hospital-text-secondary;
+
+    .fa { font-size: 14px; }
+}
+
+// ── Divider ──────────────────────────────────────────────────
+.o-hms-divider {
+    height: 1px;
+    background: $o-hospital-border;
+    margin: $o-hospital-spacing-md 0;
+}

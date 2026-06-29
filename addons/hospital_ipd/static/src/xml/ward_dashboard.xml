@@ -4,22 +4,34 @@
     <t t-name="hospital_ipd.WardDashboard">
         <div class="o_hospital_ward_dashboard">
 
+            <!-- Header -->
             <div class="o_hospital_dashboard_header">
-                <h2>Ward Dashboard</h2>
-                <small t-if="!state.loading">
-                    Tap a vacant bed to admit &#183; tap an occupied bed to discharge
-                </small>
+                <div class="o_hospital_header_left">
+                    <div class="o_hospital_header_icon">
+                        <i class="fa fa-bed"/>
+                    </div>
+                    <h2>
+                        Ward Dashboard
+                        <small>Bed occupancy &#183; real-time</small>
+                    </h2>
+                </div>
             </div>
 
+            <!-- Error -->
             <div class="alert-danger" t-if="state.error">
+                <i class="fa fa-exclamation-triangle"/>
                 Could not load ward data.
                 <button class="btn btn-link p-0 ms-2" t-on-click="onRetry">Retry</button>
             </div>
 
+            <!-- Skeleton -->
             <div class="o_hospital_skeleton" t-if="state.loading"/>
 
             <div t-if="!state.loading and !state.error">
+
+                <!-- Empty -->
                 <div class="o_hospital_ward_empty" t-if="!state.wards.length">
+                    <i class="fa fa-bed"/>
                     No wards configured yet.
                 </div>
 
@@ -27,21 +39,26 @@
                     <div class="o_hospital_ward_section"
                          t-foreach="state.wards" t-as="ward" t-key="ward.id">
                         <div class="o_hospital_ward_section_header">
-                            <div>
-                                <h3>
-                                    <t t-esc="ward.name"/>
-                                    <span class="badge" t-esc="ward.ward_type"/>
-                                </h3>
+                            <div class="o_hospital_ward_title_row">
+                                <h3 t-esc="ward.name"/>
+                                <span class="badge" t-esc="ward.ward_type"/>
                             </div>
-                            <span class="o_hospital_ward_occupancy">
-                                <t t-esc="ward.occupied_bed_count"/>/<t t-esc="ward.bed_count"/> occupied
-                            </span>
+                            <div class="o_hospital_ward_occupancy_bar">
+                                <span>
+                                    <t t-esc="ward.occupied_bed_count"/>/<t t-esc="ward.bed_count"/>
+                                </span>
+                                <div class="o_hospital_bar_track">
+                                    <div class="o_hospital_bar_fill"
+                                         t-attf-style="width:{{ ward.bed_count ? Math.round(ward.occupied_bed_count / ward.bed_count * 100) : 0 }}%"/>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="o_hospital_bed_grid">
                             <div t-foreach="ward.beds" t-as="bed" t-key="bed.id"
                                  t-attf-class="o_hospital_bed_tile {{ this.getBedStatusClass(bed) }}"
                                  t-on-click="() => this.onBedClick(bed)">
+                                <i t-attf-class="fa {{ bed.state === 'occupied' ? 'fa-user' : bed.state === 'reserved' ? 'fa-bookmark' : bed.state === 'cleaning' ? 'fa-refresh' : 'fa-bed' }} o_hospital_bed_icon"/>
                                 <div class="o_hospital_bed_number" t-esc="bed.bed_number"/>
                                 <div class="o_hospital_bed_state" t-esc="bed.state"/>
                                 <div class="o_hospital_bed_patient"
@@ -54,20 +71,25 @@
                     <!-- Legend -->
                     <div class="o_hospital_ward_legend">
                         <div class="o_hospital_legend_item">
-                            <span class="o_hospital_legend_dot vacant"/>Vacant
+                            <span class="o_hospital_legend_dot vacant"/>
+                            <i class="fa fa-bed" style="font-size:11px;opacity:0.5"/> Vacant
                         </div>
                         <div class="o_hospital_legend_item">
-                            <span class="o_hospital_legend_dot occupied"/>Occupied
+                            <span class="o_hospital_legend_dot occupied"/>
+                            <i class="fa fa-user" style="font-size:11px;opacity:0.5"/> Occupied
                         </div>
                         <div class="o_hospital_legend_item">
-                            <span class="o_hospital_legend_dot reserved"/>Reserved
+                            <span class="o_hospital_legend_dot reserved"/>
+                            <i class="fa fa-bookmark" style="font-size:11px;opacity:0.5"/> Reserved
                         </div>
                         <div class="o_hospital_legend_item">
-                            <span class="o_hospital_legend_dot cleaning"/>Cleaning
+                            <span class="o_hospital_legend_dot cleaning"/>
+                            <i class="fa fa-refresh" style="font-size:11px;opacity:0.5"/> Cleaning
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </t>
 
