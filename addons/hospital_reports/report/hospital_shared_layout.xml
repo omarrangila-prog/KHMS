@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Shared branded layout for all hospital printed reports.
+
+        Usage in a report template:
+            t-call="hospital_reports.report_layout"
+                t-set="title" to set the page title
+                (report body content as slot children)
+
+        Reads hospital.report.config for the current company to inject
+        the logo, header/footer text, and accent colour.
+    -->
+    <template id="report_layout">
+        <t t-set="o_config" t-value="request.env['hospital.report.config'].get_config()
+            if hasattr(request, 'env')
+            else env['hospital.report.config'].get_config()"/>
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-set="company_tagline" t-value="o_config.header_text"/>
+                <div class="page">
+                    <div class="o_hospital_report_header mb-3"
+                         t-attf-style="border-bottom: 3px solid {{ o_config.primary_color }}; padding-bottom: 8px;">
+                        <div class="row">
+                            <div class="col-8">
+                                <h2 class="mb-0" t-esc="title or ''"/>
+                            </div>
+                            <div class="col-4 text-end text-muted small">
+                                <t t-esc="o_config.header_text"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <t t-out="0"/>
+
+                    <div class="o_hospital_report_footer mt-4 text-center text-muted small"
+                         t-attf-style="border-top: 1px solid {{ o_config.primary_color }}; padding-top: 6px;">
+                        <t t-esc="o_config.footer_text"/>
+                        <t t-if="o_config.show_company_address">
+                            &#160;|&#160;
+                            <t t-esc="env.company.street or ''"/>
+                            <t t-if="env.company.city">
+                                ,&#160;<t t-esc="env.company.city"/>
+                            </t>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

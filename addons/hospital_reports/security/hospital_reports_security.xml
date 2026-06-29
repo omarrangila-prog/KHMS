@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- No new groups: hospital_reports reuses hospital_base.group_hospital_admin
+         for configuration access and hospital_base.group_hospital_user for
+         triggering reports. -->
+
+    <!-- Report config: only admins may read/write branding settings. -->
+    <record id="hospital_report_config_admin_rule" model="ir.rule">
+        <field name="name">Hospital Report Config: admin-only</field>
+        <field name="model_id" ref="model_hospital_report_config"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_admin'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+</odoo>

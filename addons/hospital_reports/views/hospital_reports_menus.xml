@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Reports submenu under the root Hospital menu (defined in hospital_base) -->
+    <menuitem id="hospital_menu_reports"
+              name="Reports"
+              parent="hospital_base.hospital_menu_root"
+              groups="hospital_base.group_hospital_admin"
+              sequence="80"/>
+
+    <menuitem id="hospital_menu_reports_patient_history"
+              name="Patient Visit History"
+              parent="hospital_menu_reports"
+              action="action_hospital_patient_visit_history_wizard"
+              sequence="10"/>
+
+    <menuitem id="hospital_menu_reports_daily_census"
+              name="Daily Census"
+              parent="hospital_menu_reports"
+              action="action_hospital_census_wizard"
+              sequence="20"/>
+
+    <menuitem id="hospital_menu_reports_ward_occupancy"
+              name="Ward Occupancy"
+              parent="hospital_menu_reports"
+              action="action_hospital_ward_occupancy_report"
+              sequence="30"/>
+
+    <!-- Report Branding under Configuration -->
+    <menuitem id="hospital_menu_report_branding"
+              name="Report Branding"
+              parent="hospital_base.hospital_menu_configuration"
+              action="action_hospital_report_config"
+              groups="hospital_base.group_hospital_admin"
+              sequence="50"/>
+
+</odoo>

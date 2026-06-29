@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_hospital_ward_occupancy_report" model="ir.actions.report">
+        <field name="name">Ward Occupancy</field>
+        <field name="model">hospital.ward</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hospital_reports.report_ward_occupancy</field>
+        <field name="report_file">hospital_reports.report_ward_occupancy</field>
+        <field name="binding_model_id" ref="hospital_ipd.model_hospital_ward"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <!-- Direct act_window so the Reports menu item can open it directly -->
+    <record id="action_hospital_ward_occupancy_report_window" model="ir.actions.act_window">
+        <field name="name">Ward Occupancy Report</field>
+        <field name="res_model">hospital.ward</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No wards configured.
+            </p>
+            <p>
+                Select wards from the list and use the Action menu to print
+                the Ward Occupancy report.
+            </p>
+        </field>
+    </record>
+
+</odoo>

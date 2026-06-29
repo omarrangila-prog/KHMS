@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_hospital_daily_census_report" model="ir.actions.report">
+        <field name="name">Daily Census</field>
+        <field name="model">hospital.visit</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hospital_reports.report_daily_census</field>
+        <field name="report_file">hospital_reports.report_daily_census</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+</odoo>

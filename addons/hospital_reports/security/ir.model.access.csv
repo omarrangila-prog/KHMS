@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hospital_report_config_admin,hospital.report.config admin,model_hospital_report_config,hospital_base.group_hospital_admin,1,1,1,1
+access_hospital_report_config_user,hospital.report.config user read,model_hospital_report_config,hospital_base.group_hospital_user,1,0,0,0
+access_hospital_census_wizard_user,hospital.census.wizard user,model_hospital_census_wizard,hospital_base.group_hospital_admin,1,1,1,1

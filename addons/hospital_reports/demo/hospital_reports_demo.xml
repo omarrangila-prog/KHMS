@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Demo data for hospital_reports is intentionally empty.
+         The report config singleton is seeded via data/hospital_reports_data.xml
+         (noupdate=1). Printable reports use existing demo data from dependent
+         modules (patients, visits, wards, admissions). -->
+</odoo>

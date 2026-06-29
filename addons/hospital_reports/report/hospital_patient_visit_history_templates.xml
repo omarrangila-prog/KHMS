@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_patient_visit_history">
+        <t t-foreach="docs" t-as="patient">
+            <t t-call="hospital_reports.report_layout">
+                <t t-set="title">Patient Visit History</t>
+
+                <!-- Patient header -->
+                <div class="row mb-4">
+                    <div class="col-8">
+                        <h3 t-esc="patient.name"/>
+                        <p class="mb-0">
+                            <strong>Patient Code:</strong>
+                            <t t-esc="patient.patient_code"/>
+                        </p>
+                        <p class="mb-0">
+                            <strong>Date of Birth:</strong>
+                            <t t-esc="patient.date_of_birth"/>
+                        </p>
+                        <p class="mb-0">
+                            <strong>Gender:</strong>
+                            <t t-esc="dict(patient._fields['gender'].selection).get(patient.gender, '')"/>
+                        </p>
+                        <p class="mb-0" t-if="patient.blood_group">
+                            <strong>Blood Group:</strong>
+                            <t t-esc="dict(patient._fields['blood_group'].selection).get(patient.blood_group, '')"/>
+                        </p>
+                    </div>
+                    <div class="col-4 text-end text-muted small">
+                        <p>Printed: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/></p>
+                    </div>
+                </div>
+
+                <!-- Allergies -->
+                <t t-if="patient.allergy_ids">
+                    <h5>Known Allergies</h5>
+                    <ul>
+                        <t t-foreach="patient.allergy_ids" t-as="allergy">
+                            <li>
+                                <strong t-esc="allergy.allergen"/>
+                                <t t-if="allergy.severity">
+                                    (severity: <t t-esc="dict(allergy._fields['severity'].selection).get(allergy.severity, '')"/>)
+                                </t>
+                                <t t-if="allergy.reaction_description">
+                                    - <t t-esc="allergy.reaction_description"/>
+                                </t>
+                            </li>
+                        </t>
+                    </ul>
+                </t>
+
+                <!-- Visit history table -->
+                <h5>Visit History</h5>
+                <table class="table table-bordered table-sm">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Visit Code</th>
+                            <th>Type</th>
+                            <th>State</th>
+                            <th>Check-In</th>
+                            <th>Doctor</th>
+                            <th>Department</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="patient.visit_ids" t-as="visit">
+                            <tr>
+                                <td t-esc="visit.visit_code"/>
+                                <td t-esc="dict(visit._fields['visit_type'].selection).get(visit.visit_type, '')"/>
+                                <td t-esc="dict(visit._fields['state'].selection).get(visit.state, '')"/>
+                                <td t-esc="visit.checkin_datetime" t-options="{'widget': 'datetime'}"/>
+                                <td t-esc="visit.doctor_id.display_name if visit.doctor_id else ''"/>
+                                <td t-esc="visit.department_id.display_name if visit.department_id else ''"/>
+                            </tr>
+                        </t>
+                        <tr t-if="not patient.visit_ids">
+                            <td colspan="6" class="text-center text-muted">No visits on record.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p class="text-muted small">
+                    Total visits: <t t-esc="len(patient.visit_ids)"/>
+                </p>
+            </t>
+        </t>
+    </template>
+
+</odoo>

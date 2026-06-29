@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_ward_occupancy">
+        <t t-call="hospital_reports.report_layout">
+            <t t-set="title">Ward Occupancy Report</t>
+
+            <p class="text-muted small">
+                Printed: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+            </p>
+
+            <t t-foreach="docs" t-as="ward">
+                <h4 class="mt-3">
+                    <t t-esc="ward.display_name"/>
+                    <small class="text-muted ms-2">
+                        (<t t-esc="dict(ward._fields['ward_type'].selection).get(ward.ward_type, '')"/>)
+                    </small>
+                </h4>
+
+                <div class="row mb-2">
+                    <div class="col-3">
+                        <strong>Total Beds:</strong>
+                        <t t-esc="ward.bed_count"/>
+                    </div>
+                    <div class="col-3">
+                        <strong>Occupied:</strong>
+                        <t t-esc="ward.occupied_bed_count"/>
+                    </div>
+                    <div class="col-3">
+                        <strong>Vacant:</strong>
+                        <t t-esc="ward.bed_count - ward.occupied_bed_count"/>
+                    </div>
+                    <div class="col-3">
+                        <strong>Occupancy:</strong>
+                        <t t-esc="'%.0f%%' % ((ward.occupied_bed_count / ward.bed_count * 100.0) if ward.bed_count else 0.0)"/>
+                    </div>
+                </div>
+
+                <table class="table table-bordered table-sm mb-4">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Bed</th>
+                            <th>State</th>
+                            <th>Current Patient</th>
+                            <th>Admission Date</th>
+                            <th>LOS (days)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="ward.bed_ids" t-as="bed">
+                            <tr>
+                                <td t-esc="bed.bed_number"/>
+                                <td>
+                                    <span t-att-class="
+                                        'badge bg-success' if bed.state == 'vacant'
+                                        else 'badge bg-danger' if bed.state == 'occupied'
+                                        else 'badge bg-warning' if bed.state == 'reserved'
+                                        else 'badge bg-secondary'"
+                                        t-esc="dict(bed._fields['state'].selection).get(bed.state, '')"/>
+                                </td>
+                                <td t-esc="bed.current_admission_id.patient_id.display_name if bed.current_admission_id else ''"/>
+                                <td>
+                                    <t t-if="bed.current_admission_id">
+                                        <t t-esc="bed.current_admission_id.admission_datetime" t-options="{'widget': 'datetime'}"/>
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="bed.current_admission_id">
+                                        <t t-esc="'%.1f' % bed.current_admission_id.length_of_stay_days"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </t>
+                        <tr t-if="not ward.bed_ids">
+                            <td colspan="5" class="text-center text-muted">No beds configured for this ward.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_daily_census">
+        <t t-call="hospital_reports.report_layout">
+            <t t-set="title">Daily Census Report</t>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <p class="text-muted small">
+                        Period:
+                        <strong t-esc="data.get('date_from', '')"/>
+                        to
+                        <strong t-esc="data.get('date_to', '')"/>
+                        &#160;|&#160;
+                        Total visits:
+                        <strong t-esc="len(docs)"/>
+                    </p>
+                </div>
+            </div>
+
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Visit Code</th>
+                        <th>Patient</th>
+                        <th>Type</th>
+                        <th>State</th>
+                        <th>Check-In</th>
+                        <th>Doctor</th>
+                        <th>Department</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="docs" t-as="visit">
+                        <tr>
+                            <td t-esc="visit_index + 1"/>
+                            <td t-esc="visit.visit_code"/>
+                            <td t-esc="visit.patient_id.display_name"/>
+                            <td t-esc="dict(visit._fields['visit_type'].selection).get(visit.visit_type, '')"/>
+                            <td t-esc="dict(visit._fields['state'].selection).get(visit.state, '')"/>
+                            <td t-esc="visit.checkin_datetime" t-options="{'widget': 'datetime'}"/>
+                            <td t-esc="visit.doctor_id.display_name if visit.doctor_id else ''"/>
+                            <td t-esc="visit.department_id.display_name if visit.department_id else ''"/>
+                        </tr>
+                    </t>
+                    <tr t-if="not docs">
+                        <td colspan="8" class="text-center text-muted">No visits in selected period.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Summary by type -->
+            <div class="row mt-3">
+                <div class="col-6">
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th>Visit Type</th>
+                                <th class="text-end">Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs.mapped('visit_type') | set" t-as="vtype">
+                                <tr>
+                                    <td t-esc="dict(docs[0]._fields['visit_type'].selection).get(vtype, vtype)"/>
+                                    <td class="text-end" t-esc="len(docs.filtered(lambda v: v.visit_type == vtype))"/>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Seed default branding config for the main company.
+         noupdate="1" prevents overwriting admin customisations on upgrade. -->
+    <record id="hospital_report_config_default" model="hospital.report.config">
+        <field name="company_id" ref="base.main_company"/>
+        <field name="header_text">Hospital Management System</field>
+        <field name="footer_text">Thank you for choosing our hospital.</field>
+        <field name="primary_color">#2c7be5</field>
+        <field name="show_company_address" eval="True"/>
+        <field name="show_patient_photo" eval="False"/>
+    </record>
+
+</odoo>
