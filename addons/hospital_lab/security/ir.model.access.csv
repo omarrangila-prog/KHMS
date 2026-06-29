@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hospital_lab_test_user,hospital.lab.test.user,model_hospital_lab_test,hospital_base.group_hospital_user,1,0,0,0
+access_hospital_lab_test_admin,hospital.lab.test.admin,model_hospital_lab_test,hospital_base.group_hospital_admin,1,1,1,1
+access_hospital_lab_test_lab_tech,hospital.lab.test.lab_tech,model_hospital_lab_test,group_hospital_lab_tech,1,0,0,0
+access_hospital_lab_order_user,hospital.lab.order.user,model_hospital_lab_order,hospital_base.group_hospital_user,1,0,0,0
+access_hospital_lab_order_lab_tech,hospital.lab.order.lab_tech,model_hospital_lab_order,group_hospital_lab_tech,1,1,1,0
+access_hospital_lab_order_admin,hospital.lab.order.admin,model_hospital_lab_order,hospital_base.group_hospital_admin,1,1,1,1
+access_hospital_lab_result_user,hospital.lab.result.user,model_hospital_lab_result,hospital_base.group_hospital_user,1,0,0,0
+access_hospital_lab_result_lab_tech,hospital.lab.result.lab_tech,model_hospital_lab_result,group_hospital_lab_tech,1,1,1,0
+access_hospital_lab_result_admin,hospital.lab.result.admin,model_hospital_lab_result,hospital_base.group_hospital_admin,1,1,1,1
+access_hospital_lab_order_cancel_wizard_user,hospital.lab.order.cancel.wizard.user,model_hospital_lab_order_cancel_wizard,hospital_base.group_hospital_user,1,1,1,1

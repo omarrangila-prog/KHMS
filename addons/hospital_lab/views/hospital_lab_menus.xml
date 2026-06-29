@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- "Laboratory" top-level menu under the Hospital app root
+         (hospital_base defines the Hospital app menu root as
+         hospital_base.hospital_menu_root). -->
+    <menuitem
+        id="menu_hospital_lab_root"
+        name="Laboratory"
+        parent="hospital_base.hospital_menu_root"
+        sequence="70"
+        groups="hospital_lab.group_hospital_lab_tech,hospital_base.group_hospital_admin"/>
+
+    <menuitem
+        id="menu_hospital_lab_order_queue"
+        name="Order Queue"
+        parent="menu_hospital_lab_root"
+        action="action_hospital_lab_order"
+        sequence="10"
+        groups="hospital_lab.group_hospital_lab_tech,hospital_base.group_hospital_admin"/>
+
+    <menuitem
+        id="menu_hospital_lab_test_catalog"
+        name="Test Catalog"
+        parent="menu_hospital_lab_root"
+        action="action_hospital_lab_test"
+        sequence="20"
+        groups="hospital_lab.group_hospital_lab_tech,hospital_base.group_hospital_admin"/>
+
+    <menuitem
+        id="menu_hospital_lab_results"
+        name="Results"
+        parent="menu_hospital_lab_root"
+        action="action_hospital_lab_result"
+        sequence="30"
+        groups="hospital_lab.group_hospital_lab_tech,hospital_base.group_hospital_admin"/>
+
+</odoo>

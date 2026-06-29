@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Lab Result: List view -->
+    <record id="hospital_lab_result_view_list" model="ir.ui.view">
+        <field name="name">hospital.lab.result.list</field>
+        <field name="model">hospital.lab.result</field>
+        <field name="arch" type="xml">
+            <list string="Lab Results"
+                  decoration-danger="is_abnormal == True">
+                <field name="order_id"/>
+                <field name="parameter_name"/>
+                <field name="value"/>
+                <field name="unit"/>
+                <field name="normal_range_min"/>
+                <field name="normal_range_max"/>
+                <field name="is_abnormal" widget="boolean"/>
+                <field name="entered_by"/>
+                <field name="entered_at"/>
+                <field name="verified_by"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Lab Result: Form view (structured result entry grid) -->
+    <record id="hospital_lab_result_view_form" model="ir.ui.view">
+        <field name="name">hospital.lab.result.form</field>
+        <field name="model">hospital.lab.result</field>
+        <field name="arch" type="xml">
+            <form string="Lab Result">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="parameter_name"/>
+                        <h1>
+                            <field name="parameter_name" placeholder="Parameter Name"/>
+                        </h1>
+                    </div>
+                    <div class="alert alert-danger" role="alert"
+                         invisible="not is_abnormal">
+                        ABNORMAL: This result is outside the normal reference range.
+                    </div>
+                    <group>
+                        <group string="Result">
+                            <field name="order_id"/>
+                            <field name="value"/>
+                            <field name="unit"/>
+                            <field name="is_abnormal" readonly="1"/>
+                        </group>
+                        <group string="Normal Range">
+                            <field name="normal_range_min"/>
+                            <field name="normal_range_max"/>
+                        </group>
+                    </group>
+                    <group string="Entered / Verified">
+                        <group>
+                            <field name="entered_by" readonly="1"/>
+                            <field name="entered_at" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="verified_by"/>
+                        </group>
+                    </group>
+                    <group string="Attachments">
+                        <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Lab Result: Search view -->
+    <record id="hospital_lab_result_view_search" model="ir.ui.view">
+        <field name="name">hospital.lab.result.search</field>
+        <field name="model">hospital.lab.result</field>
+        <field name="arch" type="xml">
+            <search string="Search Lab Results">
+                <field name="order_id"/>
+                <field name="parameter_name"/>
+                <filter string="Abnormal Results" name="filter_abnormal"
+                        domain="[('is_abnormal', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Order" name="group_order"
+                            context="{'group_by': 'order_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: Lab Results -->
+    <record id="action_hospital_lab_result" model="ir.actions.act_window">
+        <field name="name">Lab Results</field>
+        <field name="res_model">hospital.lab.result</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hospital_lab_result_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No lab results recorded yet.
+            </p>
+        </field>
+    </record>
+
+</odoo>

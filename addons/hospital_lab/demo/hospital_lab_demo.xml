@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 15 demo lab orders referencing real xml-ids from hospital_base and
+     hospital_reception demo data. Visits used: 01 (amended to have lab
+     requested), 03 (prescribe+lab), 07 (radiology only — lab added here
+     as additional order for demo coverage), 08 (lab+radiology), and
+     additional visits 02, 06, 09, 10.
+
+     XML-IDs used from upstream modules:
+       hospital_reception.demo_visit_01  (patient: hospital_base.demo_patient_01)
+       hospital_reception.demo_visit_02  (patient: hospital_base.demo_patient_02)
+       hospital_reception.demo_visit_03  (patient: hospital_base.demo_patient_03)
+       hospital_reception.demo_visit_06  (patient: hospital_base.demo_patient_06)
+       hospital_reception.demo_visit_07  (patient: hospital_base.demo_patient_07)
+       hospital_reception.demo_visit_08
+       hospital_reception.demo_visit_09
+       hospital_reception.demo_visit_10
+       hospital_base.demo_doctor_1 … demo_doctor_5
+-->
+<odoo noupdate="1">
+
+    <!-- 1. CBC ordered for visit_03 (fever of unknown origin), state=ordered -->
+    <record id="demo_lab_order_01" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_03"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="test_id" ref="hospital_lab.lab_test_cbc"/>
+        <field name="state">ordered</field>
+        <field name="priority">urgent</field>
+    </record>
+
+    <!-- 2. FBS ordered for visit_02 (hypertension, check metabolic profile), state=ordered -->
+    <record id="demo_lab_order_02" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_02"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="test_id" ref="hospital_lab.lab_test_fbs"/>
+        <field name="state">ordered</field>
+        <field name="priority">normal</field>
+    </record>
+
+    <!-- 3. Lipid Panel for visit_02 (hypertension screening), state=ordered -->
+    <record id="demo_lab_order_03" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_02"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="test_id" ref="hospital_lab.lab_test_lipid_panel"/>
+        <field name="state">ordered</field>
+        <field name="priority">normal</field>
+    </record>
+
+    <!-- 4. CBC for visit_08 (low back pain, ruling out infection), state=sample_collected -->
+    <record id="demo_lab_order_04" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_08"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="test_id" ref="hospital_lab.lab_test_cbc"/>
+        <field name="state">sample_collected</field>
+        <field name="priority">normal</field>
+        <field name="sample_barcode">LAB-BARCODE-0004</field>
+        <field name="collected_by" ref="base.user_admin"/>
+        <field name="collected_at">2026-06-26 09:15:00</field>
+    </record>
+
+    <!-- 5. Urine Routine for visit_06 (admission requested, pre-op baseline), state=sample_collected -->
+    <record id="demo_lab_order_05" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_06"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="test_id" ref="hospital_lab.lab_test_ure"/>
+        <field name="state">sample_collected</field>
+        <field name="priority">normal</field>
+        <field name="sample_barcode">LAB-BARCODE-0005</field>
+        <field name="collected_by" ref="base.user_admin"/>
+        <field name="collected_at">2026-06-26 10:00:00</field>
+    </record>
+
+    <!-- 6. LFT for visit_09 (hypertensive urgency — checking for end-organ damage), state=sample_collected -->
+    <record id="demo_lab_order_06" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_09"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_4"/>
+        <field name="test_id" ref="hospital_lab.lab_test_lft"/>
+        <field name="state">sample_collected</field>
+        <field name="priority">urgent</field>
+        <field name="sample_barcode">LAB-BARCODE-0006</field>
+        <field name="collected_by" ref="base.user_admin"/>
+        <field name="collected_at">2026-06-26 08:45:00</field>
+    </record>
+
+    <!-- 7. KFT for visit_09 (renal function in hypertension), state=processing -->
+    <record id="demo_lab_order_07" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_09"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_4"/>
+        <field name="test_id" ref="hospital_lab.lab_test_kft"/>
+        <field name="state">processing</field>
+        <field name="priority">urgent</field>
+        <field name="sample_barcode">LAB-BARCODE-0007</field>
+        <field name="collected_by" ref="base.user_admin"/>
+        <field name="collected_at">2026-06-26 08:50:00</field>
+    </record>
+
+    <!-- 8. CBC for visit_01 (same-day amendment: bloodwork added), state=processing -->
+    <record id="demo_lab_order_08" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_01"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="test_id" ref="hospital_lab.lab_test_cbc"/>
+        <field name="state">processing</field>
+        <field name="priority">normal</field>
+        <field name="sample_barcode">LAB-BARCODE-0008</field>
+        <field name="collected_by" ref="base.user_admin"/>
+        <field name="collected_at">2026-06-26 11:00:00</field>
+    </record>
+
+    <!-- 9. FBS for visit_06 (pre-op baseline), state=processing -->
+    <record id="demo_lab_order_09" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_06"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="test_id" ref="hospital_lab.lab_test_fbs"/>
+        <field name="state">processing</field>
+        <field name="priority">normal</field>
+        <field name="sample_barcode">LAB-BARCODE-0009</field>
+        <field name="collected_by" ref="base.user_admin"/>
+        <field name="collected_at">2026-06-26 10:05:00</field>
+    </record>
+
+    <!-- 10. CBC for visit_10 (pediatric fever baseline), state=completed, normal result -->
+    <record id="demo_lab_order_10" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_10"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_5"/>
+        <field name="test_id" ref="hospital_lab.lab_test_cbc"/>
+        <field name="state">completed</field>
+        <field name="priority">normal</field>
+        <field name="sample_barcode">LAB-BARCODE-0010</field>
+        <field name="collected_by" ref="base.user_admin"/>
+        <field name="collected_at">2026-06-25 14:00:00</field>
+    </record>
+    <record id="demo_lab_result_10_hb" model="hospital.lab.result">
+        <field name="order_id" ref="demo_lab_order_10"/>
+        <field name="parameter_name">Haemoglobin</field>
+        <field name="value">13.2</field>
+        <field name="unit">g/dL</field>
+        <field name="normal_range_min">12.0</field>
+        <field name="normal_range_max">17.5</field>
+        <field name="entered_by" ref="base.user_admin"/>
+        <field name="entered_at">2026-06-25 15:00:00</field>
+    </record>
+    <record id="demo_lab_result_10_wbc" model="hospital.lab.result">
+        <field name="order_id" ref="demo_lab_order_10"/>
+        <field name="parameter_name">WBC</field>
+        <field name="value">8.5</field>
+        <field name="unit">x10^9/L</field>
+        <field name="normal_range_min">4.0</field>
+        <field name="normal_range_max">11.0</field>
+        <field name="entered_by" ref="base.user_admin"/>
+        <field name="entered_at">2026-06-25 15:00:00</field>
+    </record>
+
+    <!-- 11. FBS for visit_03 (fever — check for diabetic ketoacidosis), state=completed, abnormal -->
+    <record id="demo_lab_order_11" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_03"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="test_id" ref="hospital_lab.lab_test_fbs"/>
+        <field name="state">completed</field>
+        <field name="priority">urgent</field>
+        <field name="sample_barcode">LAB-BARCODE-0011</field>
+        <field name="collected_by" ref="base.user_admin"/>
+        <field name="collected_at">2026-06-25 08:30:00</field>
+    </record>
+    <record id="demo_lab_result_11_glucose" model="hospital.lab.result">
+        <field name="order_id" ref="demo_lab_order_11"/>
+        <field name="parameter_name">Fasting Blood Glucose</field>
+        <field name="value">7.8</field>
+        <field name="unit">mmol/L</field>
+        <field name="normal_range_min">3.9</field>
+        <field name="normal_range_max">5.5</field>
+        <field name="entered_by" ref="base.user_admin"/>
+        <field name="entered_at">2026-06-25 09:30:00</field>
+    </record>
+
+    <!-- 12. Lipid Panel for visit_07 (wrist fracture visit — incidental ordering), state=completed -->
+    <record id="demo_lab_order_12" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_07"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="test_id" ref="hospital_lab.lab_test_lipid_panel"/>
+        <field name="state">completed</field>
+        <field name="priority">normal</field>
+        <field name="sample_barcode">LAB-BARCODE-0012</field>
+        <field name="collected_by" ref="base.user_admin"/>
+        <field name="collected_at">2026-06-24 10:30:00</field>
+    </record>
+    <record id="demo_lab_result_12_chol" model="hospital.lab.result">
+        <field name="order_id" ref="demo_lab_order_12"/>
+        <field name="parameter_name">Total Cholesterol</field>
+        <field name="value">4.8</field>
+        <field name="unit">mmol/L</field>
+        <field name="normal_range_min">0.0</field>
+        <field name="normal_range_max">5.2</field>
+        <field name="entered_by" ref="base.user_admin"/>
+        <field name="entered_at">2026-06-24 11:30:00</field>
+    </record>
+
+    <!-- 13. URE for visit_08 (low back pain), state=completed, normal -->
+    <record id="demo_lab_order_13" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_08"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="test_id" ref="hospital_lab.lab_test_ure"/>
+        <field name="state">completed</field>
+        <field name="priority">normal</field>
+        <field name="sample_barcode">LAB-BARCODE-0013</field>
+        <field name="collected_by" ref="base.user_admin"/>
+        <field name="collected_at">2026-06-25 11:00:00</field>
+    </record>
+    <record id="demo_lab_result_13_prot" model="hospital.lab.result">
+        <field name="order_id" ref="demo_lab_order_13"/>
+        <field name="parameter_name">Protein</field>
+        <field name="value">Negative</field>
+        <field name="unit"/>
+        <field name="normal_range_min">0.0</field>
+        <field name="normal_range_max">0.0</field>
+        <field name="entered_by" ref="base.user_admin"/>
+        <field name="entered_at">2026-06-25 12:00:00</field>
+    </record>
+
+    <!-- 14. Cancelled order — LFT on visit_01 cancelled before sample collected -->
+    <record id="demo_lab_order_14" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_01"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="test_id" ref="hospital_lab.lab_test_lft"/>
+        <field name="state">cancelled</field>
+        <field name="priority">normal</field>
+        <field name="cancel_reason">Patient requested cancellation; will be rescheduled.</field>
+    </record>
+
+    <!-- 15. KFT for visit_10 (pediatric, ordered as part of fever workup), state=ordered -->
+    <record id="demo_lab_order_15" model="hospital.lab.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_10"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_5"/>
+        <field name="test_id" ref="hospital_lab.lab_test_kft"/>
+        <field name="state">ordered</field>
+        <field name="priority">normal</field>
+    </record>
+
+</odoo>

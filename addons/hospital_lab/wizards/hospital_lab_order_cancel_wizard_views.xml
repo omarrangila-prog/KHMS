@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_lab_order_cancel_wizard_view_form" model="ir.ui.view">
+        <field name="name">hospital.lab.order.cancel.wizard.form</field>
+        <field name="model">hospital.lab.order.cancel.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cancel Lab Order">
+                <group>
+                    <field name="order_id" readonly="1"/>
+                    <field name="reason" placeholder="Please provide a reason for cancellation..."/>
+                </group>
+                <footer>
+                    <button name="action_confirm_cancel" type="object"
+                            string="Confirm Cancellation" class="btn-danger"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

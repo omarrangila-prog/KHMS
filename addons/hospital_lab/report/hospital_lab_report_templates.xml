@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_hospital_lab_order">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- Header -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h2>Laboratory Report</h2>
+                                <p>
+                                    <strong>Order Ref:</strong>
+                                    <t t-esc="o.name"/>
+                                </p>
+                                <p>
+                                    <strong>Date:</strong>
+                                    <t t-esc="o.create_date" t-options="{'widget': 'datetime'}"/>
+                                </p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p>
+                                    <strong>Priority:</strong>
+                                    <span t-att-class="'badge ' + ('bg-danger' if o.priority == 'emergency' else 'bg-warning' if o.priority == 'urgent' else 'bg-secondary')">
+                                        <t t-esc="dict(o.fields_get(['priority'])['priority']['selection'])[o.priority]"/>
+                                    </span>
+                                </p>
+                                <p>
+                                    <strong>Status:</strong>
+                                    <t t-esc="dict(o.fields_get(['state'])['state']['selection'])[o.state]"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Patient and Order Info -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h4>Patient</h4>
+                                <p>
+                                    <t t-esc="o.patient_id.name"/>
+                                </p>
+                                <p>
+                                    <strong>Visit:</strong>
+                                    <t t-esc="o.visit_id.visit_code if o.visit_id else ''"/>
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <h4>Test Information</h4>
+                                <p>
+                                    <strong>Test:</strong>
+                                    <t t-esc="o.test_id.name"/>
+                                </p>
+                                <p>
+                                    <strong>Sample Type:</strong>
+                                    <t t-esc="dict(o.test_id.fields_get(['sample_type'])['sample_type']['selection']).get(o.test_id.sample_type, '')"/>
+                                </p>
+                                <p t-if="o.sample_barcode">
+                                    <strong>Barcode:</strong>
+                                    <t t-esc="o.sample_barcode"/>
+                                </p>
+                                <p>
+                                    <strong>Ordering Doctor:</strong>
+                                    <t t-esc="o.doctor_id.display_name"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Collection details -->
+                        <div class="row mb-4" t-if="o.collected_at">
+                            <div class="col-12">
+                                <p>
+                                    <strong>Sample Collected:</strong>
+                                    <t t-esc="o.collected_at" t-options="{'widget': 'datetime'}"/>
+                                    <t t-if="o.collected_by">
+                                        by <t t-esc="o.collected_by.name"/>
+                                    </t>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Results table -->
+                        <h4>Results</h4>
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Result</th>
+                                    <th>Unit</th>
+                                    <th>Normal Range</th>
+                                    <th>Flag</th>
+                                    <th>Verified By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.result_ids" t-as="r">
+                                    <tr t-att-class="'table-danger' if r.is_abnormal else ''">
+                                        <td>
+                                            <t t-esc="r.parameter_name"/>
+                                        </td>
+                                        <td>
+                                            <strong>
+                                                <t t-esc="r.value or ''"/>
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <t t-esc="r.unit or ''"/>
+                                        </td>
+                                        <td>
+                                            <t t-if="r.normal_range_min or r.normal_range_max">
+                                                <t t-esc="r.normal_range_min"/> – <t t-esc="r.normal_range_max"/>
+                                            </t>
+                                            <t t-else="">—</t>
+                                        </td>
+                                        <td>
+                                            <t t-if="r.is_abnormal">
+                                                <span class="text-danger font-weight-bold">ABNORMAL</span>
+                                            </t>
+                                            <t t-else="">Normal</t>
+                                        </td>
+                                        <td>
+                                            <t t-esc="r.verified_by.name if r.verified_by else ''"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr t-if="not o.result_ids">
+                                    <td colspan="6" class="text-center text-muted">
+                                        No results entered yet.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Footer signature block -->
+                        <div class="row mt-5">
+                            <div class="col-6">
+                                <p>_________________________________</p>
+                                <p>Lab Technician Signature</p>
+                            </div>
+                            <div class="col-6">
+                                <p>_________________________________</p>
+                                <p>
+                                    <t t-esc="o.doctor_id.display_name"/> (Ordering Doctor)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

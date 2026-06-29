@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Default lab test catalog — loaded in all environments (not demo-only).
+     Normal ranges are standard adult reference ranges (SI units where
+     applicable). Individual hospitals may need to adjust per their
+     laboratory equipment calibration. -->
+<odoo noupdate="1">
+
+    <!-- 1. Complete Blood Count (CBC)
+         Key parameter: Haemoglobin (used as the reference range here;
+         full CBC has multiple parameters entered as result lines). -->
+    <record id="lab_test_cbc" model="hospital.lab.test">
+        <field name="name">Complete Blood Count (CBC)</field>
+        <field name="code">CBC</field>
+        <field name="sample_type">blood</field>
+        <field name="price">15.00</field>
+        <field name="normal_range_min">12.0</field>
+        <field name="normal_range_max">17.5</field>
+        <field name="description">Full blood panel: Hb, WBC, RBC, platelets, differential count. Normal range shown is for Haemoglobin (g/dL); WBC and platelet ranges are entered per result line.</field>
+    </record>
+
+    <!-- 2. Blood Glucose Fasting (FBS)
+         Unit: mmol/L. ADA fasting normal: 3.9–5.5 mmol/L. -->
+    <record id="lab_test_fbs" model="hospital.lab.test">
+        <field name="name">Blood Glucose Fasting (FBS)</field>
+        <field name="code">FBS</field>
+        <field name="sample_type">blood</field>
+        <field name="price">8.00</field>
+        <field name="normal_range_min">3.9</field>
+        <field name="normal_range_max">5.5</field>
+        <field name="description">Fasting blood glucose. Patient must fast 8–12 hours prior to sample collection. Unit: mmol/L.</field>
+    </record>
+
+    <!-- 3. Lipid Panel
+         Reference range: Total Cholesterol desirable &lt; 5.2 mmol/L;
+         range_min = 0 (no clinical lower bound), range_max = 5.2. -->
+    <record id="lab_test_lipid_panel" model="hospital.lab.test">
+        <field name="name">Lipid Panel</field>
+        <field name="code">LIPID</field>
+        <field name="sample_type">blood</field>
+        <field name="price">20.00</field>
+        <field name="normal_range_min">0.0</field>
+        <field name="normal_range_max">5.2</field>
+        <field name="description">Total cholesterol, LDL, HDL, triglycerides. Range shown is for total cholesterol (mmol/L); component ranges entered per result line.</field>
+    </record>
+
+    <!-- 4. Urine Routine Examination (URE)
+         Qualitative/semi-quantitative — range_min/max set to 0/0 to
+         indicate no simple numeric boundary applies (result is text). -->
+    <record id="lab_test_ure" model="hospital.lab.test">
+        <field name="name">Urine Routine Examination (URE)</field>
+        <field name="code">URE</field>
+        <field name="sample_type">urine</field>
+        <field name="price">6.00</field>
+        <field name="normal_range_min">0.0</field>
+        <field name="normal_range_max">0.0</field>
+        <field name="description">Colour, clarity, pH (4.5–8.0), specific gravity, protein, glucose, ketones, bilirubin, WBC, RBC, casts. Each parameter entered as a result line.</field>
+    </record>
+
+    <!-- 5. Liver Function Tests (LFT)
+         Reference: ALT normal 7–56 U/L (used as default range). -->
+    <record id="lab_test_lft" model="hospital.lab.test">
+        <field name="name">Liver Function Tests (LFT)</field>
+        <field name="code">LFT</field>
+        <field name="sample_type">blood</field>
+        <field name="price">22.00</field>
+        <field name="normal_range_min">7.0</field>
+        <field name="normal_range_max">56.0</field>
+        <field name="description">ALT, AST, ALP, GGT, total bilirubin, direct bilirubin, albumin, total protein. Default range is for ALT (U/L); others entered per result line.</field>
+    </record>
+
+    <!-- 6. Kidney Function Tests (KFT / RFT)
+         Reference: Serum Creatinine 62–115 µmol/L (adult). -->
+    <record id="lab_test_kft" model="hospital.lab.test">
+        <field name="name">Kidney Function Tests (KFT)</field>
+        <field name="code">KFT</field>
+        <field name="sample_type">blood</field>
+        <field name="price">18.00</field>
+        <field name="normal_range_min">62.0</field>
+        <field name="normal_range_max">115.0</field>
+        <field name="description">Serum creatinine, BUN (blood urea nitrogen), eGFR, electrolytes (Na, K, Cl, HCO3). Default range is for serum creatinine (µmol/L).</field>
+    </record>
+
+</odoo>

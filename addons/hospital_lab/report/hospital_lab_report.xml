@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_hospital_lab_order" model="ir.actions.report">
+        <field name="name">Lab Report</field>
+        <field name="model">hospital.lab.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hospital_lab.report_hospital_lab_order</field>
+        <field name="report_file">hospital_lab.report_hospital_lab_order</field>
+        <field name="print_report_name">'Lab Report - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_hospital_lab_order"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

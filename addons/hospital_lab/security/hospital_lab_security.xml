@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record id="group_hospital_lab_tech" model="res.groups">
+        <field name="name">Hospital Lab Technician</field>
+        <field name="category_id" ref="hospital_base.module_hospital_category"/>
+        <field name="implied_ids" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+        <field name="comment">Laboratory staff: receive orders, collect samples, enter and verify results.</field>
+    </record>
+
+    <!-- Multi-company record rule on hospital.lab.order (mirrors the
+         hospital_nurse pattern: company_id is a stored related from
+         visit_id.company_id). -->
+    <record id="hospital_lab_order_company_rule" model="ir.rule">
+        <field name="name">Lab Order: multi-company isolation</field>
+        <field name="model_id" ref="model_hospital_lab_order"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+</odoo>
