@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- hospital.dashboard.kpi is a SQL view with nothing to seed directly
+     (Phase 6 §10: "Demo data: Relies on demo data from dependent
+     modules"). The KPI numbers are computed live from whatever visits/
+     beds/consultations/discharges already exist once hospital_base,
+     hospital_reception, hospital_doctor, and hospital_ipd's own demo
+     data has loaded - no records belong in this file. -->
+<odoo noupdate="1">
+</odoo>

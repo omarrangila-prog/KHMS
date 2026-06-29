@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_hospital_dashboard_root"
+              name="Dashboard"
+              sequence="1"
+              groups="hospital_base.group_hospital_admin"/>
+
+    <menuitem id="menu_hospital_dashboard_executive"
+              name="Executive Dashboard"
+              parent="menu_hospital_dashboard_root"
+              action="hospital_dashboard_executive_action"
+              sequence="10"/>
+
+    <menuitem id="menu_hospital_dashboard_kpi_list"
+              name="KPI Snapshot (List)"
+              parent="menu_hospital_dashboard_root"
+              action="hospital_dashboard_kpi_action"
+              sequence="20"/>
+
+</odoo>

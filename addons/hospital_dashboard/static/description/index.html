@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Hospital Executive Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
+        h1 { color: #2c7be5; }
+        h2 { color: #495057; border-bottom: 1px solid #dee2e6; padding-bottom: 6px; }
+        ul { line-height: 1.8; }
+        .badge { background: #2c7be5; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>Hospital Executive Dashboard</h1>
+    <p>
+        Cross-department, admin-level KPI rollup for the Hospital Management System.
+        Per-department dashboards (reception, nurse, doctor, pharmacy, lab, radiology,
+        ward) each ship in their own module; this module adds the executive
+        cross-cutting view on top of all of them.
+    </p>
+
+    <h2>Key Features</h2>
+    <ul>
+        <li>Patients seen today / this week.</li>
+        <li>Bed occupancy percentage across all wards.</li>
+        <li>Average doctor wait time (check-in to first consultation).</li>
+        <li>Ward revenue from confirmed discharges (length-of-stay billing).</li>
+        <li>All KPIs computed in PostgreSQL via a SQL-view-backed model, not looped in Python.</li>
+    </ul>
+
+    <h2>Dependencies</h2>
+    <p>
+        <span class="badge">hospital_base</span>
+        <span class="badge">hospital_reception</span>
+        <span class="badge">hospital_doctor</span>
+        <span class="badge">hospital_pharmacy</span>
+        <span class="badge">hospital_lab</span>
+        <span class="badge">hospital_radiology</span>
+        <span class="badge">hospital_ipd</span>
+    </p>
+</body>
+</html>

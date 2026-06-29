@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- No new group: the Executive Dashboard is admin-only (Phase 6 §10
+         "Security: group_hospital_admin"), reusing hospital_base's
+         existing group rather than inventing a redundant one. -->
+
+</odoo>
