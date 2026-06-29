@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Extend the prescription form view (owned by hospital_doctor)
+         to add a "Dispense" action button in the header, visible to
+         pharmacists and admins when the prescription is not yet fully
+         dispensed or cancelled. The stock-badge column on the lines list
+         is also added here, now that stock/qty_available are in scope
+         (hospital_pharmacy depends on hospital_inventory which depends on
+         stock, so qty_available is meaningful from this module onward). -->
+    <record id="hospital_prescription_view_form_pharmacy_inherit" model="ir.ui.view">
+        <field name="name">hospital.prescription.view.form.pharmacy</field>
+        <field name="model">hospital.prescription</field>
+        <field name="inherit_id" ref="hospital_doctor.hospital_prescription_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Dispense button in the header -->
+            <xpath expr="//header/button[@name='action_cancel']" position="before">
+                <button name="%(hospital_pharmacy.hospital_prescription_dispense_wizard_action)d"
+                        type="action"
+                        string="Dispense"
+                        class="btn-primary"
+                        invisible="state in ('dispensed', 'cancelled')"
+                        groups="hospital_pharmacy.group_hospital_pharmacist,hospital_base.group_hospital_admin"/>
+            </xpath>
+            <!-- Add stock-on-hand badge column to the lines list.
+                 Inserted before qty_dispensed (the last relevant numeric
+                 column) so it reads naturally as: "prescribed / on hand /
+                 dispensed / state". -->
+            <xpath expr="//field[@name='line_ids']//list//field[@name='qty_dispensed']" position="before">
+                <field name="has_allergy_conflict" column_invisible="True"/>
+                <field name="qty_on_hand_at_pharmacy"
+                       string="Stock (Phm)"
+                       readonly="1"
+                       decoration-danger="qty_on_hand_at_pharmacy == 0"
+                       decoration-warning="qty_on_hand_at_pharmacy &lt; (qty_prescribed - qty_dispensed)"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Backorder report: pending/partial/backordered prescription lines. -->
+    <record id="hospital_prescription_line_view_list_backorder" model="ir.ui.view">
+        <field name="name">hospital.prescription.line.view.list.backorder</field>
+        <field name="model">hospital.prescription.line</field>
+        <field name="arch" type="xml">
+            <list string="Backorders">
+                <field name="prescription_id"/>
+                <field name="visit_id"/>
+                <field name="medicine_id"/>
+                <field name="qty_prescribed"/>
+                <field name="qty_dispensed"/>
+                <field name="qty_on_hand_at_pharmacy" string="Stock (Phm)"
+                       decoration-danger="qty_on_hand_at_pharmacy == 0"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hospital_prescription_line_action_backorder" model="ir.actions.act_window">
+        <field name="name">Backorders</field>
+        <field name="res_model">hospital.prescription.line</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="hospital_prescription_line_view_list_backorder"/>
+        <field name="domain">[('state', 'in', ['backordered', 'partial'])]</field>
+        <field name="context">{'search_default_group_by_visit': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No backorders -- all prescription lines are dispensed or pending.
+            </p>
+        </field>
+    </record>
+
+    <!-- Dispensing queue: prescriptions with open/pending lines. -->
+    <record id="hospital_prescription_action_dispensing_queue" model="ir.actions.act_window">
+        <field name="name">Dispensing Queue</field>
+        <field name="res_model">hospital.prescription</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', 'in', ['draft', 'partially_dispensed'])]</field>
+        <field name="context">{'search_default_filter_open': 1}</field>
+        <field name="search_view_id" ref="hospital_doctor.hospital_prescription_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No prescriptions awaiting dispensing.
+            </p>
+        </field>
+    </record>
+
+</odoo>

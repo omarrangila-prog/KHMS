@@ -1,0 +1,38 @@
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Hospital Pharmacy</h2>
+        <h3 class="oe_slogan">Prescription fulfillment with stock-move integration and safety checks</h3>
+        <div class="oe_span12">
+            <p class="oe_mt32">
+                Hospital Pharmacy is the dispensing integration module of the Hospital Management
+                System suite for Odoo 19. It bridges the doctor consultation/prescription workflow
+                (hospital_doctor) and the medicine catalog/stock locations (hospital_inventory) to
+                deliver the complete dispensing flow described in Phase 3 §5.
+            </p>
+        </div>
+    </div>
+    <div class="oe_row oe_spaced">
+        <h3 class="oe_slogan">Key Capabilities</h3>
+        <ul>
+            <li>Full dispensing flow: allergy conflict check, stock availability check, real stock.move creation/validation, state updates, prescription and visit aggregate-state propagation.</li>
+            <li>Allergy-override flow: blocks dispense on conflict, allows override with mandatory reason, persists override_reason on the line, and creates a dedicated audit log entry.</li>
+            <li>Partial dispense: when stock is insufficient, dispenses what is available and leaves the remainder in backordered/partial state, triggering a low-stock alert to the Inventory Manager.</li>
+            <li>Pharmacy Dashboard: OWL split-view (queue left, dispense detail right) with stock badges per line and D/A keyboard shortcuts.</li>
+            <li>Batch Dispense Wizard: per-line quantity override, allergy-override flags, "Dispense All" shortcut.</li>
+            <li>Dispensing Receipt QWeb report.</li>
+            <li>Backorder queue: all partial/backordered prescription lines in one list view.</li>
+            <li>Billing hook stub: _create_billing_line() is called at the right point in the dispense flow but is a documented no-op until a future billing module overrides it.</li>
+        </ul>
+    </div>
+    <div class="oe_row oe_spaced">
+        <h3 class="oe_slogan">Integration Point</h3>
+        <p>
+            This module depends on both hospital_doctor (prescription model/line state fields) and
+            hospital_inventory (Pharmacy stock location, medicine catalog with clinical fields).
+            It is the exact module the Phase 4 dependency graph identifies as the integration bridge
+            between the two: hospital_inventory cannot depend on hospital_doctor (cycle), and
+            hospital_doctor cannot depend on hospital_inventory (also a cycle) -- hospital_pharmacy
+            is the only module in the correct position to own the stock-move dispense logic.
+        </p>
+    </div>
+</section>

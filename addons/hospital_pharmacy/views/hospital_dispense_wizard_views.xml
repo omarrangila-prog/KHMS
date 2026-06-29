@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_prescription_dispense_wizard_view_form" model="ir.ui.view">
+        <field name="name">hospital.prescription.dispense.wizard.view.form</field>
+        <field name="model">hospital.prescription.dispense.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Dispense Prescription">
+                <sheet>
+                    <div class="alert alert-warning o_hospital_allergy_banner" role="alert"
+                         invisible="not has_any_allergy_conflict">
+                        <strong>Allergy Conflict Detected.</strong>
+                        One or more medicines on this prescription conflict with the
+                        patient's recorded allergies. Each conflicting line must be
+                        individually overridden with a written reason before dispensing.
+                    </div>
+                    <group>
+                        <field name="prescription_id" readonly="1"/>
+                        <field name="patient_id" readonly="1"/>
+                        <field name="has_any_allergy_conflict" invisible="1"/>
+                    </group>
+                    <field name="wizard_line_ids">
+                        <list editable="bottom">
+                            <field name="prescription_line_id" readonly="1"/>
+                            <field name="medicine_id" readonly="1"/>
+                            <field name="qty_prescribed" readonly="1"/>
+                            <field name="qty_dispensed_so_far" readonly="1"/>
+                            <field name="qty_on_hand" readonly="1" widget="float"
+                                   decoration-danger="qty_on_hand == 0"
+                                   decoration-warning="qty_on_hand &lt; (qty_prescribed - qty_dispensed_so_far)"/>
+                            <field name="qty_to_dispense"/>
+                            <field name="line_state" widget="badge" readonly="1"/>
+                            <field name="has_allergy_conflict" column_invisible="True"/>
+                            <field name="override_allergy"
+                                   column_invisible="not has_allergy_conflict"
+                                   invisible="not has_allergy_conflict"/>
+                            <field name="override_reason"
+                                   column_invisible="not has_allergy_conflict"
+                                   invisible="not has_allergy_conflict or not override_allergy"/>
+                        </list>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_dispense_all" type="object"
+                            string="Dispense All" class="btn-primary"/>
+                    <button name="action_dispense" type="object"
+                            string="Dispense Selected" class="btn-secondary"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="hospital_prescription_dispense_wizard_action" model="ir.actions.act_window">
+        <field name="name">Dispense Prescription</field>
+        <field name="res_model">hospital.prescription.dispense.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="hospital_doctor.model_hospital_prescription"/>
+        <field name="binding_view_types">form</field>
+        <field name="context">{"active_id": active_id}</field>
+    </record>
+
+</odoo>

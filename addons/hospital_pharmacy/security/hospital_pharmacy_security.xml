@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- Hospital Pharmacist group (Phase 6 §5, Phase 8 §12).
+         Implies hospital_base.group_hospital_user per the project-wide
+         pattern (hospital_doctor, hospital_nurse, hospital_inventory all
+         use the same implied_ids structure, Phase 11 §4). Does NOT imply
+         stock.group_stock_manager - pharmacists need to create and
+         validate stock.move records (the dispense() method does this
+         programmatically via sudo() where stock_manager is required for
+         the write), but they do not need to reroute warehouse operations
+         or reconfigure stock rules themselves.  hospital_inventory's own
+         group_hospital_inventory_manager (which does imply
+         stock.group_stock_manager) is the appropriate role for anyone
+         who actually manages warehouse settings. -->
+    <record id="group_hospital_pharmacist" model="res.groups">
+        <field name="name">Hospital Pharmacist</field>
+        <field name="category_id" ref="hospital_base.module_hospital_category"/>
+        <field name="implied_ids" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+        <field name="comment">Pharmacists: dispense medications, view and action the pharmacy queue, manage backorders.</field>
+    </record>
+
+    <!-- Multi-company rule for prescription lines (mirrors the companion
+         rule on hospital.prescription already defined in hospital_doctor):
+         pharmacists only see lines for prescriptions within their own
+         company, consistent with the project-wide ['|', company_id=False,
+         company_id in company_ids] pattern (Phase 9 §3). hospital.
+         prescription.line carries company_id transitively via its
+         related store=True visit_id.company_id - same as hospital.
+         prescription itself. -->
+    <record id="hospital_prescription_line_company_rule" model="ir.rule">
+        <field name="name">Hospital Prescription Line: multi-company isolation</field>
+        <field name="model_id" ref="hospital_doctor.model_hospital_prescription_line"/>
+        <field name="domain_force">['|', ('visit_id.company_id', '=', False), ('visit_id.company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
+    </record>
+
+    <!-- Pharmacist record rule: pharmacists can read and update ALL
+         prescription lines (not scoped to a single doctor's prescriptions,
+         unlike the doctor's own rule), but cannot delete them (audit
+         trail integrity). -->
+    <record id="hospital_prescription_pharmacist_rule" model="ir.rule">
+        <field name="name">Hospital Prescription: pharmacist reads all</field>
+        <field name="model_id" ref="hospital_doctor.model_hospital_prescription"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hospital_pharmacist'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+
+    <record id="hospital_prescription_line_pharmacist_rule" model="ir.rule">
+        <field name="name">Hospital Prescription Line: pharmacist reads and updates all</field>
+        <field name="model_id" ref="hospital_doctor.model_hospital_prescription_line"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hospital_pharmacist'))]"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+
+</odoo>

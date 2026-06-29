@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="hospital_dispensing_receipt_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Dispensing Receipt</h2>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Patient: </strong>
+                                <span t-esc="o.patient_id.name"/><br/>
+                                <strong>Patient Code: </strong>
+                                <span t-esc="o.patient_id.patient_code"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Doctor: </strong>
+                                <span t-esc="o.doctor_id.name"/><br/>
+                                <strong>Prescription Date: </strong>
+                                <span t-esc="o.create_date"/>
+                            </div>
+                        </div>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Medicine</th>
+                                    <th>Dosage</th>
+                                    <th>Frequency</th>
+                                    <th>Route</th>
+                                    <th>Qty Prescribed</th>
+                                    <th>Qty Dispensed</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <td><span t-esc="line.medicine_id.display_name"/></td>
+                                    <td><span t-esc="line.dosage"/></td>
+                                    <td><span t-esc="line.frequency"/></td>
+                                    <td><span t-esc="dict(line._fields['route'].selection).get(line.route)"/></td>
+                                    <td><span t-esc="line.qty_prescribed"/></td>
+                                    <td><span t-esc="line.qty_dispensed"/></td>
+                                    <td><span t-esc="dict(line._fields['state'].selection).get(line.state)"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="row mt-3" t-if="any(l.override_reason for l in o.line_ids)">
+                            <div class="col-12">
+                                <strong>Allergy Override Notes:</strong>
+                                <t t-foreach="o.line_ids" t-as="line">
+                                    <p t-if="line.override_reason">
+                                        <em><t t-esc="line.medicine_id.display_name"/>: </em>
+                                        <t t-esc="line.override_reason"/>
+                                    </p>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <strong>Dispensed by:</strong>
+                                ___________________________
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>Prescription Status: </strong>
+                                <span t-esc="dict(o._fields['state'].selection).get(o.state)"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

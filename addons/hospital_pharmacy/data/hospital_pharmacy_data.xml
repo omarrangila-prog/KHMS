@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- "Patient Consumption" virtual location (Phase 3 §5 dispensing
+         flow): hospital_inventory only created the Pharmacy warehouse's
+         own internal locations (view/input/stock/output +
+         stock_location_pharmacy_store), no consumption-side virtual
+         location - there is nothing in hospital_inventory to check first
+         (confirmed: grep of hospital_inventory_data.xml shows no such
+         record), so this module defines it. Modeled after Odoo's own
+         "Production"/"Scrap" virtual locations (stock/data/stock_data.xml):
+         usage="inventory" means stock moved here simply leaves trackable
+         on-hand inventory, which is exactly the semantics of "a patient
+         consumed this medicine" - there is no real warehouse to receive
+         it. Nested under stock's own "Virtual Locations" view location
+         (stock.stock_location_locations_virtual) so it shows up alongside
+         Odoo's other virtual locations in the Inventory app's location
+         tree, rather than inventing a parallel virtual-location root. -->
+    <record id="stock_location_patient_consumption" model="stock.location">
+        <field name="name">Patient Consumption</field>
+        <field name="location_id" ref="stock.stock_location_locations_virtual"/>
+        <field name="usage">inventory</field>
+        <!-- company_id intentionally left empty (multi-company neutral),
+             matching the pattern of Odoo's own shared virtual locations
+             (Production, Scrap, Inventory Loss) in stock/data/stock_data.xml.
+             The dispensing stock.move gets its company_id from the
+             prescription, not from the destination location. -->
+        <field name="company_id" eval="False"/>
+    </record>
+
+</odoo>

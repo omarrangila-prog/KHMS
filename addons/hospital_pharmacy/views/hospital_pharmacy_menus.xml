@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="hospital_pharmacy_menu_root"
+              name="Pharmacy"
+              parent="hospital_base.hospital_menu_root"
+              groups="hospital_pharmacy.group_hospital_pharmacist,hospital_base.group_hospital_admin"
+              sequence="15"/>
+
+    <menuitem id="hospital_pharmacy_menu_dashboard"
+              name="Dashboard"
+              parent="hospital_pharmacy_menu_root"
+              action="hospital_pharmacy_dashboard_action"
+              sequence="10"/>
+
+    <menuitem id="hospital_pharmacy_menu_dispensing_queue"
+              name="Dispensing Queue"
+              parent="hospital_pharmacy_menu_root"
+              action="hospital_prescription_action_dispensing_queue"
+              sequence="20"/>
+
+    <menuitem id="hospital_pharmacy_menu_backorders"
+              name="Backorders"
+              parent="hospital_pharmacy_menu_root"
+              action="hospital_prescription_line_action_backorder"
+              sequence="30"/>
+
+</odoo>

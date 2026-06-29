@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Demo pharmacy dispenses to prove the dispensing flow end-to-end.
+         Three scenarios per Phase 6 §5 demo spec:
+         1. Full dispense: adequate stock, no allergy, full qty dispensed.
+         2. Partial dispense: insufficient stock, partial qty dispensed.
+         3. Allergy-override: medicine matches a patient's recorded allergy,
+            dispense proceeds with override + reason logged.
+
+         All new prescriptions use hospital_inventory's properly stocked
+         medicines so real stock.move creation/validation fires. -->
+
+    <!-- == SCENARIO 1: Full dispense ======================================
+         hospital_inventory.demo_medicine_08 = Amlodipine 5mg, 74 in stock.
+         Prescribe 14 units -> dispense 14 -> dispensed. -->
+    <record id="demo_pharmacy_prescription_full" model="hospital.prescription">
+        <field name="visit_id" ref="hospital_reception.demo_visit_02"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="line_ids" eval="[(0, 0, {
+            'medicine_id': ref('hospital_inventory.demo_medicine_08'),
+            'dosage': '5mg',
+            'frequency': 'OD',
+            'duration_days': 14,
+            'route': 'oral',
+            'qty_prescribed': 14,
+        })]"/>
+    </record>
+
+    <!-- == SCENARIO 2: Partial dispense ====================================
+         hospital_inventory.demo_medicine_05 = Cetirizine 10mg, 3 in stock.
+         Prescribe 5 units -> only 3 available -> partial dispense. -->
+    <record id="demo_pharmacy_prescription_partial" model="hospital.prescription">
+        <field name="visit_id" ref="hospital_reception.demo_visit_03"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="line_ids" eval="[(0, 0, {
+            'medicine_id': ref('hospital_inventory.demo_medicine_05'),
+            'dosage': '10mg',
+            'frequency': 'OD',
+            'duration_days': 5,
+            'route': 'oral',
+            'qty_prescribed': 5,
+        })]"/>
+    </record>
+
+    <!-- == SCENARIO 3: Allergy override ====================================
+         Add Cetirizine allergy to demo_patient_10 (Catherine Adhiambo,
+         visit_10). Then dispense a Cetirizine prescription with override. -->
+    <record id="demo_allergy_catherine_cetirizine" model="hospital.patient.allergy">
+        <field name="patient_id" ref="hospital_base.demo_patient_10"/>
+        <field name="name">Cetirizine</field>
+        <field name="severity">moderate</field>
+        <field name="notes">Demo allergy added by hospital_pharmacy to illustrate the allergy-conflict override flow.</field>
+    </record>
+
+    <record id="demo_pharmacy_prescription_allergy" model="hospital.prescription">
+        <field name="visit_id" ref="hospital_reception.demo_visit_10"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_5"/>
+        <field name="line_ids" eval="[(0, 0, {
+            'medicine_id': ref('hospital_inventory.demo_medicine_05'),
+            'dosage': '10mg',
+            'frequency': 'OD',
+            'duration_days': 2,
+            'route': 'oral',
+            'qty_prescribed': 2,
+        })]"/>
+    </record>
+
+    <!-- == Execute demo dispenses via the _demo_dispense_prescription helper.
+         The <function> tag in Odoo data XML calls model.method(*positional_args).
+         We use a dedicated helper method on hospital.prescription that wraps
+         the dispense() call so we can pass keyword-arg-style data as a
+         single dict positional arg - cleaner than trying to pass qty,
+         override_allergy, override_reason as three separate <value> elements
+         (which would also work but is harder to read and maintain). -->
+
+    <!-- Scenario 1: full dispense, no allergy -->
+    <function model="hospital.prescription" name="_demo_dispense_prescription">
+        <value eval="ref('demo_pharmacy_prescription_full')"/>
+        <value eval="{'qty': 14, 'override_allergy': False, 'override_reason': None}"/>
+    </function>
+
+    <!-- Scenario 2: partial dispense (stock will cap at 3 of 5 requested) -->
+    <function model="hospital.prescription" name="_demo_dispense_prescription">
+        <value eval="ref('demo_pharmacy_prescription_partial')"/>
+        <value eval="{'qty': 5, 'override_allergy': False, 'override_reason': None}"/>
+    </function>
+
+    <!-- Scenario 3: allergy override -->
+    <function model="hospital.prescription" name="_demo_dispense_prescription">
+        <value eval="ref('demo_pharmacy_prescription_allergy')"/>
+        <value eval="{'qty': 2, 'override_allergy': True, 'override_reason': 'Demo override: pharmacist verified with prescribing physician that benefit outweighs moderate allergy risk. Alternative (Loratadine) was out of stock. Documented per protocol.'}"/>
+    </function>
+
+</odoo>
