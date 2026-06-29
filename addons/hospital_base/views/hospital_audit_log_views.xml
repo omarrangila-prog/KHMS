@@ -5,7 +5,7 @@
         <field name="name">hospital.audit.log.view.form</field>
         <field name="model">hospital.audit.log</field>
         <field name="arch" type="xml">
-            <form string="Audit Log Entry" create="false" edit="false" delete="false">
+            <form string="Audit Log Entry" create="0" edit="0" delete="0">
                 <sheet>
                     <group>
                         <group>
@@ -30,7 +30,7 @@
         <field name="name">hospital.audit.log.view.list</field>
         <field name="model">hospital.audit.log</field>
         <field name="arch" type="xml">
-            <list string="Audit Log" create="false" edit="false" delete="false">
+            <list string="Audit Log" create="0" edit="0" delete="0">
                 <field name="timestamp"/>
                 <field name="res_model"/>
                 <field name="res_id"/>
