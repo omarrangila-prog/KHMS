@@ -65,6 +65,65 @@
     .fa { font-size: 14px; }
 }
 
+// ── Universal press feedback (haptic-feel on every clickable) ─
+button,
+[role="button"],
+.o_hospital_kpi_card,
+.o_hospital_queue_visit_row,
+.o_hospital_doctor_queue_row,
+.o_hospital_pharmacy_queue_row,
+.o_hospital_task_row,
+.o_hospital_bed_tile,
+.o_hospital_inventory_kpi_card {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+
+    &:active:not(:disabled) {
+        transform: scale(0.96) !important;
+        transition: transform 0.08s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+}
+
+// ── KPI number counter animation target ───────────────────────
+.o-hms-kpi-animated {
+    display: inline-block;
+    transition: opacity 0.15s ease;
+
+    &.o-hms-counting {
+        opacity: 0.6;
+    }
+}
+
+// ── Tooltip (macOS popover style) ─────────────────────────────
+[data-hms-tooltip] {
+    position: relative;
+
+    &::after {
+        content: attr(data-hms-tooltip);
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%) scale(0.9);
+        background: rgba(28,28,30,0.88);
+        backdrop-filter: blur(8px);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 500;
+        padding: 4px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 9999;
+    }
+
+    &:hover::after {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+}
+
 // ── Divider ──────────────────────────────────────────────────
 .o-hms-divider {
     height: 1px;

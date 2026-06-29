@@ -3,58 +3,122 @@
 
     <t t-name="hospital_nurse.NurseDashboard">
         <div class="o_hospital_nurse_dashboard">
+
+            <!-- Header -->
             <div class="o_hospital_dashboard_header">
-                <h2>Nurse Station</h2>
-                <span class="badge text-bg-primary o_hospital_nurse_waiting_badge"
-                      t-if="!state.loading" t-esc="state.waitingCount + ' waiting'"/>
-            </div>
-
-            <div class="o_hospital_dashboard_error alert alert-danger" t-if="state.error" role="alert">
-                Couldn't load the dashboard.
-                <button class="btn btn-link" t-on-click="onRetry">Retry</button>
-            </div>
-
-            <div class="o_hospital_next_patient_card o_hospital_skeleton" t-if="state.loading"/>
-
-            <t t-elif="!state.nextPatient">
-                <div class="o_hospital_next_patient_empty">
-                    No patients waiting for vitals.
-                </div>
-            </t>
-
-            <div class="o_hospital_next_patient_card" t-else="">
-                <div class="o_hospital_next_patient_label">Next Patient</div>
-                <div class="o_hospital_next_patient_name" t-esc="state.nextPatient.patient_id[1]"/>
-                <div class="o_hospital_next_patient_meta">
-                    <span t-if="state.nextPatient.age" t-esc="state.nextPatient.age + ' yrs'"/>
-                    <span class="badge text-bg-danger" t-if="state.nextPatient.priority === 'emergency'">Emergency</span>
-                    <span class="badge text-bg-warning" t-if="state.nextPatient.priority === 'urgent'">Urgent</span>
-                    <span t-esc="state.nextPatient.visit_code"/>
-                </div>
-                <button class="btn btn-primary btn-lg o_hospital_record_vitals_btn"
-                        t-on-click="openVitalsEntry">
-                    Record Vitals
-                </button>
-                <button class="btn btn-link" t-on-click="() => this.openVisit(state.nextPatient.id)">
-                    View Visit
-                </button>
-            </div>
-
-            <div class="o_hospital_nurse_task_section">
-                <h3>Nurse Tasks</h3>
-                <div class="o_hospital_nurse_task_empty" t-if="!state.loading and state.tasks.length === 0">
-                    No pending tasks.
-                </div>
-                <div class="o_hospital_nurse_task_list" t-if="!state.loading">
-                    <div class="o_hospital_nurse_task_row" t-foreach="state.tasks" t-as="task" t-key="task.id">
-                        <span class="o_hospital_nurse_task_name" t-esc="task.name"/>
-                        <span class="o_hospital_nurse_task_visit" t-if="task.visit_id" t-esc="task.visit_id[1]"/>
-                        <button class="btn btn-sm btn-success" t-on-click="() => this.markTaskDone(task.id)">
-                            Done
-                        </button>
+                <div class="o_hospital_header_left">
+                    <div class="o_hospital_header_icon" data-hms-tooltip="Nurse station">
+                        <i class="fa fa-heartbeat"/>
                     </div>
+                    <h2>
+                        Nurse Station
+                        <small>Vitals &#38; task management</small>
+                    </h2>
+                </div>
+                <span class="o-hms-badge blue" t-if="!state.loading">
+                    <i class="fa fa-clock-o"/>
+                    <span class="o-hms-kpi-animated" data-kpi="waiting_count"
+                          t-esc="state.waitingCount"/> waiting
+                </span>
+            </div>
+
+            <!-- Error -->
+            <div class="alert-danger" t-if="state.error"
+                 style="display:flex;align-items:center;gap:8px">
+                <i class="fa fa-exclamation-triangle"/>
+                Couldn&#39;t load the dashboard.
+                <button class="btn btn-link p-0 ms-2" t-on-click="onRetry">Retry</button>
+            </div>
+
+            <!-- Skeleton -->
+            <div class="o_hospital_skeleton" t-if="state.loading"/>
+
+            <!-- Abnormal alert -->
+            <div class="o_hospital_nurse_alert_banner"
+                 t-if="!state.loading and state.nextPatient and state.nextPatient.priority === 'emergency'">
+                <div class="o_hospital_alert_icon"><i class="fa fa-bolt"/></div>
+                <div>
+                    <div class="o_hospital_alert_text">Emergency patient in queue</div>
+                    <div class="o_hospital_alert_sub">Prioritise immediately</div>
                 </div>
             </div>
+
+            <!-- No patients -->
+            <div class="o_hospital_nurse_empty" t-if="!state.loading and !state.nextPatient">
+                <i class="fa fa-check-circle"/>
+                No patients waiting for vitals
+            </div>
+
+            <!-- Next patient hero card -->
+            <div class="o_hospital_nurse_next_card" t-if="!state.loading and state.nextPatient">
+                <div class="o_hospital_nurse_next_eyebrow">
+                    <i class="fa fa-arrow-right"/> Next Patient
+                </div>
+                <div class="o_hospital_nurse_next_name"
+                     t-esc="state.nextPatient.patient_id[1]"/>
+                <div class="o_hospital_nurse_next_meta">
+                    <span t-if="state.nextPatient.age">
+                        <i class="fa fa-user"/> <t t-esc="state.nextPatient.age"/> yrs
+                    </span>
+                    <span>
+                        <i class="fa fa-barcode"/> <t t-esc="state.nextPatient.visit_code"/>
+                    </span>
+                    <span t-if="state.nextPatient.priority === 'emergency'"
+                          style="background:rgba(255,255,255,0.20);border-radius:20px;padding:2px 10px;font-weight:700">
+                        <i class="fa fa-bolt"/> Emergency
+                    </span>
+                    <span t-if="state.nextPatient.priority === 'urgent'"
+                          style="background:rgba(255,255,255,0.18);border-radius:20px;padding:2px 10px;font-weight:600">
+                        <i class="fa fa-arrow-up"/> Urgent
+                    </span>
+                </div>
+                <div class="o_hospital_nurse_next_actions">
+                    <button class="btn-white" t-on-click="openVitalsEntry"
+                            data-hms-tooltip="Open vitals entry form">
+                        <i class="fa fa-heartbeat"/> Record Vitals
+                    </button>
+                    <button class="btn-ghost"
+                            t-on-click="() => this.openVisit(state.nextPatient.id)"
+                            data-hms-tooltip="Open full visit record">
+                        <i class="fa fa-external-link"/> View Visit
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tasks section -->
+            <div class="o_hospital_nurse_tasks_section" t-if="!state.loading">
+                <div class="o_hospital_tasks_header">
+                    <div class="o_hospital_section_title">
+                        <i class="fa fa-tasks"/> Nurse Tasks
+                    </div>
+                    <span class="o-hms-badge grey" t-if="state.tasks.length"
+                          t-esc="state.tasks.length + ' pending'"/>
+                </div>
+
+                <div class="o_hospital_nurse_empty" t-if="state.tasks.length === 0">
+                    <i class="fa fa-check-square-o"/>
+                    All tasks complete
+                </div>
+
+                <div t-foreach="state.tasks" t-as="task" t-key="task.id"
+                     class="o_hospital_task_row">
+                    <div class="o_hospital_task_icon"><i class="fa fa-clipboard"/></div>
+                    <div class="o_hospital_task_body">
+                        <div class="o_hospital_task_name" t-esc="task.name"/>
+                        <div class="o_hospital_task_meta" t-if="task.visit_id">
+                            <i class="fa fa-folder-open-o"/>
+                            <span t-esc="task.visit_id[1]"/>
+                        </div>
+                    </div>
+                    <button class="o-hms-badge green"
+                            style="cursor:pointer;border:none"
+                            t-on-click="() => this.markTaskDone(task.id)"
+                            data-hms-tooltip="Mark as done">
+                        <i class="fa fa-check"/> Done
+                    </button>
+                </div>
+            </div>
+
         </div>
     </t>
 

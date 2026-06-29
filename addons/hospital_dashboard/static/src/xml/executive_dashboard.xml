@@ -7,7 +7,7 @@
             <!-- Header -->
             <div class="o_hospital_dashboard_header">
                 <div class="o_hospital_header_left">
-                    <div class="o_hospital_header_icon">
+                    <div class="o_hospital_header_icon" data-hms-tooltip="Hospital KPIs">
                         <i class="fa fa-line-chart"/>
                     </div>
                     <h2>
@@ -15,7 +15,7 @@
                         <small>Hospital performance overview</small>
                     </h2>
                 </div>
-                <button t-on-click="onRetry">
+                <button t-on-click="onRetry" data-hms-tooltip="Refresh data">
                     <i class="fa fa-refresh"/> Refresh
                 </button>
             </div>
@@ -37,26 +37,32 @@
                 <div class="o_hospital_kpi_card">
                     <div class="o_hospital_kpi_icon"><i class="fa fa-users"/></div>
                     <div class="o_hospital_kpi_label">Patients Today</div>
-                    <div class="o_hospital_kpi_value" t-esc="state.kpi.patients_today"/>
+                    <div class="o_hospital_kpi_value o-hms-kpi-animated"
+                         data-kpi="patients_today"
+                         t-esc="state.kpi.patients_today"/>
                 </div>
 
                 <div class="o_hospital_kpi_card">
                     <div class="o_hospital_kpi_icon"><i class="fa fa-calendar-check-o"/></div>
                     <div class="o_hospital_kpi_label">Patients This Week</div>
-                    <div class="o_hospital_kpi_value" t-esc="state.kpi.patients_this_week"/>
+                    <div class="o_hospital_kpi_value o-hms-kpi-animated"
+                         data-kpi="patients_this_week"
+                         t-esc="state.kpi.patients_this_week"/>
                 </div>
 
                 <div class="o_hospital_kpi_card">
                     <div class="o_hospital_kpi_icon"><i class="fa fa-bed"/></div>
                     <div class="o_hospital_kpi_label">Bed Occupancy</div>
-                    <div class="o_hospital_kpi_value"
+                    <div class="o_hospital_kpi_value o-hms-kpi-animated"
+                         data-kpi="bed_occupancy_pct"
                          t-esc="this.formatPercent(state.kpi.bed_occupancy_pct)"/>
                 </div>
 
                 <div class="o_hospital_kpi_card">
                     <div class="o_hospital_kpi_icon"><i class="fa fa-clock-o"/></div>
                     <div class="o_hospital_kpi_label">Avg. Doctor Wait</div>
-                    <div class="o_hospital_kpi_value"
+                    <div class="o_hospital_kpi_value o-hms-kpi-animated"
+                         data-kpi="avg_wait_minutes"
                          t-esc="this.formatMinutes(state.kpi.avg_wait_minutes)"/>
                 </div>
 

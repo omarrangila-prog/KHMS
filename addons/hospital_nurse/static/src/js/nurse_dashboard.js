@@ -1,17 +1,24 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, useState } from "@odoo/owl";
+import { Component, onMounted, onWillStart, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
-/**
- * Nurse Dashboard (Phase 8 §6): tablet-first home for the nurse station --
- * a big "Next Patient" card (highest priority / earliest check-in still
- * waiting_nurse), a quick-vitals-entry shortcut, and the nurse task list.
- * Pure read/aggregate display -- vitals recording and task completion both
- * delegate to model methods via the ORM/action service, per Phase 11 §1
- * "no business logic in views or controllers".
- */
+function animateCount(el, target, duration = 600) {
+    if (!el) return;
+    const start = parseFloat(el.dataset.rawValue || "0") || 0;
+    const delta = target - start;
+    if (delta === 0) return;
+    const t0 = performance.now();
+    (function step(now) {
+        const p = Math.min((now - t0) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(start + delta * eased);
+        if (p < 1) requestAnimationFrame(step);
+        else el.dataset.rawValue = target;
+    })(performance.now());
+}
+
 export class NurseDashboard extends Component {
     static template = "hospital_nurse.NurseDashboard";
     static props = ["*"];
@@ -27,6 +34,7 @@ export class NurseDashboard extends Component {
             tasks: [],
         });
         onWillStart(() => this.loadDashboard());
+        onMounted(() => { if (!this.state.loading) this._animateKpis(); });
     }
 
     async loadDashboard() {
@@ -34,42 +42,38 @@ export class NurseDashboard extends Component {
         this.state.error = false;
         try {
             await Promise.all([this._loadNextPatient(), this._loadTasks()]);
-        } catch (error) {
+        } catch {
             this.state.error = true;
-            throw error;
         } finally {
             this.state.loading = false;
+            Promise.resolve().then(() => this._animateKpis());
         }
+    }
+
+    _animateKpis() {
+        const el = this.el && this.el.querySelector('[data-kpi="waiting_count"]');
+        animateCount(el, this.state.waitingCount, 650);
     }
 
     async _loadNextPatient() {
         const PRIORITY_ORDER = { emergency: 0, urgent: 1, normal: 2 };
         const visits = await this.orm.searchRead(
-            "hospital.visit",
-            [["state", "=", "waiting_nurse"]],
-            ["visit_code", "patient_id", "priority", "checkin_datetime"],
+            "hospital.visit", [["state","=","waiting_nurse"]],
+            ["visit_code","patient_id","priority","checkin_datetime"],
             { order: "checkin_datetime asc", limit: 50 }
         );
         this.state.waitingCount = visits.length;
-        if (!visits.length) {
-            this.state.nextPatient = false;
-            return;
-        }
+        if (!visits.length) { this.state.nextPatient = false; return; }
         const ordered = [...visits].sort((a, b) => {
             const pa = PRIORITY_ORDER[a.priority] ?? 99;
             const pb = PRIORITY_ORDER[b.priority] ?? 99;
-            if (pa !== pb) {
-                return pa - pb;
-            }
-            return a.checkin_datetime < b.checkin_datetime ? -1 : 1;
+            return pa !== pb ? pa - pb : a.checkin_datetime < b.checkin_datetime ? -1 : 1;
         });
         const next = ordered[0];
         let age = false;
         if (next.patient_id) {
             const [patient] = await this.orm.read(
-                "hospital.patient",
-                [next.patient_id[0]],
-                ["age", "gender"]
+                "hospital.patient", [next.patient_id[0]], ["age","gender"]
             );
             age = patient ? patient.age : false;
         }
@@ -77,23 +81,17 @@ export class NurseDashboard extends Component {
     }
 
     async _loadTasks() {
-        const tasks = await this.orm.searchRead(
-            "hospital.nurse.task",
-            [["state", "=", "pending"]],
-            ["name", "visit_id", "sequence"],
+        this.state.tasks = await this.orm.searchRead(
+            "hospital.nurse.task", [["state","=","pending"]],
+            ["name","visit_id","sequence"],
             { order: "sequence asc, id asc", limit: 20 }
         );
-        this.state.tasks = tasks;
     }
 
-    onRetry() {
-        this.loadDashboard();
-    }
+    onRetry() { this.loadDashboard(); }
 
     async openVitalsEntry() {
-        if (!this.state.nextPatient) {
-            return;
-        }
+        if (!this.state.nextPatient) return;
         await this.action.doAction("hospital_nurse.hospital_vitals_quick_entry_action", {
             additionalContext: { default_visit_id: this.state.nextPatient.id },
         });
@@ -101,18 +99,14 @@ export class NurseDashboard extends Component {
     }
 
     async markTaskDone(taskId) {
-        await this.orm.call("hospital.nurse.task", "action_mark_done", [[taskId]]);
+        await this.orm.call("hospital.nurse.task","action_mark_done",[[taskId]]);
         await this._loadTasks();
     }
 
     openVisit(visitId) {
         this.action.doAction({
-            type: "ir.actions.act_window",
-            res_model: "hospital.visit",
-            res_id: visitId,
-            view_mode: "form",
-            views: [[false, "form"]],
-            target: "current",
+            type: "ir.actions.act_window", res_model: "hospital.visit",
+            res_id: visitId, view_mode: "form", views: [[false,"form"]], target: "current",
         });
     }
 }

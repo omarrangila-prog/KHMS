@@ -1,18 +1,33 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, useState } from "@odoo/owl";
+import { Component, onMounted, onWillStart, useState, useRef } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
-/**
- * Executive Dashboard (Phase 6 §10): admin-level KPI card grid rolling
- * up patient volume, bed occupancy, average doctor wait time, and ward
- * revenue across the whole hospital.
- *
- * All KPI numbers are computed in PostgreSQL by the
- * hospital.dashboard.kpi SQL-view model (Phase 5 §10) - this component
- * only reads the one row for the current company and renders it.
- */
+// Animate a numeric DOM element from its current displayed value to `target`
+// over `duration` ms using requestAnimationFrame easing.
+function animateCount(el, target, duration = 600, formatter = (v) => Math.round(v)) {
+    if (!el) return;
+    const start = parseFloat(el.dataset.rawValue || "0") || 0;
+    const delta = target - start;
+    if (delta === 0) return;
+    const startTime = performance.now();
+
+    function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // ease-out-cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = formatter(start + delta * eased);
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        } else {
+            el.dataset.rawValue = target;
+        }
+    }
+    requestAnimationFrame(step);
+}
+
 export class ExecutiveDashboard extends Component {
     static template = "hospital_dashboard.ExecutiveDashboard";
     static props = ["*"];
@@ -24,10 +39,15 @@ export class ExecutiveDashboard extends Component {
             error: false,
             kpi: null,
         });
-        onWillStart(() => this.loadDashboard());
+        this._prevKpi = null;
+        onWillStart(() => this._fetchKpi());
+        onMounted(() => {
+            // If data already loaded before mount (unlikely but safe), animate.
+            if (this.state.kpi) this._animateAllKpis();
+        });
     }
 
-    async loadDashboard() {
+    async _fetchKpi() {
         this.state.loading = true;
         this.state.error = false;
         try {
@@ -44,16 +64,39 @@ export class ExecutiveDashboard extends Component {
                 { limit: 1 }
             );
             this.state.kpi = rows[0] || null;
-        } catch (error) {
+        } catch {
             this.state.error = true;
-            throw error;
         } finally {
             this.state.loading = false;
+            // Animate after next microtask so DOM is rendered
+            Promise.resolve().then(() => this._animateAllKpis());
         }
     }
 
+    _animateAllKpis() {
+        if (!this.state.kpi) return;
+        const kpi = this.state.kpi;
+
+        const sel = (id) => this.el && this.el.querySelector(`[data-kpi="${id}"]`);
+
+        animateCount(sel("patients_today"), kpi.patients_today, 700);
+        animateCount(sel("patients_this_week"), kpi.patients_this_week, 800);
+        animateCount(
+            sel("bed_occupancy_pct"),
+            kpi.bed_occupancy_pct,
+            750,
+            (v) => v.toFixed(1) + "%"
+        );
+        animateCount(
+            sel("avg_wait_minutes"),
+            kpi.avg_wait_minutes,
+            700,
+            (v) => Math.round(v) + " min"
+        );
+    }
+
     onRetry() {
-        this.loadDashboard();
+        this._fetchKpi();
     }
 
     formatPercent(value) {
@@ -61,7 +104,9 @@ export class ExecutiveDashboard extends Component {
     }
 
     formatMinutes(value) {
-        return value !== undefined && value !== null ? value.toFixed(0) + " min" : "-";
+        return value !== undefined && value !== null
+            ? Math.round(value) + " min"
+            : "-";
     }
 }
 

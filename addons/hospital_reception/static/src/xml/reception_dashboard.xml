@@ -7,7 +7,7 @@
             <!-- Header -->
             <div class="o_hospital_dashboard_header">
                 <div class="o_hospital_header_left">
-                    <div class="o_hospital_header_icon">
+                    <div class="o_hospital_header_icon" data-hms-tooltip="Reception">
                         <i class="fa fa-hospital-o"/>
                     </div>
                     <h2>
@@ -16,10 +16,12 @@
                     </h2>
                 </div>
                 <div class="o_hospital_dashboard_actions">
-                    <button class="btn btn-secondary" t-on-click="openSearchPatients">
+                    <button class="btn btn-secondary" t-on-click="openSearchPatients"
+                            data-hms-tooltip="Search existing patients">
                         <i class="fa fa-search"/> Search Patient
                     </button>
-                    <button class="btn btn-primary" t-on-click="openNewRegistration">
+                    <button class="btn btn-primary" t-on-click="openNewRegistration"
+                            data-hms-tooltip="Register a new patient">
                         <i class="fa fa-plus"/> New Registration
                     </button>
                 </div>
@@ -40,10 +42,12 @@
                          style="min-height:110px"/>
                 </t>
                 <t t-else="">
-                    <div class="o_hospital_kpi_card">
+                    <div class="o_hospital_kpi_card" data-hms-tooltip="Patients waiting for nurse">
                         <div class="o_hospital_kpi_row">
                             <div>
-                                <div class="o_hospital_kpi_value" t-esc="state.kpi.waiting"/>
+                                <div class="o_hospital_kpi_value o-hms-kpi-animated"
+                                     data-kpi="waiting"
+                                     t-esc="state.kpi.waiting"/>
                                 <div class="o_hospital_kpi_label">Waiting</div>
                             </div>
                             <div class="o_hospital_kpi_icon">
@@ -51,10 +55,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="o_hospital_kpi_card">
+                    <div class="o_hospital_kpi_card" data-hms-tooltip="Currently in consultation">
                         <div class="o_hospital_kpi_row">
                             <div>
-                                <div class="o_hospital_kpi_value" t-esc="state.kpi.in_consult"/>
+                                <div class="o_hospital_kpi_value o-hms-kpi-animated"
+                                     data-kpi="in_consult"
+                                     t-esc="state.kpi.in_consult"/>
                                 <div class="o_hospital_kpi_label">In Consult</div>
                             </div>
                             <div class="o_hospital_kpi_icon">
@@ -62,10 +68,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="o_hospital_kpi_card">
+                    <div class="o_hospital_kpi_card" data-hms-tooltip="Visits completed today">
                         <div class="o_hospital_kpi_row">
                             <div>
-                                <div class="o_hospital_kpi_value" t-esc="state.kpi.completed_today"/>
+                                <div class="o_hospital_kpi_value o-hms-kpi-animated"
+                                     data-kpi="completed_today"
+                                     t-esc="state.kpi.completed_today"/>
                                 <div class="o_hospital_kpi_label">Completed Today</div>
                             </div>
                             <div class="o_hospital_kpi_icon">
@@ -149,7 +157,8 @@
                                 <td>
                                     <button class="btn-outline-primary"
                                             t-if="appt.state === 'draft' or appt.state === 'confirmed'"
-                                            t-on-click="() => this.checkInAppointment(appt.id)">
+                                            t-on-click="() => this.checkInAppointment(appt.id)"
+                                            data-hms-tooltip="Check patient in">
                                         <i class="fa fa-sign-in"/> Check In
                                     </button>
                                 </td>
