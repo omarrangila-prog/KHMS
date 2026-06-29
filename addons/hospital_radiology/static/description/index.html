@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Hospital Radiology</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
+        h1 { color: #27ae60; }
+        h2 { color: #495057; border-bottom: 1px solid #dee2e6; padding-bottom: 6px; }
+        ul { line-height: 1.8; }
+        .badge { background: #27ae60; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>Hospital Radiology</h1>
+    <p>
+        Full radiology order and result management for the Hospital Management System.
+        Mirrors the hospital_lab module structure for imaging modalities: X-Ray, CT, MRI,
+        Ultrasound, and Mammography.
+    </p>
+
+    <h2>Key Features</h2>
+    <ul>
+        <li>Radiology Study Catalog with modality classification.</li>
+        <li>Order state machine: Ordered → Scheduled → In Progress → Completed.</li>
+        <li>Priority-driven queue (Normal / Urgent / Emergency) with colour-coded badges.</li>
+        <li>Findings Entry: narrative findings + impression text + multi-file attachment upload.</li>
+        <li>Automatic doctor notification (mail activity) on order completion.</li>
+        <li>Cancel wizard requiring a documented reason (audit trail).</li>
+        <li>Visit aggregate-state integration: visit moves to Billing only after all radiology orders complete.</li>
+        <li>Multi-company isolation via company record rules.</li>
+        <li>QWeb Radiology Report PDF with findings, impression, and attachments list.</li>
+    </ul>
+
+    <h2>Dependencies</h2>
+    <p>
+        <span class="badge">hospital_doctor</span> (brings in hospital_nurse, hospital_reception, hospital_base).
+    </p>
+
+    <h2>Default Study Catalog</h2>
+    <p>Includes 5 standard imaging studies installed in every environment:</p>
+    <ul>
+        <li>Chest X-Ray (PA View)</li>
+        <li>CT Head (Non-Contrast)</li>
+        <li>MRI Spine (Lumbar)</li>
+        <li>Ultrasound Abdomen</li>
+        <li>Mammography (Bilateral)</li>
+    </ul>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Radiology Study: List view -->
+    <record id="hospital_radiology_study_view_list" model="ir.ui.view">
+        <field name="name">hospital.radiology.study.list</field>
+        <field name="model">hospital.radiology.study</field>
+        <field name="arch" type="xml">
+            <list string="Radiology Studies">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="modality"/>
+                <field name="price"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Radiology Study: Form view -->
+    <record id="hospital_radiology_study_view_form" model="ir.ui.view">
+        <field name="name">hospital.radiology.study.form</field>
+        <field name="model">hospital.radiology.study</field>
+        <field name="arch" type="xml">
+            <form string="Radiology Study">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Study Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="modality"/>
+                            <field name="price"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Billing">
+                        <field name="product_id"/>
+                    </group>
+                    <group string="Description / Preparation Instructions">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Radiology Study: Search view -->
+    <record id="hospital_radiology_study_view_search" model="ir.ui.view">
+        <field name="name">hospital.radiology.study.search</field>
+        <field name="model">hospital.radiology.study</field>
+        <field name="arch" type="xml">
+            <search string="Search Radiology Studies">
+                <field name="name"/>
+                <field name="code"/>
+                <filter string="X-Ray" name="filter_xray"
+                        domain="[('modality', '=', 'xray')]"/>
+                <filter string="CT Scan" name="filter_ct"
+                        domain="[('modality', '=', 'ct')]"/>
+                <filter string="MRI" name="filter_mri"
+                        domain="[('modality', '=', 'mri')]"/>
+                <filter string="Ultrasound" name="filter_ultrasound"
+                        domain="[('modality', '=', 'ultrasound')]"/>
+                <filter string="Archived" name="inactive"
+                        domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Modality" name="group_modality"
+                            context="{'group_by': 'modality'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: Radiology Study Catalog -->
+    <record id="action_hospital_radiology_study" model="ir.actions.act_window">
+        <field name="name">Study Catalog</field>
+        <field name="res_model">hospital.radiology.study</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hospital_radiology_study_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add your first radiology study to the catalog.
+            </p>
+        </field>
+    </record>
+
+</odoo>

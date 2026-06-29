@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 10 demo radiology orders referencing real xml-ids from hospital_base
+     and hospital_reception demo data.
+
+     XML-IDs used from upstream modules:
+       hospital_reception.demo_visit_07  (radiology requested — S52.5 distal radius)
+       hospital_reception.demo_visit_08  (lab+radiology — M54.5 low back pain)
+       hospital_reception.demo_visit_01  (amended — visit_01 had lab added, here radiology too)
+       hospital_reception.demo_visit_03  (R50.9 fever, add chest X-ray to rule out pneumonia)
+       hospital_reception.demo_visit_09  (hypertensive urgency — chest X-ray)
+       hospital_reception.demo_visit_06  (J18.9 pneumonia — CT chest)
+       hospital_base.demo_doctor_1 … demo_doctor_5
+-->
+<odoo noupdate="1">
+
+    <!-- 1. Chest X-Ray for visit_07 (wrist fracture: also check for rib injury), state=ordered -->
+    <record id="demo_radiology_order_01" model="hospital.radiology.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_07"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="study_id" ref="hospital_radiology.radiology_study_cxr"/>
+        <field name="state">ordered</field>
+        <field name="priority">normal</field>
+    </record>
+
+    <!-- 2. Wrist X-Ray (using CXR catalog as fallback — wrist X-ray not in default catalog;
+         using Chest X-Ray as the catalogued study type for demo simplicity) for visit_07, state=ordered -->
+    <record id="demo_radiology_order_02" model="hospital.radiology.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_07"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_2"/>
+        <field name="study_id" ref="hospital_radiology.radiology_study_cxr"/>
+        <field name="state">ordered</field>
+        <field name="priority">urgent</field>
+    </record>
+
+    <!-- 3. MRI Spine for visit_08 (low back pain investigation), state=scheduled -->
+    <record id="demo_radiology_order_03" model="hospital.radiology.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_08"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="study_id" ref="hospital_radiology.radiology_study_mri_spine"/>
+        <field name="state">scheduled</field>
+        <field name="priority">normal</field>
+        <field name="scheduled_datetime">2026-06-30 10:00:00</field>
+    </record>
+
+    <!-- 4. Chest X-Ray for visit_03 (fever — rule out pneumonia), state=scheduled -->
+    <record id="demo_radiology_order_04" model="hospital.radiology.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_03"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="study_id" ref="hospital_radiology.radiology_study_cxr"/>
+        <field name="state">scheduled</field>
+        <field name="priority">urgent</field>
+        <field name="scheduled_datetime">2026-06-28 14:00:00</field>
+    </record>
+
+    <!-- 5. CT Head for visit_09 (hypertensive urgency — rule out haemorrhage), state=in_progress -->
+    <record id="demo_radiology_order_05" model="hospital.radiology.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_09"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_4"/>
+        <field name="study_id" ref="hospital_radiology.radiology_study_ct_head"/>
+        <field name="state">in_progress</field>
+        <field name="priority">emergency</field>
+        <field name="scheduled_datetime">2026-06-28 08:30:00</field>
+        <field name="performed_by" ref="base.user_admin"/>
+        <field name="performed_at">2026-06-28 08:45:00</field>
+    </record>
+
+    <!-- 6. CT Head for visit_06 (suspected pneumonia/head investigation), state=in_progress -->
+    <record id="demo_radiology_order_06" model="hospital.radiology.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_06"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="study_id" ref="hospital_radiology.radiology_study_ct_head"/>
+        <field name="state">in_progress</field>
+        <field name="priority">urgent</field>
+        <field name="scheduled_datetime">2026-06-27 15:00:00</field>
+        <field name="performed_by" ref="base.user_admin"/>
+        <field name="performed_at">2026-06-27 15:20:00</field>
+    </record>
+
+    <!-- 7. Chest X-Ray for visit_01 (amended: worsening symptoms), state=completed, normal -->
+    <record id="demo_radiology_order_07" model="hospital.radiology.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_01"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="study_id" ref="hospital_radiology.radiology_study_cxr"/>
+        <field name="state">completed</field>
+        <field name="priority">normal</field>
+        <field name="scheduled_datetime">2026-06-25 11:00:00</field>
+        <field name="performed_by" ref="base.user_admin"/>
+        <field name="performed_at">2026-06-25 11:15:00</field>
+    </record>
+    <record id="demo_radiology_result_07" model="hospital.radiology.result">
+        <field name="order_id" ref="demo_radiology_order_07"/>
+        <field name="findings_text">Lungs are clear bilaterally. No consolidation, effusion, or pneumothorax. Heart size normal. Bony thorax intact.</field>
+        <field name="impression_text">Normal chest radiograph. No acute cardiopulmonary abnormality.</field>
+        <field name="reported_by" ref="base.user_admin"/>
+        <field name="reported_at">2026-06-25 12:00:00</field>
+    </record>
+
+    <!-- 8. Ultrasound Abdomen for visit_08 (low back pain — rule out renal origin), state=completed -->
+    <record id="demo_radiology_order_08" model="hospital.radiology.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_08"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="study_id" ref="hospital_radiology.radiology_study_us_abdomen"/>
+        <field name="state">completed</field>
+        <field name="priority">normal</field>
+        <field name="scheduled_datetime">2026-06-26 14:00:00</field>
+        <field name="performed_by" ref="base.user_admin"/>
+        <field name="performed_at">2026-06-26 14:20:00</field>
+    </record>
+    <record id="demo_radiology_result_08" model="hospital.radiology.result">
+        <field name="order_id" ref="demo_radiology_order_08"/>
+        <field name="findings_text">Liver, gallbladder, pancreas, spleen and both kidneys appear normal in size and echotexture. No hydronephrosis or renal calculi identified. No free fluid.</field>
+        <field name="impression_text">Normal abdominal ultrasound. No renal aetiology for low back pain identified.</field>
+        <field name="reported_by" ref="base.user_admin"/>
+        <field name="reported_at">2026-06-26 15:00:00</field>
+    </record>
+
+    <!-- 9. MRI Spine for visit_01 (cancelled before scheduling) -->
+    <record id="demo_radiology_order_09" model="hospital.radiology.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_01"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_1"/>
+        <field name="study_id" ref="hospital_radiology.radiology_study_mri_spine"/>
+        <field name="state">cancelled</field>
+        <field name="priority">normal</field>
+        <field name="cancel_reason">Patient declined MRI; will be rescheduled as outpatient.</field>
+    </record>
+
+    <!-- 10. Mammography for a completed visit — demo of mammography modality, state=completed -->
+    <record id="demo_radiology_order_10" model="hospital.radiology.order">
+        <field name="visit_id" ref="hospital_reception.demo_visit_03"/>
+        <field name="doctor_id" ref="hospital_base.demo_doctor_3"/>
+        <field name="study_id" ref="hospital_radiology.radiology_study_mammo"/>
+        <field name="state">completed</field>
+        <field name="priority">normal</field>
+        <field name="scheduled_datetime">2026-06-24 09:00:00</field>
+        <field name="performed_by" ref="base.user_admin"/>
+        <field name="performed_at">2026-06-24 09:30:00</field>
+    </record>
+    <record id="demo_radiology_result_10" model="hospital.radiology.result">
+        <field name="order_id" ref="demo_radiology_order_10"/>
+        <field name="findings_text">Bilateral mammography performed. Both breasts are dense (Category C). No suspicious mass, architectural distortion or microcalcification identified.</field>
+        <field name="impression_text">No mammographic evidence of malignancy. Recommend routine annual screening.</field>
+        <field name="reported_by" ref="base.user_admin"/>
+        <field name="reported_at">2026-06-24 10:30:00</field>
+    </record>
+
+</odoo>

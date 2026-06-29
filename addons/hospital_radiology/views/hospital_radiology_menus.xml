@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- "Radiology" top-level menu under the Hospital app root
+         (hospital_base defines the Hospital app menu root as
+         hospital_base.hospital_menu_root). -->
+    <menuitem
+        id="menu_hospital_radiology_root"
+        name="Radiology"
+        parent="hospital_base.hospital_menu_root"
+        sequence="80"
+        groups="hospital_radiology.group_hospital_radiology_tech,hospital_base.group_hospital_admin"/>
+
+    <menuitem
+        id="menu_hospital_radiology_order_queue"
+        name="Order Queue"
+        parent="menu_hospital_radiology_root"
+        action="action_hospital_radiology_order"
+        sequence="10"
+        groups="hospital_radiology.group_hospital_radiology_tech,hospital_base.group_hospital_admin"/>
+
+    <menuitem
+        id="menu_hospital_radiology_study_catalog"
+        name="Study Catalog"
+        parent="menu_hospital_radiology_root"
+        action="action_hospital_radiology_study"
+        sequence="20"
+        groups="hospital_radiology.group_hospital_radiology_tech,hospital_base.group_hospital_admin"/>
+
+    <menuitem
+        id="menu_hospital_radiology_results"
+        name="Results"
+        parent="menu_hospital_radiology_root"
+        action="action_hospital_radiology_result"
+        sequence="30"
+        groups="hospital_radiology.group_hospital_radiology_tech,hospital_base.group_hospital_admin"/>
+
+</odoo>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_hospital_radiology_order">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- Header -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h2>Radiology Report</h2>
+                                <p>
+                                    <strong>Order Ref:</strong>
+                                    <t t-esc="o.name"/>
+                                </p>
+                                <p>
+                                    <strong>Date:</strong>
+                                    <t t-esc="o.create_date" t-options="{'widget': 'datetime'}"/>
+                                </p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p>
+                                    <strong>Priority:</strong>
+                                    <span t-att-class="'badge ' + ('bg-danger' if o.priority == 'emergency' else 'bg-warning' if o.priority == 'urgent' else 'bg-secondary')">
+                                        <t t-esc="dict(o.fields_get(['priority'])['priority']['selection'])[o.priority]"/>
+                                    </span>
+                                </p>
+                                <p>
+                                    <strong>Status:</strong>
+                                    <t t-esc="dict(o.fields_get(['state'])['state']['selection'])[o.state]"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Patient and Study Info -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h4>Patient</h4>
+                                <p>
+                                    <t t-esc="o.patient_id.name"/>
+                                </p>
+                                <p>
+                                    <strong>Visit:</strong>
+                                    <t t-esc="o.visit_id.visit_code if o.visit_id else ''"/>
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <h4>Study Information</h4>
+                                <p>
+                                    <strong>Study:</strong>
+                                    <t t-esc="o.study_id.name"/>
+                                </p>
+                                <p>
+                                    <strong>Modality:</strong>
+                                    <t t-esc="dict(o.study_id.fields_get(['modality'])['modality']['selection']).get(o.study_id.modality, '')"/>
+                                </p>
+                                <p>
+                                    <strong>Ordering Doctor:</strong>
+                                    <t t-esc="o.doctor_id.display_name"/>
+                                </p>
+                                <p t-if="o.scheduled_datetime">
+                                    <strong>Scheduled:</strong>
+                                    <t t-esc="o.scheduled_datetime" t-options="{'widget': 'datetime'}"/>
+                                </p>
+                                <p t-if="o.performed_at">
+                                    <strong>Performed:</strong>
+                                    <t t-esc="o.performed_at" t-options="{'widget': 'datetime'}"/>
+                                    <t t-if="o.performed_by">
+                                        by <t t-esc="o.performed_by.name"/>
+                                    </t>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Results: findings and impression -->
+                        <t t-foreach="o.result_ids" t-as="r">
+                            <div class="mb-4">
+                                <h4>Findings</h4>
+                                <p t-if="r.findings_text" style="white-space: pre-wrap;">
+                                    <t t-esc="r.findings_text"/>
+                                </p>
+                                <p t-else="" class="text-muted">No findings entered.</p>
+
+                                <t t-if="r.impression_text">
+                                    <h4>Impression</h4>
+                                    <p style="white-space: pre-wrap;">
+                                        <t t-esc="r.impression_text"/>
+                                    </p>
+                                </t>
+
+                                <!-- Attachments list -->
+                                <t t-if="r.attachment_ids">
+                                    <h4>Attached Images / Reports</h4>
+                                    <ul>
+                                        <t t-foreach="r.attachment_ids" t-as="att">
+                                            <li>
+                                                <t t-esc="att.name"/>
+                                            </li>
+                                        </t>
+                                    </ul>
+                                </t>
+
+                                <!-- Reported / Verified -->
+                                <p class="mt-2">
+                                    <strong>Reported by:</strong>
+                                    <t t-esc="r.reported_by.name if r.reported_by else ''"/>
+                                    <t t-if="r.reported_at">
+                                        on <t t-esc="r.reported_at" t-options="{'widget': 'datetime'}"/>
+                                    </t>
+                                </p>
+                                <p t-if="r.verified_by">
+                                    <strong>Verified by:</strong>
+                                    <t t-esc="r.verified_by.name"/>
+                                </p>
+                            </div>
+                        </t>
+                        <div t-if="not o.result_ids" class="text-muted">
+                            No results entered yet.
+                        </div>
+
+                        <!-- Footer signature block -->
+                        <div class="row mt-5">
+                            <div class="col-6">
+                                <p>_________________________________</p>
+                                <p>Radiologist / Technician Signature</p>
+                            </div>
+                            <div class="col-6">
+                                <p>_________________________________</p>
+                                <p>
+                                    <t t-esc="o.doctor_id.display_name"/> (Ordering Doctor)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

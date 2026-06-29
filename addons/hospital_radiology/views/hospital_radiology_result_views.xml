@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Radiology Result: List view -->
+    <record id="hospital_radiology_result_view_list" model="ir.ui.view">
+        <field name="name">hospital.radiology.result.list</field>
+        <field name="model">hospital.radiology.result</field>
+        <field name="arch" type="xml">
+            <list string="Radiology Results">
+                <field name="order_id"/>
+                <field name="reported_by"/>
+                <field name="reported_at"/>
+                <field name="verified_by"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Radiology Result: Form view (findings entry with attachment upload) -->
+    <record id="hospital_radiology_result_view_form" model="ir.ui.view">
+        <field name="name">hospital.radiology.result.form</field>
+        <field name="model">hospital.radiology.result</field>
+        <field name="arch" type="xml">
+            <form string="Radiology Result">
+                <sheet>
+                    <group>
+                        <field name="order_id"/>
+                    </group>
+                    <group string="Findings">
+                        <field name="findings_text" nolabel="1"
+                               placeholder="Describe radiological findings in detail..."/>
+                    </group>
+                    <group string="Impression / Clinical Summary">
+                        <field name="impression_text" nolabel="1"
+                               placeholder="Clinical impression or conclusion (optional)..."/>
+                    </group>
+                    <group string="Images / Reports">
+                        <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
+                    </group>
+                    <group string="Reported / Verified">
+                        <group>
+                            <field name="reported_by" readonly="1"/>
+                            <field name="reported_at" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="verified_by"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Radiology Result: Search view -->
+    <record id="hospital_radiology_result_view_search" model="ir.ui.view">
+        <field name="name">hospital.radiology.result.search</field>
+        <field name="model">hospital.radiology.result</field>
+        <field name="arch" type="xml">
+            <search string="Search Radiology Results">
+                <field name="order_id"/>
+                <field name="reported_by"/>
+                <group expand="0" string="Group By">
+                    <filter string="Order" name="group_order"
+                            context="{'group_by': 'order_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: Radiology Results -->
+    <record id="action_hospital_radiology_result" model="ir.actions.act_window">
+        <field name="name">Radiology Results</field>
+        <field name="res_model">hospital.radiology.result</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hospital_radiology_result_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No radiology results recorded yet.
+            </p>
+        </field>
+    </record>
+
+</odoo>
