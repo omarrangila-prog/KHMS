@@ -64,9 +64,9 @@ export class ReceptionDashboard extends Component {
 
     async _loadKpis() {
         const [w, c, d] = await Promise.all([
-            this.orm.readGroup("hospital.visit", [["state","=","waiting_nurse"]], ["id"], []),
-            this.orm.readGroup("hospital.visit", [["state","in",["waiting_doctor","in_progress_multi"]]], ["id"], []),
-            this.orm.readGroup("hospital.visit", [["state","=","done"],["checkin_datetime",">=",this._todayStart()]], ["id"], []),
+            this.orm.formattedReadGroup("hospital.visit", [["state","=","waiting_nurse"]], [], ["__count"]),
+            this.orm.formattedReadGroup("hospital.visit", [["state","in",["waiting_doctor","in_progress_multi"]]], [], ["__count"]),
+            this.orm.formattedReadGroup("hospital.visit", [["state","=","done"],["checkin_datetime",">=",this._todayStart()]], [], ["__count"]),
         ]);
         this.state.kpi.waiting         = w[0] ? w[0].__count : 0;
         this.state.kpi.in_consult      = c[0] ? c[0].__count : 0;
@@ -74,10 +74,10 @@ export class ReceptionDashboard extends Component {
     }
 
     async _loadQueue() {
-        const groups = await this.orm.readGroup(
+        const groups = await this.orm.formattedReadGroup(
             "hospital.visit",
             [["state","in",["waiting_nurse","waiting_doctor","in_progress_multi"]]],
-            ["id"], ["doctor_id"]
+            ["doctor_id"], ["__count"]
         );
         const queueByDoctor = [];
         for (const group of groups) {

@@ -123,15 +123,22 @@
                 border-radius: $o-hospital-radius-xl $o-hospital-radius-xl 0 0;
             }
 
-            // Decorative orb — visible at 12% opacity
+            // Decorative orb — soft radial glow, not a flat blob
             &::after {
                 content: "";
                 position: absolute;
-                bottom: -20px; right: -20px;
-                width: 90px; height: 90px;
+                bottom: -36px; right: -36px;
+                width: 96px; height: 96px;
                 border-radius: 50%;
-                opacity: 0.12;
+                background: radial-gradient(circle at 35% 35%, currentColor 0%, transparent 70%);
+                opacity: 0.16;
                 pointer-events: none;
+                transition: $o-hospital-transition;
+            }
+
+            &:hover::after {
+                opacity: 0.26;
+                transform: scale(1.08);
             }
 
             &:hover {
@@ -142,19 +149,19 @@
             // Per-card colour theming
             &:nth-child(1) {
                 &::before { background: linear-gradient(90deg, $o-hospital-primary, $o-hospital-teal); }
-                &::after  { background: $o-hospital-primary; }
+                &::after  { color: $o-hospital-primary; }
                 .o_hospital_kpi_value  { color: $o-hospital-primary; }
                 .o_hospital_kpi_icon   { background: $o-hospital-primary-light; color: $o-hospital-primary; }
             }
             &:nth-child(2) {
                 &::before { background: linear-gradient(90deg, $o-hospital-orange, $o-hospital-yellow); }
-                &::after  { background: $o-hospital-orange; }
+                &::after  { color: $o-hospital-orange; }
                 .o_hospital_kpi_value  { color: $o-hospital-orange; }
                 .o_hospital_kpi_icon   { background: $o-hospital-orange-light; color: $o-hospital-orange; }
             }
             &:nth-child(3) {
                 &::before { background: linear-gradient(90deg, $o-hospital-green, $o-hospital-teal); }
-                &::after  { background: $o-hospital-green; }
+                &::after  { color: $o-hospital-green; }
                 .o_hospital_kpi_value  { color: $o-hospital-green; }
                 .o_hospital_kpi_icon   { background: $o-hospital-green-light; color: $o-hospital-green; }
             }
@@ -378,16 +385,20 @@
     // ── Empty & error states ─────────────────────────────────
     .o_hospital_queue_empty,
     .o_hospital_appointments_empty {
-        color: $o-hospital-text-tertiary;
-        padding: $o-hospital-spacing-xl;
+        color: $o-hospital-text-secondary;
+        padding: $o-hospital-spacing-lg $o-hospital-spacing-xl;
         text-align: center;
         font-size: 13px;
+        font-weight: 500;
+        background: $o-hospital-green-light;
+        border-radius: $o-hospital-radius-md;
+        margin: $o-hospital-spacing-sm 0;
 
         .fa {
             display: block;
-            font-size: 28px;
-            margin-bottom: 10px;
-            opacity: 0.35;
+            font-size: 26px;
+            margin-bottom: 8px;
+            color: $o-hospital-green;
         }
     }
 

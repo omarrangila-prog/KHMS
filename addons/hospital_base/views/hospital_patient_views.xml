@@ -89,14 +89,14 @@
         <field name="name">hospital.patient.view.list</field>
         <field name="model">hospital.patient</field>
         <field name="arch" type="xml">
-            <list string="Patients">
-                <field name="patient_code"/>
+            <list string="Patients" decoration-muted="not active">
+                <field name="patient_code" widget="badge"/>
                 <field name="name"/>
-                <field name="date_of_birth"/>
+                <field name="date_of_birth" optional="hide"/>
                 <field name="age"/>
-                <field name="gender"/>
+                <field name="gender" widget="badge"/>
                 <field name="phone"/>
-                <field name="mobile"/>
+                <field name="mobile" optional="hide"/>
                 <field name="blood_group"/>
             </list>
         </field>
