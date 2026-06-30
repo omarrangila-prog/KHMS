@@ -229,6 +229,23 @@
         }
     }
 
+    // ── Chart card ───────────────────────────────────────────
+    .o_hospital_chart_card {
+        background: $o-hospital-surface;
+        backdrop-filter: $o-hospital-blur;
+        border: 1px solid $o-hospital-border;
+        border-radius: $o-hospital-radius-xl;
+        padding: $o-hospital-spacing-lg;
+        box-shadow: $o-hospital-shadow-sm;
+        margin-bottom: $o-hospital-spacing-xl;
+        @include o-hospital-fade-up(0.1s);
+
+        .o_hospital_chart_canvas_wrap {
+            position: relative;
+            height: 220px;
+        }
+    }
+
     // ── Doctor queue cards ───────────────────────────────────
     .o_hospital_queue_kanban {
         display: flex;

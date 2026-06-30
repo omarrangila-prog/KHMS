@@ -61,6 +61,17 @@
                 </div>
             </div>
 
+            <!-- Stock status chart -->
+            <div class="o_hospital_chart_card"
+                 t-if="!state.loading and state.stockStatusBreakdown.length">
+                <div class="o_hospital_section_title">
+                    <i class="fa fa-pie-chart"/> Stock Status Breakdown
+                </div>
+                <div class="o_hospital_chart_canvas_wrap">
+                    <canvas t-ref="statusChart"/>
+                </div>
+            </div>
+
             <!-- Empty -->
             <div class="o_hospital_inventory_empty"
                  t-if="!state.loading and state.rows.length === 0">

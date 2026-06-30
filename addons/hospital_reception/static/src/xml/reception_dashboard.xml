@@ -84,6 +84,16 @@
                 </t>
             </div>
 
+            <!-- Today's Appointment Status Chart -->
+            <div class="o_hospital_chart_card" t-if="!state.loading and state.appointmentsByStatus.length">
+                <div class="o_hospital_section_title">
+                    <i class="fa fa-pie-chart"/> Today's Appointment Status
+                </div>
+                <div class="o_hospital_chart_canvas_wrap">
+                    <canvas t-ref="statusChart"/>
+                </div>
+            </div>
+
             <!-- Body -->
             <div class="o_hospital_dashboard_columns">
 

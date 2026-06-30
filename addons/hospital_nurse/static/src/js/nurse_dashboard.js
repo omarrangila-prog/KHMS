@@ -1,8 +1,9 @@
 /** @odoo-module **/
 
-import { Component, onMounted, onWillStart, useState } from "@odoo/owl";
+import { Component, onWillStart, onWillUnmount, useState, useRef, useEffect } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+import { loadBundle } from "@web/core/assets";
 
 function animateCount(el, target, duration = 600) {
     if (!el) return;
@@ -32,16 +33,34 @@ export class NurseDashboard extends Component {
             nextPatient: false,
             waitingCount: 0,
             tasks: [],
+            vitalsNormalCount: 0,
+            vitalsAbnormalCount: 0,
         });
-        onWillStart(() => this.loadDashboard());
-        onMounted(() => { if (!this.state.loading) this._animateKpis(); });
+        this.vitalsChartRef = useRef("vitalsChart");
+        this._vitalsChart = null;
+
+        onWillStart(async () => {
+            await loadBundle("web.chartjs_lib");
+            await this.loadDashboard();
+        });
+        useEffect(
+            () => this._renderChart(),
+            () => [this.vitalsChartRef.el, this.state.loading]
+        );
+        onWillUnmount(() => {
+            if (this._vitalsChart) this._vitalsChart.destroy();
+        });
     }
 
     async loadDashboard() {
         this.state.loading = true;
         this.state.error = false;
         try {
-            await Promise.all([this._loadNextPatient(), this._loadTasks()]);
+            await Promise.all([
+                this._loadNextPatient(),
+                this._loadTasks(),
+                this._loadVitalsBreakdown(),
+            ]);
         } catch {
             this.state.error = true;
         } finally {
@@ -49,6 +68,58 @@ export class NurseDashboard extends Component {
             Promise.resolve().then(() => this._animateKpis());
         }
     }
+
+    async _loadVitalsBreakdown() {
+        const groups = await this.orm.formattedReadGroup(
+            "hospital.vitals",
+            [["create_date", ">=", this._todayStart()]],
+            ["is_abnormal"], ["__count"]
+        );
+        this.state.vitalsNormalCount = 0;
+        this.state.vitalsAbnormalCount = 0;
+        for (const g of groups) {
+            if (g.is_abnormal) this.state.vitalsAbnormalCount = g.__count;
+            else this.state.vitalsNormalCount = g.__count;
+        }
+    }
+
+    _renderChart() {
+        if (typeof Chart === "undefined") return;
+        if (this._vitalsChart) {
+            this._vitalsChart.destroy();
+            this._vitalsChart = null;
+        }
+        const total = this.state.vitalsNormalCount + this.state.vitalsAbnormalCount;
+        if (!this.vitalsChartRef.el || !total) return;
+
+        this._vitalsChart = new Chart(this.vitalsChartRef.el, {
+            type: "doughnut",
+            data: {
+                labels: ["Normal", "Abnormal"],
+                datasets: [
+                    {
+                        data: [this.state.vitalsNormalCount, this.state.vitalsAbnormalCount],
+                        backgroundColor: ["#30D158", "#FF453A"],
+                        borderWidth: 2,
+                        borderColor: "#ffffff",
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "68%",
+                plugins: {
+                    legend: {
+                        position: "right",
+                        labels: { boxWidth: 10, font: { size: 11 }, usePointStyle: true },
+                    },
+                },
+            },
+        });
+    }
+
+    _todayStart() { return new Date().toISOString().slice(0,10) + " 00:00:00"; }
 
     _animateKpis() {
         const el = this.el && this.el.querySelector('[data-kpi="waiting_count"]');

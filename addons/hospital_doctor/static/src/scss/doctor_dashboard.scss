@@ -264,6 +264,34 @@
         }
     }
 
+    // ── Outcome chart card (context pane) ───────────────────
+    .o_hospital_chart_card {
+        margin: $o-hospital-spacing-md;
+        padding: $o-hospital-spacing-md;
+        background: $o-hospital-surface;
+        border: 1px solid $o-hospital-border;
+        border-radius: $o-hospital-radius-lg;
+        box-shadow: $o-hospital-shadow-xs;
+
+        .o_hospital_section_title {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: $o-hospital-text-secondary;
+            margin-bottom: $o-hospital-spacing-sm;
+            .fa { opacity: 0.65; }
+        }
+
+        .o_hospital_chart_canvas_wrap {
+            position: relative;
+            height: 180px;
+        }
+    }
+
     // ── Skeleton ─────────────────────────────────────────────
     .o_hospital_skeleton {
         background: linear-gradient(90deg, rgba(0,0,0,0.04) 25%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.04) 75%);

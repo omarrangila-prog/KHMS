@@ -85,6 +85,17 @@
                 </div>
             </div>
 
+            <!-- Today's vitals normal/abnormal chart -->
+            <div class="o_hospital_chart_card"
+                 t-if="!state.loading and (state.vitalsNormalCount + state.vitalsAbnormalCount) > 0">
+                <div class="o_hospital_section_title">
+                    <i class="fa fa-pie-chart"/> Today's Vitals Readings
+                </div>
+                <div class="o_hospital_chart_canvas_wrap">
+                    <canvas t-ref="vitalsChart"/>
+                </div>
+            </div>
+
             <!-- Tasks section -->
             <div class="o_hospital_nurse_tasks_section" t-if="!state.loading">
                 <div class="o_hospital_tasks_header">

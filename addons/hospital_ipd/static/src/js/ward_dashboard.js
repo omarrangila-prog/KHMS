@@ -1,8 +1,22 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, useState } from "@odoo/owl";
+import { Component, onWillStart, onWillUnmount, useState, useRef, useEffect } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+import { loadBundle } from "@web/core/assets";
+
+const BED_STATE_COLORS = {
+    vacant: "#30D158",
+    occupied: "#FF453A",
+    reserved: "#FF9F0A",
+    cleaning: "#5AC8FA",
+};
+const BED_STATE_LABELS = {
+    vacant: "Vacant",
+    occupied: "Occupied",
+    reserved: "Reserved",
+    cleaning: "Cleaning",
+};
 
 /**
  * Ward Dashboard (Phase 8 §14): bed occupancy grid grouped by ward,
@@ -29,7 +43,20 @@ export class WardDashboard extends Component {
             error: false,
             wards: [],
         });
-        onWillStart(() => this.loadDashboard());
+        this.occupancyChartRef = useRef("occupancyChart");
+        this._occupancyChart = null;
+
+        onWillStart(async () => {
+            await loadBundle("web.chartjs_lib");
+            await this.loadDashboard();
+        });
+        useEffect(
+            () => this._renderChart(),
+            () => [this.occupancyChartRef.el, this.state.loading]
+        );
+        onWillUnmount(() => {
+            if (this._occupancyChart) this._occupancyChart.destroy();
+        });
     }
 
     async loadDashboard() {
@@ -43,6 +70,45 @@ export class WardDashboard extends Component {
         } finally {
             this.state.loading = false;
         }
+    }
+
+    _renderChart() {
+        if (typeof Chart === "undefined") return;
+        if (this._occupancyChart) {
+            this._occupancyChart.destroy();
+            this._occupancyChart = null;
+        }
+        if (!this.occupancyChartRef.el || !this.state.wards.length) return;
+
+        const labels = this.state.wards.map((w) => w.name);
+        const states = ["vacant", "occupied", "reserved", "cleaning"];
+        const datasets = states.map((stateKey) => ({
+            label: BED_STATE_LABELS[stateKey],
+            data: this.state.wards.map(
+                (w) => w.beds.filter((b) => b.state === stateKey).length
+            ),
+            backgroundColor: BED_STATE_COLORS[stateKey],
+            borderRadius: 4,
+        }));
+
+        this._occupancyChart = new Chart(this.occupancyChartRef.el, {
+            type: "bar",
+            data: { labels, datasets },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: "bottom",
+                        labels: { boxWidth: 10, font: { size: 11 }, usePointStyle: true },
+                    },
+                },
+                scales: {
+                    x: { stacked: true },
+                    y: { stacked: true, beginAtZero: true, ticks: { precision: 0 } },
+                },
+            },
+        });
     }
 
     async _loadWards() {

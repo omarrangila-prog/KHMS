@@ -38,6 +38,16 @@
 
                 <!-- LEFT: Dispensing queue -->
                 <div class="o_hospital_pharmacy_pane_queue">
+                    <div class="o_hospital_chart_card"
+                         t-if="!state.loading and state.lineStatusBreakdown.length">
+                        <div class="o_hospital_section_title">
+                            <i class="fa fa-pie-chart"/> Today's Dispensing Status
+                        </div>
+                        <div class="o_hospital_chart_canvas_wrap">
+                            <canvas t-ref="statusChart"/>
+                        </div>
+                    </div>
+
                     <div class="o_hospital_pharmacy_pane_header">
                         <div class="o_hospital_section_title">
                             <i class="fa fa-list-ul"/> Dispensing Queue

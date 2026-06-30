@@ -1,8 +1,9 @@
 /** @odoo-module **/
 
-import { Component, onMounted, onWillStart, useState } from "@odoo/owl";
+import { Component, onWillStart, onWillUnmount, useState, useRef, useEffect } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+import { loadBundle } from "@web/core/assets";
 
 function animateCount(el, target, duration = 600) {
     if (!el) return;
@@ -19,6 +20,21 @@ function animateCount(el, target, duration = 600) {
     })(performance.now());
 }
 
+const STATUS_COLORS = {
+    draft: "#AEAEB2",
+    confirmed: "#0A84FF",
+    checked_in: "#30D158",
+    no_show: "#FF9F0A",
+    cancelled: "#FF453A",
+};
+const STATUS_LABELS = {
+    draft: "Draft",
+    confirmed: "Confirmed",
+    checked_in: "Checked In",
+    no_show: "No Show",
+    cancelled: "Cancelled",
+};
+
 export class ReceptionDashboard extends Component {
     static template = "hospital_reception.ReceptionDashboard";
     static props = ["*"];
@@ -32,9 +48,22 @@ export class ReceptionDashboard extends Component {
             kpi: { waiting: 0, in_consult: 0, completed_today: 0 },
             queueByDoctor: [],
             appointments: [],
+            appointmentsByStatus: [],
         });
-        onWillStart(() => this.loadDashboard());
-        onMounted(() => { if (!this.state.loading) this._animateKpis(); });
+        this.statusChartRef = useRef("statusChart");
+        this._statusChart = null;
+
+        onWillStart(async () => {
+            await loadBundle("web.chartjs_lib");
+            await this.loadDashboard();
+        });
+        useEffect(
+            () => this._renderChart(),
+            () => [this.statusChartRef.el, this.state.loading]
+        );
+        onWillUnmount(() => {
+            if (this._statusChart) this._statusChart.destroy();
+        });
     }
 
     async loadDashboard() {
@@ -45,6 +74,7 @@ export class ReceptionDashboard extends Component {
                 this._loadKpis(),
                 this._loadQueue(),
                 this._loadAppointments(),
+                this._loadAppointmentStatusBreakdown(),
             ]);
         } catch {
             this.state.error = true;
@@ -52,6 +82,57 @@ export class ReceptionDashboard extends Component {
             this.state.loading = false;
             Promise.resolve().then(() => this._animateKpis());
         }
+    }
+
+    async _loadAppointmentStatusBreakdown() {
+        const groups = await this.orm.formattedReadGroup(
+            "hospital.appointment",
+            [["scheduled_datetime", ">=", this._todayStart()], ["scheduled_datetime", "<=", this._todayEnd()]],
+            ["state"], ["__count"]
+        );
+        this.state.appointmentsByStatus = groups
+            .filter((g) => g.__count > 0)
+            .map((g) => ({
+                state: g.state,
+                label: STATUS_LABELS[g.state] || g.state,
+                value: g.__count,
+                color: STATUS_COLORS[g.state] || "#8E8E93",
+            }));
+    }
+
+    _renderChart() {
+        if (typeof Chart === "undefined") return;
+        if (this._statusChart) {
+            this._statusChart.destroy();
+            this._statusChart = null;
+        }
+        if (!this.statusChartRef.el || !this.state.appointmentsByStatus.length) return;
+
+        this._statusChart = new Chart(this.statusChartRef.el, {
+            type: "doughnut",
+            data: {
+                labels: this.state.appointmentsByStatus.map((r) => r.label),
+                datasets: [
+                    {
+                        data: this.state.appointmentsByStatus.map((r) => r.value),
+                        backgroundColor: this.state.appointmentsByStatus.map((r) => r.color),
+                        borderWidth: 2,
+                        borderColor: "#ffffff",
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "68%",
+                plugins: {
+                    legend: {
+                        position: "right",
+                        labels: { boxWidth: 10, font: { size: 11 }, usePointStyle: true },
+                    },
+                },
+            },
+        });
     }
 
     _animateKpis() {

@@ -36,6 +36,15 @@
                 </div>
 
                 <div t-else="">
+                    <div class="o_hospital_chart_card">
+                        <div class="o_hospital_section_title">
+                            <i class="fa fa-bar-chart"/> Bed Status by Ward
+                        </div>
+                        <div class="o_hospital_chart_canvas_wrap">
+                            <canvas t-ref="occupancyChart"/>
+                        </div>
+                    </div>
+
                     <div class="o_hospital_ward_section"
                          t-foreach="state.wards" t-as="ward" t-key="ward.id">
                         <div class="o_hospital_ward_section_header">

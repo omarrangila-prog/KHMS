@@ -264,6 +264,35 @@
         gap: 8px;
     }
 
+    .o_hospital_section_title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+        font-weight: 700;
+        color: $o-hospital-text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: $o-hospital-spacing-md;
+        .fa { opacity: 0.65; }
+    }
+
+    .o_hospital_chart_card {
+        background: $o-hospital-surface;
+        backdrop-filter: $o-hospital-blur;
+        border: 1px solid $o-hospital-border;
+        border-radius: $o-hospital-radius-xl;
+        padding: $o-hospital-spacing-lg;
+        box-shadow: $o-hospital-shadow-sm;
+        margin-bottom: $o-hospital-spacing-xl;
+        @include o-hospital-fade-up(0.08s);
+
+        .o_hospital_chart_canvas_wrap {
+            position: relative;
+            height: 240px;
+        }
+    }
+
     .o_hospital_skeleton {
         background: linear-gradient(90deg, rgba(0,0,0,0.04) 25%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.04) 75%);
         background-size: 200% 100%;

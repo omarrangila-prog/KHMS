@@ -76,6 +76,15 @@
                     <div class="o_hospital_doctor_context_empty">
                         Open a consultation to see history, vitals, and allergies here.
                     </div>
+                    <div class="o_hospital_chart_card"
+                         t-if="!state.loading and state.outcomeBreakdown.length">
+                        <div class="o_hospital_section_title">
+                            <i class="fa fa-bar-chart"/> Today's Outcomes
+                        </div>
+                        <div class="o_hospital_chart_canvas_wrap">
+                            <canvas t-ref="outcomeChart"/>
+                        </div>
+                    </div>
                 </div>
 
             </div>

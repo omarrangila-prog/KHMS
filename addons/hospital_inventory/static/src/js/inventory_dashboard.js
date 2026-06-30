@@ -1,8 +1,9 @@
 /** @odoo-module **/
 
-import { Component, onMounted, onWillStart, useState } from "@odoo/owl";
+import { Component, onMounted, onWillStart, onWillUnmount, useState, useRef, useEffect } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+import { loadBundle } from "@web/core/assets";
 
 function animateCount(el, target, duration = 650) {
     if (!el) return;
@@ -32,9 +33,23 @@ export class InventoryDashboard extends Component {
             rows: [],
             lowStockCount: 0,
             expiringSoonCount: 0,
+            stockStatusBreakdown: [],
         });
-        onWillStart(() => this.loadDashboard());
+        this.statusChartRef = useRef("statusChart");
+        this._statusChart = null;
+
+        onWillStart(async () => {
+            await loadBundle("web.chartjs_lib");
+            await this.loadDashboard();
+        });
         onMounted(() => { if (!this.state.loading) this._animateKpis(); });
+        useEffect(
+            () => this._renderChart(),
+            () => [this.statusChartRef.el, this.state.loading]
+        );
+        onWillUnmount(() => {
+            if (this._statusChart) this._statusChart.destroy();
+        });
     }
 
     async loadDashboard() {
@@ -50,12 +65,62 @@ export class InventoryDashboard extends Component {
             this.state.rows = rows;
             this.state.lowStockCount     = rows.filter((r) => r.is_low_stock).length;
             this.state.expiringSoonCount = rows.filter((r) => r.is_expiring_soon || r.is_expired).length;
+
+            const expiredCount = rows.filter((r) => r.is_expired).length;
+            const expiringCount = rows.filter((r) => r.is_expiring_soon && !r.is_expired).length;
+            const lowStockOnlyCount = rows.filter(
+                (r) => r.is_low_stock && !r.is_expiring_soon && !r.is_expired
+            ).length;
+            const okCount = rows.filter(
+                (r) => !r.is_low_stock && !r.is_expiring_soon && !r.is_expired
+            ).length;
+            this.state.stockStatusBreakdown = [
+                { label: "OK", value: okCount, color: "#30D158" },
+                { label: "Low Stock", value: lowStockOnlyCount, color: "#FF9F0A" },
+                { label: "Expiring Soon", value: expiringCount, color: "#5AC8FA" },
+                { label: "Expired", value: expiredCount, color: "#FF453A" },
+            ].filter((r) => r.value > 0);
         } catch {
             this.state.error = true;
         } finally {
             this.state.loading = false;
             Promise.resolve().then(() => this._animateKpis());
         }
+    }
+
+    _renderChart() {
+        if (typeof Chart === "undefined") return;
+        if (this._statusChart) {
+            this._statusChart.destroy();
+            this._statusChart = null;
+        }
+        if (!this.statusChartRef.el || !this.state.stockStatusBreakdown.length) return;
+
+        this._statusChart = new Chart(this.statusChartRef.el, {
+            type: "doughnut",
+            data: {
+                labels: this.state.stockStatusBreakdown.map((r) => r.label),
+                datasets: [
+                    {
+                        data: this.state.stockStatusBreakdown.map((r) => r.value),
+                        backgroundColor: this.state.stockStatusBreakdown.map((r) => r.color),
+                        borderWidth: 2,
+                        borderColor: "#ffffff",
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "68%",
+                plugins: {
+                    legend: {
+                        position: "right",
+                        labels: { boxWidth: 10, font: { size: 11 }, usePointStyle: true },
+                    },
+                },
+            },
+        });
     }
 
     _animateKpis() {

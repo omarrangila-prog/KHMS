@@ -1,8 +1,9 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, useState } from "@odoo/owl";
+import { Component, onWillStart, onWillUnmount, useState, useRef, useEffect } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+import { loadBundle } from "@web/core/assets";
 
 /**
  * Doctor Dashboard (Phase 8 §8): 3-pane layout -- queue (left, narrow),
@@ -28,21 +29,95 @@ export class DoctorDashboard extends Component {
             queue: [],
             seenToday: 0,
             activeMobileTab: "queue",
+            outcomeBreakdown: [],
         });
-        onWillStart(() => this.loadDashboard());
+        this.outcomeChartRef = useRef("outcomeChart");
+        this._outcomeChart = null;
+
+        onWillStart(async () => {
+            await loadBundle("web.chartjs_lib");
+            await this.loadDashboard();
+        });
+        useEffect(
+            () => this._renderChart(),
+            () => [this.outcomeChartRef.el, this.state.loading]
+        );
+        onWillUnmount(() => {
+            if (this._outcomeChart) this._outcomeChart.destroy();
+        });
     }
 
     async loadDashboard() {
         this.state.loading = true;
         this.state.error = false;
         try {
-            await Promise.all([this._loadQueue(), this._loadSeenToday()]);
+            await Promise.all([
+                this._loadQueue(),
+                this._loadSeenToday(),
+                this._loadOutcomeBreakdown(),
+            ]);
         } catch (error) {
             this.state.error = true;
             throw error;
         } finally {
             this.state.loading = false;
         }
+    }
+
+    async _loadOutcomeBreakdown() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const todayStr = today.toISOString().slice(0, 19).replace("T", " ");
+        const baseDomain = [
+            ["doctor_id.user_id", "=", this.user.userId],
+            ["create_date", ">=", todayStr],
+        ];
+        const fields = [
+            ["outcome_prescribe", "Prescribed"],
+            ["outcome_lab_requested", "Lab"],
+            ["outcome_radiology_requested", "Radiology"],
+            ["outcome_admit_requested", "Admit"],
+            ["outcome_discharge", "Discharge"],
+        ];
+        const counts = await Promise.all(
+            fields.map(([field]) =>
+                this.orm.searchCount("hospital.consultation", [...baseDomain, [field, "=", true]])
+            )
+        );
+        this.state.outcomeBreakdown = fields
+            .map(([, label], i) => ({ label, value: counts[i] }))
+            .filter((r) => r.value > 0);
+    }
+
+    _renderChart() {
+        if (typeof Chart === "undefined") return;
+        if (this._outcomeChart) {
+            this._outcomeChart.destroy();
+            this._outcomeChart = null;
+        }
+        if (!this.outcomeChartRef.el || !this.state.outcomeBreakdown.length) return;
+
+        this._outcomeChart = new Chart(this.outcomeChartRef.el, {
+            type: "bar",
+            data: {
+                labels: this.state.outcomeBreakdown.map((r) => r.label),
+                datasets: [
+                    {
+                        label: "Consultations Today",
+                        data: this.state.outcomeBreakdown.map((r) => r.value),
+                        backgroundColor: "#0A84FF",
+                        borderRadius: 6,
+                        maxBarThickness: 28,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+            },
+        });
     }
 
     async _loadQueue() {

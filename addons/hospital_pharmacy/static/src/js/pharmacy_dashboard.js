@@ -1,8 +1,24 @@
 /** @odoo-module **/
 
-import { Component, onMounted, onWillStart, useState } from "@odoo/owl";
+import { Component, onMounted, onWillStart, onWillUnmount, useState, useRef, useEffect } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+import { loadBundle } from "@web/core/assets";
+
+const LINE_STATE_COLORS = {
+    pending: "#AEAEB2",
+    dispensed: "#30D158",
+    partial: "#0A84FF",
+    backordered: "#FF9F0A",
+    cancelled: "#FF453A",
+};
+const LINE_STATE_LABELS = {
+    pending: "Pending",
+    dispensed: "Dispensed",
+    partial: "Partial",
+    backordered: "Backordered",
+    cancelled: "Cancelled",
+};
 
 /**
  * Pharmacy Dashboard (Phase 8 §12): split view.
@@ -33,16 +49,30 @@ export class PharmacyDashboard extends Component {
             queue: [],
             selectedPrescriptionId: null,
             selectedLines: [],
+            lineStatusBreakdown: [],
         });
-        onWillStart(() => this.loadDashboard());
+        this.statusChartRef = useRef("statusChart");
+        this._statusChart = null;
+
+        onWillStart(async () => {
+            await loadBundle("web.chartjs_lib");
+            await this.loadDashboard();
+        });
         onMounted(() => this._bindKeyboardShortcuts());
+        useEffect(
+            () => this._renderChart(),
+            () => [this.statusChartRef.el, this.state.loading]
+        );
+        onWillUnmount(() => {
+            if (this._statusChart) this._statusChart.destroy();
+        });
     }
 
     async loadDashboard() {
         this.state.loading = true;
         this.state.error = false;
         try {
-            await this._loadQueue();
+            await Promise.all([this._loadQueue(), this._loadLineStatusBreakdown()]);
             if (
                 this.state.selectedPrescriptionId &&
                 !this.state.queue.find(
@@ -58,6 +88,59 @@ export class PharmacyDashboard extends Component {
         } finally {
             this.state.loading = false;
         }
+    }
+
+    async _loadLineStatusBreakdown() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const todayStr = today.toISOString().slice(0, 19).replace("T", " ");
+        const groups = await this.orm.formattedReadGroup(
+            "hospital.prescription.line",
+            [["create_date", ">=", todayStr]],
+            ["state"], ["__count"]
+        );
+        this.state.lineStatusBreakdown = groups
+            .filter((g) => g.__count > 0)
+            .map((g) => ({
+                label: LINE_STATE_LABELS[g.state] || g.state,
+                value: g.__count,
+                color: LINE_STATE_COLORS[g.state] || "#8E8E93",
+            }));
+    }
+
+    _renderChart() {
+        if (typeof Chart === "undefined") return;
+        if (this._statusChart) {
+            this._statusChart.destroy();
+            this._statusChart = null;
+        }
+        if (!this.statusChartRef.el || !this.state.lineStatusBreakdown.length) return;
+
+        this._statusChart = new Chart(this.statusChartRef.el, {
+            type: "doughnut",
+            data: {
+                labels: this.state.lineStatusBreakdown.map((r) => r.label),
+                datasets: [
+                    {
+                        data: this.state.lineStatusBreakdown.map((r) => r.value),
+                        backgroundColor: this.state.lineStatusBreakdown.map((r) => r.color),
+                        borderWidth: 2,
+                        borderColor: "#ffffff",
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "68%",
+                plugins: {
+                    legend: {
+                        position: "bottom",
+                        labels: { boxWidth: 10, font: { size: 11 }, usePointStyle: true },
+                    },
+                },
+            },
+        });
     }
 
     async _loadQueue() {
