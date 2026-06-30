@@ -71,28 +71,33 @@
                            statusbar_visible="ordered,scheduled,in_progress,completed"/>
                 </header>
                 <sheet>
-                    <div class="oe_title">
-                        <label for="name"/>
-                        <h1>
-                            <field name="name" readonly="1"/>
-                        </h1>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-medkit"/>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
                     </div>
                     <group>
-                        <group string="Order Details">
+                        <group string="Order Details" class="o-hms-card-group">
                             <field name="visit_id"/>
                             <field name="patient_id" readonly="1"/>
                             <field name="doctor_id"/>
                             <field name="study_id"/>
-                            <field name="priority"/>
+                            <field name="priority" widget="badge" decoration-danger="priority == 'emergency'" decoration-warning="priority == 'urgent'"/>
                         </group>
-                        <group string="Scheduling / Execution">
+                        <group string="Scheduling / Execution" class="o-hms-card-group">
                             <field name="scheduled_datetime"/>
                             <field name="performed_by" readonly="1"/>
                             <field name="performed_at" readonly="1"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                     </group>
-                    <group string="Cancellation" invisible="state != 'cancelled'">
+                    <group string="Cancellation" class="o-hms-card-group" invisible="state != 'cancelled'">
                         <field name="cancel_reason" readonly="1"/>
                     </group>
                     <notebook>
@@ -123,7 +128,7 @@
         <field name="name">hospital.radiology.order.kanban</field>
         <field name="model">hospital.radiology.order</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="state" class="o_kanban_small_column">
+            <kanban default_group_by="state" class="o_kanban_small_column o-hms-kanban">
                 <field name="name"/>
                 <field name="patient_id"/>
                 <field name="study_id"/>
@@ -140,14 +145,20 @@
                             </div>
                             <field name="priority" widget="priority"/>
                         </div>
-                        <div>
+                        <div class="o-hms-icon-chip">
+                            <i class="fa fa-user"/>
                             <field name="patient_id"/>
                         </div>
-                        <div>
+                        <div class="o-hms-icon-chip">
+                            <i class="fa fa-medkit"/>
                             <field name="study_id"/>
                         </div>
-                        <div>
-                            <field name="state" widget="badge"/>
+                        <div class="mt-1">
+                            <field name="state" widget="badge"
+                                decoration-success="state == 'completed'"
+                                decoration-danger="state == 'cancelled'"
+                                decoration-warning="state == 'in_progress'"
+                                decoration-info="state in ('ordered', 'scheduled')"/>
                         </div>
                     </t>
                 </templates>

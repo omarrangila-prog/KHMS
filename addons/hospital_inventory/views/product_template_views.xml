@@ -19,14 +19,14 @@
                 <page string="Hospital Medicine" name="hospital_medicine"
                       invisible="not is_hospital_medicine">
                     <group>
-                        <group name="hospital_medicine_clinical" string="Clinical Details">
+                        <group name="hospital_medicine_clinical" string="Clinical Details" class="o-hms-card-group">
                             <field name="generic_name"/>
                             <field name="dosage_form"/>
                             <field name="strength"/>
                             <field name="requires_prescription"/>
                             <field name="controlled_substance"/>
                         </group>
-                        <group name="hospital_medicine_stock" string="Stock">
+                        <group name="hospital_medicine_stock" string="Stock" class="o-hms-card-group">
                             <field name="reorder_threshold"/>
                             <field name="qty_available" readonly="1"/>
                         </group>
@@ -57,7 +57,7 @@
         <field name="name">product.template.view.kanban.hospital.medicine</field>
         <field name="model">product.template</field>
         <field name="arch" type="xml">
-            <kanban>
+            <kanban class="o-hms-kanban">
                 <field name="name"/>
                 <field name="generic_name"/>
                 <field name="dosage_form"/>
@@ -68,12 +68,18 @@
                     <t t-name="card">
                         <div class="o_hospital_medicine_kanban_card">
                             <strong t-esc="record.name.value"/>
-                            <div t-esc="record.generic_name.value"/>
-                            <div>
+                            <div class="o-hms-icon-chip" t-if="record.generic_name.value">
+                                <i class="fa fa-flask"/>
+                                <span t-esc="record.generic_name.value"/>
+                            </div>
+                            <div class="o-hms-icon-chip">
                                 <span t-esc="record.dosage_form.value"/>
                                 <span t-esc="record.strength.value"/>
                             </div>
-                            <div>
+                            <div class="o-hms-badge green" t-if="record.qty_available.raw_value &gt; record.reorder_threshold.raw_value">
+                                Qty: <span t-esc="record.qty_available.value"/>
+                            </div>
+                            <div class="o-hms-badge red" t-if="record.qty_available.raw_value &lt;= record.reorder_threshold.raw_value">
                                 Qty: <span t-esc="record.qty_available.value"/>
                             </div>
                         </div>

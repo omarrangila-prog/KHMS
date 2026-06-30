@@ -29,38 +29,43 @@
         <field name="arch" type="xml">
             <form string="Lab Result">
                 <sheet>
-                    <div class="oe_title">
-                        <label for="parameter_name"/>
-                        <h1>
-                            <field name="parameter_name" placeholder="Parameter Name"/>
-                        </h1>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-flask"/>
+                        </div>
+                        <div class="oe_title">
+                            <label for="parameter_name"/>
+                            <h1>
+                                <field name="parameter_name" placeholder="Parameter Name"/>
+                            </h1>
+                        </div>
                     </div>
                     <div class="alert alert-danger" role="alert"
                          invisible="not is_abnormal">
                         ABNORMAL: This result is outside the normal reference range.
                     </div>
                     <group>
-                        <group string="Result">
+                        <group string="Result" class="o-hms-card-group">
                             <field name="order_id"/>
                             <field name="value"/>
                             <field name="unit"/>
                             <field name="is_abnormal" readonly="1"/>
                         </group>
-                        <group string="Normal Range">
+                        <group string="Normal Range" class="o-hms-card-group">
                             <field name="normal_range_min"/>
                             <field name="normal_range_max"/>
                         </group>
                     </group>
                     <group string="Entered / Verified">
-                        <group>
+                        <group class="o-hms-card-group">
                             <field name="entered_by" readonly="1"/>
                             <field name="entered_at" readonly="1"/>
                         </group>
-                        <group>
+                        <group class="o-hms-card-group">
                             <field name="verified_by"/>
                         </group>
                     </group>
-                    <group string="Attachments">
+                    <group string="Attachments" class="o-hms-card-group">
                         <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
                     </group>
                 </sheet>

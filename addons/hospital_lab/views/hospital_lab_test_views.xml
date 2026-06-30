@@ -25,29 +25,34 @@
         <field name="arch" type="xml">
             <form string="Lab Test">
                 <sheet>
-                    <div class="oe_title">
-                        <label for="name"/>
-                        <h1>
-                            <field name="name" placeholder="Test Name"/>
-                        </h1>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-flask"/>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Test Name"/>
+                            </h1>
+                        </div>
                     </div>
                     <group>
-                        <group>
+                        <group class="o-hms-card-group">
                             <field name="code"/>
                             <field name="sample_type"/>
                             <field name="price"/>
                         </group>
-                        <group>
+                        <group class="o-hms-card-group">
                             <field name="normal_range_min"/>
                             <field name="normal_range_max"/>
                             <field name="active"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                     </group>
-                    <group string="Billing">
+                    <group string="Billing" class="o-hms-card-group">
                         <field name="product_id"/>
                     </group>
-                    <group string="Description / Instructions">
+                    <group string="Description / Instructions" class="o-hms-card-group">
                         <field name="description" nolabel="1"/>
                     </group>
                 </sheet>

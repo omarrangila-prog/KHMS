@@ -22,26 +22,26 @@
         <field name="arch" type="xml">
             <form string="Radiology Result">
                 <sheet>
-                    <group>
+                    <group class="o-hms-card-group">
                         <field name="order_id"/>
                     </group>
-                    <group string="Findings">
+                    <group string="Findings" class="o-hms-card-group">
                         <field name="findings_text" nolabel="1"
                                placeholder="Describe radiological findings in detail..."/>
                     </group>
-                    <group string="Impression / Clinical Summary">
+                    <group string="Impression / Clinical Summary" class="o-hms-card-group">
                         <field name="impression_text" nolabel="1"
                                placeholder="Clinical impression or conclusion (optional)..."/>
                     </group>
-                    <group string="Images / Reports">
+                    <group string="Images / Reports" class="o-hms-card-group">
                         <field name="attachment_ids" widget="many2many_binary" nolabel="1"/>
                     </group>
                     <group string="Reported / Verified">
-                        <group>
+                        <group class="o-hms-card-group">
                             <field name="reported_by" readonly="1"/>
                             <field name="reported_at" readonly="1"/>
                         </group>
-                        <group>
+                        <group class="o-hms-card-group">
                             <field name="verified_by"/>
                         </group>
                     </group>

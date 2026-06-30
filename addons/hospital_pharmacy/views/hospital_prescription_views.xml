@@ -50,7 +50,11 @@
                 <field name="qty_dispensed"/>
                 <field name="qty_on_hand_at_pharmacy" string="Stock (Phm)"
                        decoration-danger="qty_on_hand_at_pharmacy == 0"/>
-                <field name="state" widget="badge"/>
+                <field name="state" widget="badge"
+                    decoration-success="state == 'dispensed'"
+                    decoration-info="state == 'partial'"
+                    decoration-warning="state == 'backordered'"
+                    decoration-danger="state == 'cancelled'"/>
             </list>
         </field>
     </record>
