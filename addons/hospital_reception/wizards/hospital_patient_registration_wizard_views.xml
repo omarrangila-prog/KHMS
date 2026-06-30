@@ -10,33 +10,33 @@
                     <strong>Possible match found:</strong>
                     <field name="duplicate_patient_ids" widget="many2many_tags" readonly="1" nolabel="1"/>
                 </div>
-                <group>
+                <group class="o-hms-card-group">
                     <field name="patient_id" string="Search Existing Patient"/>
                 </group>
                 <group string="New Patient Details" invisible="patient_id">
-                    <group>
+                    <group class="o-hms-card-group">
                         <field name="name" required="not patient_id"/>
                         <field name="date_of_birth" required="not patient_id"/>
                         <field name="gender"/>
                     </group>
-                    <group>
+                    <group class="o-hms-card-group">
                         <field name="phone" required="not patient_id"/>
                         <field name="mobile"/>
                         <field name="email"/>
                         <field name="identity_type"/>
                         <field name="identity_number"/>
                     </group>
-                    <group string="Emergency Contact">
+                    <group string="Emergency Contact" class="o-hms-card-group">
                         <field name="emergency_contact_name"/>
                         <field name="emergency_contact_phone"/>
                     </group>
                 </group>
                 <group string="Assign &amp; Queue">
-                    <group>
+                    <group class="o-hms-card-group">
                         <field name="doctor_id"/>
                         <field name="department_id"/>
                     </group>
-                    <group>
+                    <group class="o-hms-card-group">
                         <field name="payer_type" widget="radio"/>
                         <field name="priority"/>
                     </group>

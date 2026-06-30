@@ -6,15 +6,15 @@
         <field name="model">hospital.transfer.wizard</field>
         <field name="arch" type="xml">
             <form string="Transfer Bed">
-                <group>
+                <group class="o-hms-card-group">
                     <field name="admission_id" readonly="1"/>
                     <field name="from_bed_id" readonly="1"/>
                 </group>
-                <group string="New Bed">
+                <group string="New Bed" class="o-hms-card-group">
                     <field name="ward_id"/>
                     <field name="to_bed_id"/>
                 </group>
-                <group>
+                <group class="o-hms-card-group">
                     <field name="reason" placeholder="Reason for transfer..."/>
                 </group>
                 <footer>

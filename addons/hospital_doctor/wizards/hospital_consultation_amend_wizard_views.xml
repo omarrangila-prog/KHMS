@@ -6,7 +6,7 @@
         <field name="model">hospital.consultation.amend.wizard</field>
         <field name="arch" type="xml">
             <form string="Amend Consultation">
-                <group>
+                <group class="o-hms-card-group">
                     <field name="consultation_id" readonly="1"/>
                     <field name="reason" placeholder="Why is this consultation being amended?"/>
                 </group>

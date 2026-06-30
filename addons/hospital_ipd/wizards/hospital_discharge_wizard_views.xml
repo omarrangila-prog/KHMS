@@ -12,16 +12,16 @@
                     still pending for this visit:
                     <field name="blocking_items_summary" readonly="1" nolabel="1"/>
                 </div>
-                <group>
+                <group class="o-hms-card-group">
                     <field name="admission_id" readonly="1"/>
                     <field name="patient_id" readonly="1"/>
                     <field name="discharge_type"/>
                 </group>
-                <group string="Summary">
+                <group string="Summary" class="o-hms-card-group">
                     <field name="discharge_summary" nolabel="1" colspan="2"
                            placeholder="Discharge summary..."/>
                 </group>
-                <group string="Follow-up Instructions"
+                <group string="Follow-up Instructions" class="o-hms-card-group"
                        invisible="discharge_type == 'deceased'">
                     <field name="follow_up_instructions" nolabel="1" colspan="2"
                            placeholder="Follow-up instructions..."/>

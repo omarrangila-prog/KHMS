@@ -6,13 +6,13 @@
         <field name="model">hospital.admission.wizard</field>
         <field name="arch" type="xml">
             <form string="Admit Patient">
-                <group>
+                <group class="o-hms-card-group">
                     <field name="admission_id" invisible="1"/>
                     <field name="visit_id" readonly="admission_id"/>
                     <field name="patient_id" readonly="1"/>
                     <field name="admitting_doctor_id"/>
                 </group>
-                <group string="Bed Assignment">
+                <group string="Bed Assignment" class="o-hms-card-group">
                     <field name="ward_id"/>
                     <field name="bed_id"/>
                 </group>

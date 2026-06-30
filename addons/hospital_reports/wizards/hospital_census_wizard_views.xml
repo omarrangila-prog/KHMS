@@ -6,7 +6,7 @@
         <field name="model">hospital.census.wizard</field>
         <field name="arch" type="xml">
             <form string="Daily Census Report">
-                <group>
+                <group class="o-hms-card-group">
                     <field name="company_id"/>
                     <field name="date_from"/>
                     <field name="date_to"/>

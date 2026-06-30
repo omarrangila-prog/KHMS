@@ -14,7 +14,7 @@
                         patient's recorded allergies. Each conflicting line must be
                         individually overridden with a written reason before dispensing.
                     </div>
-                    <group>
+                    <group class="o-hms-card-group">
                         <field name="prescription_id" readonly="1"/>
                         <field name="patient_id" readonly="1"/>
                         <field name="has_any_allergy_conflict" invisible="1"/>
@@ -29,7 +29,11 @@
                                    decoration-danger="qty_on_hand == 0"
                                    decoration-warning="qty_on_hand &lt; (qty_prescribed - qty_dispensed_so_far)"/>
                             <field name="qty_to_dispense"/>
-                            <field name="line_state" widget="badge" readonly="1"/>
+                            <field name="line_state" widget="badge" readonly="1"
+                                decoration-success="line_state == 'dispensed'"
+                                decoration-info="line_state == 'partial'"
+                                decoration-warning="line_state == 'backordered'"
+                                decoration-danger="line_state == 'cancelled'"/>
                             <field name="has_allergy_conflict" column_invisible="True"/>
                             <field name="override_allergy"
                                    column_invisible="not has_allergy_conflict"

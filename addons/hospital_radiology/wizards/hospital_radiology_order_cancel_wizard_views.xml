@@ -6,7 +6,7 @@
         <field name="model">hospital.radiology.order.cancel.wizard</field>
         <field name="arch" type="xml">
             <form string="Cancel Radiology Order">
-                <group>
+                <group class="o-hms-card-group">
                     <field name="order_id" readonly="1"/>
                     <field name="reason" placeholder="Please provide a reason for cancellation..."/>
                 </group>

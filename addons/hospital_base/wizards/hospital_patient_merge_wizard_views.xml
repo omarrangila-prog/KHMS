@@ -6,7 +6,7 @@
         <field name="model">hospital.patient.merge.wizard</field>
         <field name="arch" type="xml">
             <form string="Merge Duplicate Patients">
-                <group>
+                <group class="o-hms-card-group">
                     <field name="survivor_id"/>
                     <field name="duplicate_ids" widget="many2many_tags"/>
                 </group>

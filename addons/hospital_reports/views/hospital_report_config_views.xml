@@ -7,21 +7,26 @@
         <field name="arch" type="xml">
             <form string="Report Branding">
                 <sheet>
-                    <div class="oe_title">
-                        <label for="company_id"/>
-                        <h1>
-                            <field name="company_id" readonly="1"/>
-                        </h1>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-paint-brush"/>
+                        </div>
+                        <div class="oe_title">
+                            <label for="company_id"/>
+                            <h1>
+                                <field name="company_id" readonly="1"/>
+                            </h1>
+                        </div>
                     </div>
-                    <group string="Logo &amp; Colours">
+                    <group string="Logo &amp; Colours" class="o-hms-card-group">
                         <field name="logo" widget="image" options="{'size': [128, 128]}"/>
                         <field name="primary_color"/>
                     </group>
-                    <group string="Header / Footer Text">
+                    <group string="Header / Footer Text" class="o-hms-card-group">
                         <field name="header_text"/>
                         <field name="footer_text"/>
                     </group>
-                    <group string="Display Options">
+                    <group string="Display Options" class="o-hms-card-group">
                         <field name="show_company_address"/>
                         <field name="show_patient_photo"/>
                     </group>
