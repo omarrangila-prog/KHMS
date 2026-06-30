@@ -83,7 +83,7 @@
                 <field name="parameter_name"/>
                 <filter string="Abnormal Results" name="filter_abnormal"
                         domain="[('is_abnormal', '=', True)]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Order" name="group_order"
                             context="{'group_by': 'order_id'}"/>
                 </group>

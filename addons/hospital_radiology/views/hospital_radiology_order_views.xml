@@ -180,7 +180,7 @@
                         domain="[('priority', 'in', ['urgent', 'emergency'])]"/>
                 <filter string="Pending" name="filter_pending"
                         domain="[('state', 'not in', ['completed', 'cancelled'])]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Priority" name="group_priority"
                             context="{'group_by': 'priority'}"/>
                     <filter string="Status" name="group_state"

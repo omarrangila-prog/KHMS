@@ -135,7 +135,7 @@
                 <filter string="Female" name="filter_female" domain="[('gender', '=', 'female')]"/>
                 <separator/>
                 <filter string="Archived" name="filter_inactive" domain="[('active', '=', False)]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Gender" name="groupby_gender" context="{'group_by': 'gender'}"/>
                     <filter string="Blood Group" name="groupby_blood_group" context="{'group_by': 'blood_group'}"/>
                 </group>

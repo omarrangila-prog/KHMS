@@ -83,7 +83,7 @@
                 <separator/>
                 <filter string="No Show" name="filter_no_show" domain="[('state', '=', 'no_show')]"/>
                 <filter string="Cancelled" name="filter_cancelled" domain="[('state', '=', 'cancelled')]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Status" name="groupby_state" context="{'group_by': 'state'}"/>
                     <filter string="Doctor" name="groupby_doctor" context="{'group_by': 'doctor_id'}"/>
                     <filter string="Department" name="groupby_department" context="{'group_by': 'department_id'}"/>

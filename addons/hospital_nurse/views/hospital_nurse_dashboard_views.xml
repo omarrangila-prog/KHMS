@@ -38,7 +38,7 @@
             <button name="action_send_to_doctor" position="before">
                 <button name="%(hospital_nurse.hospital_vitals_action_new)d"
                         type="action" string="Record Vitals" class="oe_highlight"
-                        context="{'default_visit_id': active_id}"
+                        context="{'default_visit_id': id}"
                         invisible="state != 'waiting_nurse'"/>
             </button>
             <xpath expr="//sheet" position="inside">

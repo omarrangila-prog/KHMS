@@ -41,7 +41,7 @@
                 <field name="product_id"/>
                 <filter string="Expiring Soon" name="filter_expiring_soon" domain="[('is_expiring_soon', '=', True)]"/>
                 <filter string="Expired" name="filter_expired" domain="[('is_expired', '=', True)]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Medicine" name="group_by_product" context="{'group_by': 'product_id'}"/>
                 </group>
             </search>

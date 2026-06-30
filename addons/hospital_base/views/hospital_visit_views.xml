@@ -103,7 +103,7 @@
                 <filter string="Urgent" name="filter_urgent" domain="[('priority', '=', 'urgent')]"/>
                 <separator/>
                 <filter string="Active Queue" name="filter_active_queue" domain="[('state', 'not in', ['done', 'cancelled', 'void'])]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Status" name="groupby_state" context="{'group_by': 'state'}"/>
                     <filter string="Doctor" name="groupby_doctor" context="{'group_by': 'doctor_id'}"/>
                     <filter string="Department" name="groupby_department" context="{'group_by': 'department_id'}"/>

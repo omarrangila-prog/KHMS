@@ -57,7 +57,7 @@
                 <field name="ward_id"/>
                 <filter string="Vacant" name="filter_vacant" domain="[('state', '=', 'vacant')]"/>
                 <filter string="Occupied" name="filter_occupied" domain="[('state', '=', 'occupied')]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Ward" name="group_ward" context="{'group_by': 'ward_id'}"/>
                     <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
                 </group>

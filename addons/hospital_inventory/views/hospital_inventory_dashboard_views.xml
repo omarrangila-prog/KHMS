@@ -22,7 +22,7 @@
                 <filter string="Low Stock" name="filter_low_stock" domain="[('is_low_stock', '=', True)]"/>
                 <filter string="Expiring Soon" name="filter_expiring_soon" domain="[('is_expiring_soon', '=', True)]"/>
                 <filter string="Expired" name="filter_expired" domain="[('is_expired', '=', True)]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Category" name="group_by_categ" context="{'group_by': 'categ_id'}"/>
                 </group>
             </search>

@@ -33,9 +33,9 @@
          created warehouse record at data-load time instead. -->
     <record id="stock_location_pharmacy_store" model="stock.location">
         <field name="name">Pharmacy Store</field>
-        <field name="location_id" eval="obj().env.ref('hospital_inventory.stock_warehouse_pharmacy').lot_stock_id.id"/>
+        <field name="location_id" model="stock.warehouse" eval="obj().env.ref('hospital_inventory.stock_warehouse_pharmacy').lot_stock_id.id"/>
         <field name="usage">internal</field>
-        <field name="company_id" eval="obj().env.ref('hospital_inventory.stock_warehouse_pharmacy').company_id.id"/>
+        <field name="company_id" model="stock.warehouse" eval="obj().env.ref('hospital_inventory.stock_warehouse_pharmacy').company_id.id"/>
     </record>
 
 </odoo>

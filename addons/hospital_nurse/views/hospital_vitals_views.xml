@@ -79,7 +79,7 @@
                 <field name="visit_id"/>
                 <field name="recorded_by"/>
                 <filter string="Abnormal" name="filter_abnormal" domain="[('is_abnormal', '=', True)]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Patient" name="groupby_patient" context="{'group_by': 'patient_id'}"/>
                     <filter string="Recorded By" name="groupby_recorded_by" context="{'group_by': 'recorded_by'}"/>
                 </group>

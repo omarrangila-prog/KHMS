@@ -34,17 +34,17 @@ Front-desk addon for the Hospital Management System suite, built on top of
         "security/ir.model.access.csv",
         # data
         "data/hospital_reception_sequence_data.xml",
-        # views
-        "views/hospital_appointment_views.xml",
-        "views/hospital_visit_views.xml",
-        "views/hospital_reception_dashboard_views.xml",
-        "views/hospital_reception_menus.xml",
         # wizards
         "wizards/hospital_patient_registration_wizard_views.xml",
         "wizards/hospital_visit_cancel_wizard_views.xml",
         # report
         "report/hospital_queue_ticket_report.xml",
         "report/hospital_queue_ticket_templates.xml",
+        # views
+        "views/hospital_appointment_views.xml",
+        "views/hospital_visit_views.xml",
+        "views/hospital_reception_dashboard_views.xml",
+        "views/hospital_reception_menus.xml",
     ],
     "demo": [
         "demo/hospital_visit_demo.xml",

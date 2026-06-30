@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="hospital_consultation_action_new" model="ir.actions.act_window">
+        <field name="name">New Consultation</field>
+        <field name="res_model">hospital.consultation</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
     <!-- Doctor-specific addition to hospital_base's visit form: a "New
          Consultation" shortcut and two read-only notebook pages
          (Consultations, Prescriptions), mirroring hospital_nurse's own
@@ -13,7 +20,7 @@
             <button name="action_send_to_doctor" position="before">
                 <button name="%(hospital_doctor.hospital_consultation_action_new)d"
                         type="action" string="New Consultation" class="oe_highlight"
-                        context="{'default_visit_id': active_id}"
+                        context="{'default_visit_id': id}"
                         invisible="state not in ('waiting_doctor', 'in_progress_multi')"/>
             </button>
             <xpath expr="//sheet" position="inside">

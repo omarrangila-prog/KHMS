@@ -3,7 +3,7 @@
 
     <record id="group_hospital_ward_manager" model="res.groups">
         <field name="name">Hospital Ward Manager</field>
-        <field name="category_id" ref="hospital_base.module_hospital_category"/>
+        <field name="privilege_id" ref="hospital_base.hospital_groups_privilege"/>
         <field name="implied_ids" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
         <field name="comment">Ward/bed staff: assign beds, manage transfers, and finalize discharges.</field>
     </record>

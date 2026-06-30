@@ -28,8 +28,8 @@ class HospitalDoctorSchedule(models.Model):
         string="Weekday",
         required=True,
     )
-    start_time = fields.Float(string="Start Time", widget="float_time", required=True)
-    end_time = fields.Float(string="End Time", widget="float_time", required=True)
+    start_time = fields.Float(string="Start Time", required=True)
+    end_time = fields.Float(string="End Time", required=True)
     max_patients = fields.Integer(string="Max Patients", default=0)
 
     @api.constrains("start_time", "end_time")

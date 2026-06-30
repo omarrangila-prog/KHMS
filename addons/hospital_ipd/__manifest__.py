@@ -50,13 +50,6 @@ dependency cycle. The discharge-blocking check instead queries
         "security/ir.model.access.csv",
         # sequences
         "data/hospital_ipd_sequence.xml",
-        # views
-        "views/hospital_ward_views.xml",
-        "views/hospital_bed_views.xml",
-        "views/hospital_ipd_admission_views.xml",
-        "views/hospital_discharge_views.xml",
-        "views/hospital_ward_dashboard_views.xml",
-        "views/hospital_ipd_menus.xml",
         # wizards
         "wizards/hospital_admission_wizard_views.xml",
         "wizards/hospital_transfer_wizard_views.xml",
@@ -64,6 +57,13 @@ dependency cycle. The discharge-blocking check instead queries
         # reports
         "report/hospital_discharge_summary_report.xml",
         "report/hospital_discharge_summary_templates.xml",
+        # views
+        "views/hospital_ward_views.xml",
+        "views/hospital_bed_views.xml",
+        "views/hospital_ipd_admission_views.xml",
+        "views/hospital_discharge_views.xml",
+        "views/hospital_ward_dashboard_views.xml",
+        "views/hospital_ipd_menus.xml",
     ],
     "demo": [
         "demo/hospital_ipd_demo.xml",

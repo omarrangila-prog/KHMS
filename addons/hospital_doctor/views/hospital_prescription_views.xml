@@ -74,7 +74,7 @@
                 <field name="doctor_id"/>
                 <filter string="My Prescriptions" name="filter_mine" domain="[('doctor_id.user_id', '=', uid)]"/>
                 <filter string="Open" name="filter_open" domain="[('state', 'in', ['draft', 'partially_dispensed'])]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Status" name="groupby_state" context="{'group_by': 'state'}"/>
                     <filter string="Doctor" name="groupby_doctor" context="{'group_by': 'doctor_id'}"/>
                 </group>

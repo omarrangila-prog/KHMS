@@ -76,7 +76,7 @@
                 <field name="visit_id"/>
                 <filter string="Pending" name="filter_pending" domain="[('state', '=', 'pending')]"/>
                 <filter string="Done" name="filter_done" domain="[('state', '=', 'done')]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Status" name="groupby_state" context="{'group_by': 'state'}"/>
                     <filter string="Visit" name="groupby_visit" context="{'group_by': 'visit_id'}"/>
                 </group>

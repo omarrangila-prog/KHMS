@@ -63,7 +63,7 @@
             <search string="Search Radiology Results">
                 <field name="order_id"/>
                 <field name="reported_by"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Order" name="group_order"
                             context="{'group_by': 'order_id'}"/>
                 </group>

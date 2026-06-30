@@ -12,13 +12,11 @@
          usage="inventory" means stock moved here simply leaves trackable
          on-hand inventory, which is exactly the semantics of "a patient
          consumed this medicine" - there is no real warehouse to receive
-         it. Nested under stock's own "Virtual Locations" view location
-         (stock.stock_location_locations_virtual) so it shows up alongside
-         Odoo's other virtual locations in the Inventory app's location
-         tree, rather than inventing a parallel virtual-location root. -->
+         it. No parent location_id, matching how Odoo's own top-level
+         virtual locations (stock_location_suppliers/_customers) are
+         defined without one in this Odoo version. -->
     <record id="stock_location_patient_consumption" model="stock.location">
         <field name="name">Patient Consumption</field>
-        <field name="location_id" ref="stock.stock_location_locations_virtual"/>
         <field name="usage">inventory</field>
         <!-- company_id intentionally left empty (multi-company neutral),
              matching the pattern of Odoo's own shared virtual locations

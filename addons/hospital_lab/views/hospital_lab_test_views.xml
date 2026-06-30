@@ -69,7 +69,7 @@
                         domain="[('sample_type', '=', 'urine')]"/>
                 <filter string="Archived" name="inactive"
                         domain="[('active', '=', False)]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Sample Type" name="group_sample_type"
                             context="{'group_by': 'sample_type'}"/>
                 </group>

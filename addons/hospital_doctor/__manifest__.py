@@ -54,17 +54,17 @@ modules must implement.
         # security
         "security/hospital_doctor_security.xml",
         "security/ir.model.access.csv",
+        # wizards
+        "wizards/hospital_consultation_amend_wizard_views.xml",
+        # report
+        "report/hospital_prescription_report.xml",
+        "report/hospital_prescription_templates.xml",
         # views
         "views/hospital_consultation_views.xml",
         "views/hospital_prescription_views.xml",
         "views/hospital_visit_views.xml",
         "views/hospital_doctor_dashboard_views.xml",
         "views/hospital_doctor_menus.xml",
-        # wizards
-        "wizards/hospital_consultation_amend_wizard_views.xml",
-        # report
-        "report/hospital_prescription_report.xml",
-        "report/hospital_prescription_templates.xml",
     ],
     "demo": [
         "demo/hospital_consultation_demo.xml",

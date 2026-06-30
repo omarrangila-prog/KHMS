@@ -38,9 +38,8 @@ Module 11/12 in the Hospital Management System suite.
         "security/ir.model.access.csv",
         # data
         "data/hospital_reports_data.xml",
-        # views / config menus
+        # views / config
         "views/hospital_report_config_views.xml",
-        "views/hospital_reports_menus.xml",
         # wizards
         "wizards/hospital_census_wizard_views.xml",
         # reports
@@ -51,6 +50,8 @@ Module 11/12 in the Hospital Management System suite.
         "report/hospital_daily_census_templates.xml",
         "report/hospital_ward_occupancy_report.xml",
         "report/hospital_ward_occupancy_templates.xml",
+        # config menus
+        "views/hospital_reports_menus.xml",
     ],
     "demo": [
         "demo/hospital_reports_demo.xml",

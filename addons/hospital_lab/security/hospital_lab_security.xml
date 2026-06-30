@@ -3,7 +3,7 @@
 
     <record id="group_hospital_lab_tech" model="res.groups">
         <field name="name">Hospital Lab Technician</field>
-        <field name="category_id" ref="hospital_base.module_hospital_category"/>
+        <field name="privilege_id" ref="hospital_base.hospital_groups_privilege"/>
         <field name="implied_ids" eval="[(4, ref('hospital_base.group_hospital_user'))]"/>
         <field name="comment">Laboratory staff: receive orders, collect samples, enter and verify results.</field>
     </record>

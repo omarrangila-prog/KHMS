@@ -102,7 +102,7 @@
                 <filter string="Waiting for Bed" name="filter_waiting" domain="[('state', '=', 'waiting_for_bed')]"/>
                 <filter string="Admitted" name="filter_admitted" domain="[('state', '=', 'admitted')]"/>
                 <filter string="Discharged" name="filter_discharged" domain="[('state', '=', 'discharged')]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Ward" name="group_ward" context="{'group_by': 'ward_id'}"/>
                     <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
                     <filter string="Admitting Doctor" name="group_doctor" context="{'group_by': 'admitting_doctor_id'}"/>

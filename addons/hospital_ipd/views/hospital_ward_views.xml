@@ -71,7 +71,7 @@
                 <field name="code"/>
                 <filter string="General" name="filter_general" domain="[('ward_type', '=', 'general')]"/>
                 <filter string="ICU" name="filter_icu" domain="[('ward_type', '=', 'icu')]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Ward Type" name="group_ward_type" context="{'group_by': 'ward_type'}"/>
                 </group>
             </search>

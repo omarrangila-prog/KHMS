@@ -48,7 +48,7 @@
                 <field name="res_model"/>
                 <field name="user_id"/>
                 <field name="action"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Model" name="groupby_model" context="{'group_by': 'res_model'}"/>
                     <filter string="User" name="groupby_user" context="{'group_by': 'user_id'}"/>
                     <filter string="Action" name="groupby_action" context="{'group_by': 'action'}"/>

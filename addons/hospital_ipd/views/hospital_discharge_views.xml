@@ -93,7 +93,7 @@
                 <field name="admission_id"/>
                 <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
                 <filter string="Confirmed" name="filter_confirmed" domain="[('state', '=', 'confirmed')]"/>
-                <group expand="0" string="Group By">
+                <group>
                     <filter string="Discharge Type" name="group_type" context="{'group_by': 'discharge_type'}"/>
                     <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
                 </group>
