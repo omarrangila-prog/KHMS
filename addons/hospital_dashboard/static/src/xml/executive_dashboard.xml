@@ -79,6 +79,38 @@
 
             </div>
 
+            <!-- Charts -->
+            <div class="o_hospital_chart_grid"
+                 t-if="!state.loading and !state.error">
+
+                <div class="o_hospital_chart_card">
+                    <div class="o_hospital_section_title">
+                        <i class="fa fa-pie-chart"/> Today's Visits by Department
+                    </div>
+                    <div class="o_hospital_chart_canvas_wrap" t-if="state.visitsByDept.length">
+                        <canvas t-ref="deptChart"/>
+                    </div>
+                    <div class="o_hospital_chart_empty" t-else="">
+                        <i class="fa fa-pie-chart"/>
+                        No visits checked in today yet.
+                    </div>
+                </div>
+
+                <div class="o_hospital_chart_card">
+                    <div class="o_hospital_section_title">
+                        <i class="fa fa-bed"/> Beds by Ward
+                    </div>
+                    <div class="o_hospital_chart_canvas_wrap" t-if="state.bedsByWard.length">
+                        <canvas t-ref="wardChart"/>
+                    </div>
+                    <div class="o_hospital_chart_empty" t-else="">
+                        <i class="fa fa-bed"/>
+                        No wards configured yet.
+                    </div>
+                </div>
+
+            </div>
+
             <!-- Empty -->
             <div class="o_hospital_kpi_empty"
                  t-if="!state.loading and !state.error and !state.kpi">
