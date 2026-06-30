@@ -19,22 +19,27 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
                 </header>
                 <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="patient_id" readonly="1"/>
-                        </h1>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-user"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="patient_id" readonly="1"/>
+                            </h1>
+                        </div>
                     </div>
                     <div class="alert alert-danger" role="alert" invisible="not allergy_summary">
                         <strong>Allergy Alert: </strong>
                         <field name="allergy_summary" readonly="1" nolabel="1"/>
                     </div>
                     <group>
-                        <group string="Visit">
+                        <group string="Visit" class="o-hms-card-group">
                             <field name="visit_id" readonly="1"/>
                             <field name="doctor_id"/>
                             <field name="amended_from_id" invisible="not amended_from_id" readonly="1"/>
                         </group>
-                        <group string="Diagnosis">
+                        <group string="Diagnosis" class="o-hms-card-group">
                             <field name="diagnosis_code"/>
                         </group>
                     </group>
@@ -58,20 +63,20 @@
                                     <field name="create_date" string="Date"/>
                                     <field name="doctor_id"/>
                                     <field name="diagnosis_text"/>
-                                    <field name="state" widget="badge"/>
+                                    <field name="state" widget="badge" decoration-success="state == 'done'"/>
                                 </list>
                             </field>
                         </page>
                         <page string="Diagnosis &amp; Notes" name="diagnosis">
-                            <group>
+                            <group class="o-hms-card-group">
                                 <field name="diagnosis_text" nolabel="1" placeholder="Diagnosis details..."/>
                             </group>
-                            <group string="Clinical Notes">
+                            <group string="Clinical Notes" class="o-hms-card-group">
                                 <field name="clinical_notes" nolabel="1" placeholder="Clinical notes..."/>
                             </group>
                         </page>
                         <page string="Outcome" name="outcome">
-                            <group string="Select one or more outcomes">
+                            <group string="Select one or more outcomes" class="o-hms-card-group">
                                 <field name="outcome_prescribe"/>
                                 <field name="outcome_lab_requested"/>
                                 <field name="outcome_radiology_requested"/>
@@ -87,7 +92,10 @@
                         <page string="Prescription" name="prescription" invisible="not outcome_prescribe">
                             <field name="prescription_ids" context="{'default_visit_id': visit_id, 'default_doctor_id': doctor_id, 'default_consultation_id': id}">
                                 <list editable="bottom">
-                                    <field name="state" widget="badge"/>
+                                    <field name="state" widget="badge"
+                                        decoration-success="state == 'dispensed'"
+                                        decoration-info="state == 'partially_dispensed'"
+                                        decoration-danger="state == 'cancelled'"/>
                                     <button name="action_cancel" type="object" string="Cancel" invisible="state in ('cancelled', 'dispensed')"/>
                                 </list>
                             </field>
@@ -113,7 +121,7 @@
                 <field name="outcome_radiology_requested" widget="boolean_toggle"/>
                 <field name="outcome_admit_requested" widget="boolean_toggle"/>
                 <field name="outcome_discharge" widget="boolean_toggle"/>
-                <field name="state" widget="badge"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'"/>
             </list>
         </field>
     </record>

@@ -24,17 +24,22 @@
         <field name="arch" type="xml">
             <form string="Bed">
                 <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="bed_number"/>
-                        </h1>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-bed"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="bed_number"/>
+                            </h1>
+                        </div>
                     </div>
                     <group>
-                        <group string="Location">
+                        <group string="Location" class="o-hms-card-group">
                             <field name="ward_id"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
-                        <group string="Status">
+                        <group string="Status" class="o-hms-card-group">
                             <field name="state" widget="badge"
                                    decoration-success="state == 'vacant'"
                                    decoration-danger="state == 'occupied'"

@@ -22,7 +22,7 @@
         <field name="name">hospital.nurse.task.view.kanban</field>
         <field name="model">hospital.nurse.task</field>
         <field name="arch" type="xml">
-            <kanban class="o_hospital_nurse_task_kanban" default_group_by="state">
+            <kanban class="o_hospital_nurse_task_kanban o-hms-kanban" default_group_by="state">
                 <field name="name"/>
                 <field name="visit_id"/>
                 <field name="state"/>
@@ -31,8 +31,11 @@
                     <t t-name="card">
                         <div class="oe_kanban_global_click">
                             <strong><field name="name"/></strong>
-                            <div><field name="visit_id"/></div>
-                            <div>
+                            <div class="o-hms-icon-chip">
+                                <i class="fa fa-stethoscope"/>
+                                <field name="visit_id"/>
+                            </div>
+                            <div class="mt-2">
                                 <button name="action_mark_done" type="object"
                                         string="Mark Done" class="btn btn-sm btn-primary"
                                         invisible="state == 'done'"/>
@@ -55,7 +58,7 @@
                     <field name="state" widget="statusbar" statusbar_visible="pending,done"/>
                 </header>
                 <sheet>
-                    <group>
+                    <group class="o-hms-card-group">
                         <field name="name"/>
                         <field name="visit_id"/>
                         <field name="sequence"/>

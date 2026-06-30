@@ -14,25 +14,30 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,checked_in"/>
                 </header>
                 <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="name" readonly="1"/>
-                        </h1>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-calendar-check-o"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
                     </div>
                     <group>
-                        <group string="Patient">
+                        <group string="Patient" class="o-hms-card-group">
                             <field name="patient_id"/>
                             <field name="scheduled_datetime"/>
                         </group>
-                        <group string="Assignment">
+                        <group string="Assignment" class="o-hms-card-group">
                             <field name="doctor_id"/>
                             <field name="department_id"/>
                         </group>
                     </group>
-                    <group string="Visit" invisible="not visit_id">
+                    <group string="Visit" class="o-hms-card-group" invisible="not visit_id">
                         <field name="visit_id" readonly="1"/>
                     </group>
-                    <group string="Notes">
+                    <group string="Notes" class="o-hms-card-group">
                         <field name="notes" nolabel="1"/>
                     </group>
                 </sheet>

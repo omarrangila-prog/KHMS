@@ -48,25 +48,30 @@
                            statusbar_visible="requested,waiting_for_bed,admitted,discharged"/>
                 </header>
                 <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="admission_code" readonly="1"/>
-                        </h1>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-bed"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="admission_code" readonly="1"/>
+                            </h1>
+                        </div>
                     </div>
                     <group>
-                        <group string="Patient &amp; Visit">
+                        <group string="Patient &amp; Visit" class="o-hms-card-group">
                             <field name="patient_id"/>
                             <field name="visit_id"/>
                             <field name="admitting_doctor_id"/>
                         </group>
-                        <group string="Bed Assignment">
+                        <group string="Bed Assignment" class="o-hms-card-group">
                             <field name="ward_id" readonly="1"/>
                             <field name="bed_id" readonly="1"/>
                             <field name="admission_datetime"/>
                             <field name="length_of_stay_days"/>
                         </group>
                     </group>
-                    <group>
+                    <group class="o-hms-card-group">
                         <field name="company_id" groups="base.group_multi_company"/>
                         <field name="discharge_id"/>
                     </group>

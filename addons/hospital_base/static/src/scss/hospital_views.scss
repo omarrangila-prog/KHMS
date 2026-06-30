@@ -1,0 +1,163 @@
+// ============================================================
+// Hospital Standard Views — macOS card styling for form/list/kanban
+// Applies the o-hospital-* design tokens to ordinary Odoo views
+// (Patients, Visits, Doctors, etc.) so they match the dashboards.
+// ============================================================
+
+// ── Form: record header band (title + avatar) ────────────────
+.o-hms-form-header {
+    display: flex;
+    align-items: center;
+    gap: $o-hospital-spacing-md;
+    padding-bottom: $o-hospital-spacing-md;
+    margin-bottom: $o-hospital-spacing-md;
+    border-bottom: 1px solid $o-hospital-border;
+
+    .o-hms-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: $o-hospital-radius-lg;
+        background: $o-hospital-primary-light;
+        color: $o-hospital-primary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        font-weight: 600;
+        flex-shrink: 0;
+        box-shadow: $o-hospital-shadow-xs;
+    }
+
+    .o_field_widget img,
+    img.o-hms-avatar-img {
+        width: 56px;
+        height: 56px;
+        border-radius: $o-hospital-radius-lg;
+        object-fit: cover;
+        box-shadow: $o-hospital-shadow-xs;
+    }
+
+    .oe_title {
+        margin: 0;
+
+        h1 {
+            font-family: $o-hospital-font;
+            font-weight: 700;
+            font-size: 22px;
+            margin: 0;
+        }
+
+        h3 {
+            font-weight: 500;
+            color: $o-hospital-text-secondary;
+            font-size: 13px;
+            margin: 2px 0 0;
+        }
+    }
+}
+
+// ── Form: card-style groups (elevated, rounded) ───────────────
+.o_form_view .o_group,
+.o_form_view .o-hms-card-group {
+    background: $o-hospital-surface-solid;
+    border: 1px solid $o-hospital-border;
+    border-radius: $o-hospital-radius-md;
+    padding: $o-hospital-spacing-md;
+    box-shadow: $o-hospital-shadow-xs;
+    transition: $o-hospital-transition-fast;
+
+    .o_horizontal_separator {
+        font-family: $o-hospital-font;
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: $o-hospital-text-secondary;
+        border: 0;
+        margin: 0 0 $o-hospital-spacing-sm;
+        padding: 0;
+    }
+}
+
+// ── Status pill on header (replaces default statusbar look) ──
+.o-hms-status-pill {
+    @extend .o-hms-badge;
+    font-size: 12px;
+    padding: 5px 14px;
+}
+
+// ── Stat buttons: rounder, softer ──────────────────────────────
+.o_form_view .oe_stat_button {
+    border-radius: $o-hospital-radius-sm;
+    transition: $o-hospital-transition-fast;
+
+    &:hover {
+        background: $o-hospital-primary-light;
+    }
+}
+
+// ── List view: zebra + hover + rounded container ───────────────
+.o_list_view {
+    border-radius: $o-hospital-radius-md;
+    overflow: hidden;
+
+    .o_data_row {
+        transition: background 0.12s ease;
+
+        &:hover {
+            background: $o-hospital-primary-light !important;
+        }
+    }
+
+    thead {
+        background: $o-hospital-surface-dark;
+
+        th {
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: $o-hospital-text-secondary;
+        }
+    }
+}
+
+// ── State/badge field decorations (reuse o-hms-badge colours) ──
+.o_field_widget.o_field_badge .badge,
+.o_list_view .badge,
+.o_form_view .badge {
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 11px;
+    padding: 4px 10px;
+    letter-spacing: 0.1px;
+}
+
+// ── Kanban: elevated cards, coloured left border by state ─────
+.o_kanban_view.o-hms-kanban {
+    .o_kanban_record {
+        background: $o-hospital-surface-solid;
+        border: 1px solid $o-hospital-border;
+        border-left: 3px solid $o-hospital-primary;
+        border-radius: $o-hospital-radius-md;
+        box-shadow: $o-hospital-shadow-xs;
+        padding: $o-hospital-spacing-md;
+        transition: $o-hospital-transition-fast;
+
+        &:hover {
+            box-shadow: $o-hospital-shadow-md;
+            transform: translateY(-2px);
+        }
+
+        strong {
+            font-size: 14px;
+            font-weight: 600;
+            color: $o-hospital-text-primary;
+        }
+    }
+}
+
+// ── Chatter panel: softened to match shell ──────────────────────
+.o-mail-Chatter {
+    background: transparent;
+}

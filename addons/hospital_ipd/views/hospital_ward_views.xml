@@ -23,20 +23,25 @@
         <field name="arch" type="xml">
             <form string="Ward">
                 <sheet>
-                    <div class="oe_title">
-                        <label for="name"/>
-                        <h1>
-                            <field name="name"/>
-                        </h1>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-hospital-o"/>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
                     </div>
                     <group>
-                        <group string="Ward Details">
+                        <group string="Ward Details" class="o-hms-card-group">
                             <field name="code"/>
                             <field name="ward_type"/>
                             <field name="daily_rate" widget="monetary"/>
                             <field name="currency_id" groups="base.group_multi_currency"/>
                         </group>
-                        <group string="Occupancy">
+                        <group string="Occupancy" class="o-hms-card-group">
                             <field name="bed_count"/>
                             <field name="occupied_bed_count"/>
                             <field name="active"/>

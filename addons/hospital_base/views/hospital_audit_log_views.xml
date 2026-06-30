@@ -8,17 +8,21 @@
             <form string="Audit Log Entry" create="0" edit="0" delete="0">
                 <sheet>
                     <group>
-                        <group>
+                        <group class="o-hms-card-group">
                             <field name="res_model"/>
                             <field name="res_id"/>
                             <field name="user_id"/>
                         </group>
-                        <group>
-                            <field name="action"/>
+                        <group class="o-hms-card-group">
+                            <field name="action" widget="badge"
+                                decoration-success="action == 'create'"
+                                decoration-info="action == 'write'"
+                                decoration-danger="action == 'unlink'"
+                                decoration-warning="action == 'read_sensitive'"/>
                             <field name="timestamp"/>
                         </group>
                     </group>
-                    <group string="Field Changes">
+                    <group string="Field Changes" class="o-hms-card-group">
                         <field name="field_changes" nolabel="1"/>
                     </group>
                 </sheet>
@@ -34,7 +38,11 @@
                 <field name="timestamp"/>
                 <field name="res_model"/>
                 <field name="res_id"/>
-                <field name="action"/>
+                <field name="action" widget="badge"
+                    decoration-success="action == 'create'"
+                    decoration-info="action == 'write'"
+                    decoration-danger="action == 'unlink'"
+                    decoration-warning="action == 'read_sensitive'"/>
                 <field name="user_id"/>
             </list>
         </field>

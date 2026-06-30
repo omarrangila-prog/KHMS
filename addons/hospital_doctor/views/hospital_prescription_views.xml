@@ -11,17 +11,22 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,partially_dispensed,dispensed"/>
                 </header>
                 <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="patient_id" readonly="1"/>
-                        </h1>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-file-text-o"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="patient_id" readonly="1"/>
+                            </h1>
+                        </div>
                     </div>
                     <group>
-                        <group string="Visit">
+                        <group string="Visit" class="o-hms-card-group">
                             <field name="visit_id"/>
                             <field name="consultation_id"/>
                         </group>
-                        <group string="Prescriber">
+                        <group string="Prescriber" class="o-hms-card-group">
                             <field name="doctor_id"/>
                         </group>
                     </group>
@@ -43,7 +48,11 @@
                             <field name="route"/>
                             <field name="qty_prescribed"/>
                             <field name="qty_dispensed" readonly="1"/>
-                            <field name="state" widget="badge"/>
+                            <field name="state" widget="badge"
+                                decoration-success="state == 'dispensed'"
+                                decoration-info="state == 'partial'"
+                                decoration-warning="state == 'backordered'"
+                                decoration-danger="state == 'cancelled'"/>
                         </list>
                     </field>
                 </sheet>
@@ -60,7 +69,10 @@
                 <field name="create_date" string="Date"/>
                 <field name="patient_id"/>
                 <field name="doctor_id"/>
-                <field name="state" widget="badge"/>
+                <field name="state" widget="badge"
+                    decoration-success="state == 'dispensed'"
+                    decoration-info="state == 'partially_dispensed'"
+                    decoration-danger="state == 'cancelled'"/>
             </list>
         </field>
     </record>

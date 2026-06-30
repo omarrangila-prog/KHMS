@@ -37,30 +37,35 @@
                         still pending for this visit:
                         <field name="blocking_items_summary" readonly="1" nolabel="1"/>
                     </div>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="patient_id" readonly="1"/>
-                        </h1>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-sign-out"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="patient_id" readonly="1"/>
+                            </h1>
+                        </div>
                     </div>
                     <group>
-                        <group string="Admission">
+                        <group string="Admission" class="o-hms-card-group">
                             <field name="admission_id" readonly="1"/>
                             <field name="visit_id" readonly="1"/>
                             <field name="discharge_type"/>
                             <field name="discharge_datetime"/>
                         </group>
-                        <group string="Billing">
+                        <group string="Billing" class="o-hms-card-group">
                             <field name="ward_charge_amount" widget="monetary"/>
                             <field name="currency_id" invisible="1"/>
                             <field name="discharged_by"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                     </group>
-                    <group string="Summary">
+                    <group string="Summary" class="o-hms-card-group">
                         <field name="discharge_summary" nolabel="1" colspan="2"
                                placeholder="Discharge summary..."/>
                     </group>
-                    <group string="Follow-up Instructions"
+                    <group string="Follow-up Instructions" class="o-hms-card-group"
                            invisible="discharge_type == 'deceased'">
                         <field name="follow_up_instructions" nolabel="1" colspan="2"
                                placeholder="Follow-up instructions..."/>

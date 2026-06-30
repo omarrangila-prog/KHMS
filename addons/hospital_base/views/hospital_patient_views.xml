@@ -10,16 +10,21 @@
                     <button name="action_view_visits" type="object" string="Visits" class="oe_stat_button" icon="fa-stethoscope"/>
                 </header>
                 <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="name" placeholder="Patient Full Name"/>
-                        </h1>
-                        <h3>
-                            <field name="patient_code" readonly="1"/>
-                        </h3>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-user"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Patient Full Name"/>
+                            </h1>
+                            <h3>
+                                <field name="patient_code" readonly="1"/>
+                            </h3>
+                        </div>
                     </div>
                     <group>
-                        <group string="Identity">
+                        <group string="Identity" class="o-hms-card-group">
                             <field name="date_of_birth"/>
                             <field name="age" readonly="1"/>
                             <field name="gender"/>
@@ -27,23 +32,23 @@
                             <field name="identity_type"/>
                             <field name="identity_number" groups="hospital_base.group_hospital_admin"/>
                         </group>
-                        <group string="Contact">
+                        <group string="Contact" class="o-hms-card-group">
                             <field name="phone"/>
                             <field name="mobile"/>
-                            <field name="email"/>
+                            <field name="email" widget="email"/>
                             <field name="address_id"/>
                         </group>
                     </group>
-                    <group string="Emergency Contact">
+                    <group string="Emergency Contact" class="o-hms-card-group">
                         <field name="emergency_contact_name"/>
-                        <field name="emergency_contact_phone"/>
+                        <field name="emergency_contact_phone" widget="phone"/>
                     </group>
                     <notebook>
                         <page string="Allergies" name="allergies">
                             <field name="allergy_ids">
                                 <list editable="bottom">
                                     <field name="name"/>
-                                    <field name="severity"/>
+                                    <field name="severity" widget="badge" decoration-danger="severity == 'severe'" decoration-warning="severity == 'moderate'" decoration-success="severity == 'mild'"/>
                                     <field name="notes"/>
                                 </list>
                             </field>
@@ -64,7 +69,11 @@
                                     <field name="visit_type"/>
                                     <field name="doctor_id"/>
                                     <field name="department_id"/>
-                                    <field name="state"/>
+                                    <field name="state" widget="badge"
+                                        decoration-success="state == 'done'"
+                                        decoration-info="state in ('waiting_nurse', 'waiting_doctor', 'in_progress_multi')"
+                                        decoration-warning="state == 'admitted'"
+                                        decoration-danger="state in ('cancelled', 'void')"/>
                                     <field name="checkin_datetime"/>
                                 </list>
                             </field>
@@ -97,7 +106,7 @@
         <field name="name">hospital.patient.view.kanban</field>
         <field name="model">hospital.patient</field>
         <field name="arch" type="xml">
-            <kanban class="o_hospital_patient_kanban">
+            <kanban class="o_hospital_patient_kanban o-hms-kanban">
                 <field name="name"/>
                 <field name="patient_code"/>
                 <field name="phone"/>
@@ -105,15 +114,24 @@
                 <field name="gender"/>
                 <templates>
                     <t t-name="card">
-                        <div class="oe_kanban_global_click">
-                            <strong><field name="name"/></strong>
-                            <div><field name="patient_code"/></div>
-                            <div>
-                                <span><field name="age"/> yrs</span>
-                                <span> - </span>
-                                <span><field name="gender"/></span>
+                        <div class="oe_kanban_global_click d-flex align-items-center gap-3">
+                            <div class="o-hms-avatar" style="width:40px;height:40px;font-size:16px;">
+                                <i class="fa fa-user"/>
                             </div>
-                            <div><field name="phone"/></div>
+                            <div class="flex-grow-1">
+                                <strong><field name="name"/></strong>
+                                <div class="o-hms-icon-chip">
+                                    <i class="fa fa-id-card"/>
+                                    <field name="patient_code"/>
+                                </div>
+                                <div class="o-hms-icon-chip">
+                                    <span><field name="age"/> yrs &#183; <field name="gender"/></span>
+                                </div>
+                                <div t-if="record.phone.raw_value" class="o-hms-icon-chip">
+                                    <i class="fa fa-phone"/>
+                                    <field name="phone"/>
+                                </div>
+                            </div>
                         </div>
                     </t>
                 </templates>

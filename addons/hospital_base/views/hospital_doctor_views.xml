@@ -7,18 +7,26 @@
         <field name="arch" type="xml">
             <form string="Doctor">
                 <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="name" readonly="1"/>
-                        </h1>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-user-md"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                            <h3>
+                                <field name="specialization"/>
+                            </h3>
+                        </div>
                     </div>
                     <group>
-                        <group string="Identity">
+                        <group string="Identity" class="o-hms-card-group">
                             <field name="user_id"/>
                             <field name="department_id"/>
                             <field name="active"/>
                         </group>
-                        <group string="Professional Info">
+                        <group string="Professional Info" class="o-hms-card-group">
                             <field name="specialization"/>
                             <field name="license_number"/>
                             <field name="company_id" groups="base.group_multi_company"/>

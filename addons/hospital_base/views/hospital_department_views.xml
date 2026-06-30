@@ -7,12 +7,17 @@
         <field name="arch" type="xml">
             <form string="Department">
                 <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="name" placeholder="Department Name"/>
-                        </h1>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-building"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Department Name"/>
+                            </h1>
+                        </div>
                     </div>
-                    <group>
+                    <group class="o-hms-card-group">
                         <field name="code"/>
                         <field name="active"/>
                         <field name="company_id" groups="base.group_multi_company"/>

@@ -16,25 +16,30 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,waiting_nurse,waiting_doctor,in_progress_multi,admitted,billing,done"/>
                 </header>
                 <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="visit_code" readonly="1"/>
-                        </h1>
+                    <div class="o-hms-form-header">
+                        <div class="o-hms-avatar">
+                            <i class="fa fa-stethoscope"/>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="visit_code" readonly="1"/>
+                            </h1>
+                        </div>
                     </div>
                     <group>
-                        <group string="Patient">
+                        <group string="Patient" class="o-hms-card-group">
                             <field name="patient_id"/>
                             <field name="visit_type"/>
                             <field name="checkin_datetime"/>
                         </group>
-                        <group string="Assignment">
+                        <group string="Assignment" class="o-hms-card-group">
                             <field name="doctor_id"/>
                             <field name="department_id"/>
-                            <field name="priority"/>
+                            <field name="priority" widget="badge" decoration-danger="priority == 'emergency'" decoration-warning="priority == 'urgent'"/>
                             <field name="payer_type"/>
                         </group>
                     </group>
-                    <group string="Cancellation" invisible="state != 'cancelled'">
+                    <group string="Cancellation" class="o-hms-card-group" invisible="state != 'cancelled'">
                         <field name="cancel_reason"/>
                     </group>
                 </sheet>
@@ -54,7 +59,11 @@
                 <field name="doctor_id"/>
                 <field name="department_id"/>
                 <field name="priority" widget="badge" decoration-danger="priority == 'emergency'" decoration-warning="priority == 'urgent'"/>
-                <field name="state" widget="badge"/>
+                <field name="state" widget="badge"
+                    decoration-success="state == 'done'"
+                    decoration-info="state in ('waiting_nurse', 'waiting_doctor', 'in_progress_multi')"
+                    decoration-warning="state == 'admitted'"
+                    decoration-danger="state in ('cancelled', 'void')"/>
                 <field name="checkin_datetime"/>
             </list>
         </field>
@@ -64,7 +73,7 @@
         <field name="name">hospital.visit.view.kanban</field>
         <field name="model">hospital.visit</field>
         <field name="arch" type="xml">
-            <kanban class="o_hospital_visit_kanban" default_group_by="state">
+            <kanban class="o_hospital_visit_kanban o-hms-kanban" default_group_by="state">
                 <field name="visit_code"/>
                 <field name="patient_id"/>
                 <field name="doctor_id"/>
@@ -74,14 +83,23 @@
                 <templates>
                     <t t-name="card">
                         <div class="oe_kanban_global_click">
-                            <strong><field name="visit_code"/></strong>
-                            <div><field name="patient_id"/></div>
-                            <div><field name="doctor_id"/></div>
-                            <div>
+                            <div class="d-flex justify-content-between align-items-start">
+                                <strong><field name="visit_code"/></strong>
                                 <span class="badge text-bg-danger" t-if="record.priority.raw_value == 'emergency'">Emergency</span>
                                 <span class="badge text-bg-warning" t-if="record.priority.raw_value == 'urgent'">Urgent</span>
                             </div>
-                            <div><field name="checkin_datetime"/></div>
+                            <div class="o-hms-icon-chip">
+                                <i class="fa fa-user"/>
+                                <field name="patient_id"/>
+                            </div>
+                            <div class="o-hms-icon-chip" t-if="record.doctor_id.raw_value">
+                                <i class="fa fa-user-md"/>
+                                <field name="doctor_id"/>
+                            </div>
+                            <div class="o-hms-icon-chip">
+                                <i class="fa fa-clock-o"/>
+                                <field name="checkin_datetime"/>
+                            </div>
                         </div>
                     </t>
                 </templates>
