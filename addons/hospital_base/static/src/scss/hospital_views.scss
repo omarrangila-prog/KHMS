@@ -96,11 +96,11 @@
     }
 }
 
-// ── List view: zebra + hover + rounded container ───────────────
+// ── List view: zebra + hover, no clipping ───────────────────────
+// overflow:hidden was clipping header text on any list wider than its
+// container (e.g. editable one2many lists inside a dialog) - dropped
+// in favour of just the hover/header colour treatment.
 .o_list_view {
-    border-radius: $o-hospital-radius-md;
-    overflow: hidden;
-
     .o_data_row {
         transition: background 0.12s ease;
 
@@ -118,6 +118,7 @@
             text-transform: uppercase;
             letter-spacing: 0.3px;
             color: $o-hospital-text-secondary;
+            white-space: nowrap;
         }
     }
 }
