@@ -54,6 +54,7 @@ module builds on:
     ],
     "assets": {
         "web.assets_backend": [
+            "hospital_base/static/src/scss/_variables.scss",
             "hospital_base/static/src/scss/hospital_shell.scss",
         ],
     },
