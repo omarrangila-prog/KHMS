@@ -60,7 +60,7 @@ module builds on:
         ],
     },
     "images": ["static/description/icon.png"],
-    "application": True,
+    "application": False,
     "installable": True,
     "auto_install": False,
 }
