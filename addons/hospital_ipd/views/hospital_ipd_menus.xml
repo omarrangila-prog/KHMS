@@ -3,8 +3,8 @@
 
     <menuitem id="menu_hospital_ipd_root"
               name="IPD"
-              sequence="50"
-              web_icon="hospital_ipd,static/description/icon.png"/>
+              parent="hospital_base.hospital_menu_root"
+              sequence="50"/>
 
     <menuitem id="menu_hospital_ipd_dashboard"
               name="Ward Dashboard"

@@ -2,7 +2,8 @@
 <odoo>
 
     <menuitem id="menu_hospital_dashboard_root"
-              name="Dashboard"
+              name="Dashboards"
+              parent="hospital_base.hospital_menu_root"
               sequence="1"
               groups="hospital_base.group_hospital_admin"/>
 
